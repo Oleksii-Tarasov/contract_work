@@ -1,0 +1,13 @@
+<!-- Scripts -->
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Context path for JS
+    const contextPath = '${pageContext.request.contextPath}';
+</script>
+<%--<script src="${pageContext.request.contextPath}/js/table-utils.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/js/websocket.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/js/search.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/js/sort.js"></script>--%>
+</body>
+</html>
