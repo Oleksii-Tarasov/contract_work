@@ -11,9 +11,9 @@
                 <th data-sortable="true">Назва предмета закупівлі</th>
                 <th data-sortable="true">одиниця виміру</th>
                 <th data-sortable="true">кількість</th>
-                <th data-sortable="true">ціна за од.</th>
-                <th data-sortable="true">Сума по кошторису</th>
-                <th data-sortable="true">Сума договору</th>
+                <th data-sortable="true">ціна за одиницю</th>
+                <th data-sortable="true">Сума</th>
+                <th data-sortable="true">Сума Договору</th>
                 <th data-sortable="true">Залишок</th>
             </tr>
             <%--                <c:forEach var="user" items="${sevUsers}" varStatus="status">--%>
