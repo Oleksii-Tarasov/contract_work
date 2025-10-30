@@ -25,10 +25,15 @@
           <artifactId>jstl</artifactId>
           <version>1.2</version>
       </dependency>
+      <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <version>42.7.5</version>
+      </dependency>
   </dependencies>
 
   <build>
-      <finalName>sevhelper</finalName>
+      <finalName>contractwork</finalName>
       <pluginManagement>
           <plugins>
               <plugin>

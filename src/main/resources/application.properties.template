@@ -1,0 +1,4 @@
+# Postgres DB connection
+postgres.db.url=jdbc:postgresql://localhost:5432/db_name
+postgres.db.user=user
+postgres.db.password=pass
