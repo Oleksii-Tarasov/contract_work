@@ -43,7 +43,7 @@ public class NewProjectToEstimateServlet extends HttpServlet {
 
         try {
             estimateDAO.insertProject(newProjectForEstimate);
-            resp.sendRedirect(req.getContextPath() + "/");
+            resp.sendRedirect(req.getContextPath() + "/estimate");
         } catch (Exception e) {
             e.printStackTrace();
         }

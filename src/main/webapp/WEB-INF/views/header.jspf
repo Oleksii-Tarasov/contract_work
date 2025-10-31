@@ -3,11 +3,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:setLocale value="uk_UA" scope="session"/>
+
 <html>
 <head>
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        <%@include file="/css/style.css"%>
+        <%@include file="/css/header.css"%>
     </style>
     <title>Договірна Робота ВС</title>
 </head>
@@ -35,7 +37,7 @@
                                data-bs-target="#helpModal">Довідка</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/estimate">
                                 Кошторис
                             </a>
                         </li>

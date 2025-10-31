@@ -1,0 +1,85 @@
+body {
+    padding-top: 50px;
+}
+
+/*Header-Navbar*/
+
+.navbar {
+    background-color: #00264d !important;
+}
+
+.navbar h6 {
+    color: white !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    padding: 0 15px !important;
+}
+
+.navbar-brand {
+    color: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.navbar-brand img {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.container-fluid {
+    padding-left: 1px !important;
+}
+
+.navbar .d-flex {
+    align-items: center;
+    padding: 5px !important;
+    margin: 5px !important;
+}
+
+.navbar .form-control {
+    min-width: 300px;
+    width: 25vw; /* takes up 25% of the window width */
+}
+
+.navbar .form-control:focus {
+    border-color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+.navbar .btn {
+    color: white !important;
+    border-color: white !important;
+}
+
+.navbar .btn:hover {
+    color: white !important;
+    background-color: #1274da !important;
+}
+
+/*Drop-down menu*/
+
+.nav-link {
+    color: white !important;
+}
+
+.dropdown-menu {
+    background-color: #00264d !important;
+}
+
+.dropdown-item {
+    color: white !important;
+}
+
+.dropdown-item:hover {
+    background-color: #1274da !important;
+}
+
+.navbar-toggler {
+    border-color: white !important;
+}
+
+.nav-item .dropdown-toggle {
+    font-size: 1.25rem !important;
+}

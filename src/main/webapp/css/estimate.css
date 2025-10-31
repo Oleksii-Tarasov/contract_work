@@ -1,0 +1,72 @@
+.custom-width {
+    max-width: 95%;
+}
+
+/*Table*/
+.table td, .table th {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table > :not(caption) > * > * {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {  /* № з/п */
+    min-width: 5px;
+    width: 6%;
+}
+.table th:nth-child(2),
+.table td:nth-child(2) {  /* Найменування */
+    min-width: 150px;
+    width: 35%;
+}
+.table th:nth-child(3),
+.table td:nth-child(3) {  /* Одиниця виміру */
+    min-width: 50px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(4),
+.table td:nth-child(4) {  /* Кількість */
+    min-width: 50px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(5),
+.table td:nth-child(5) {  /* Ціна, грн */
+    min-width: 90px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(6),
+.table td:nth-child(6) {  /* Сума, грн */
+    min-width: 100px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(7),
+.table td:nth-child(7) {  /* ЗФ */
+    min-width: 80px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(8),
+.table td:nth-child(8) {  /* СФ */
+    min-width: 90px;
+    width: 5%;
+    text-align: center;
+}
+.table th:nth-child(9),
+.table td:nth-child(9) {  /* Обгрунтування */
+    min-width: 150px;
+    width: 35%;
+}

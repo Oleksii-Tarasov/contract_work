@@ -16,6 +16,23 @@ public class Estimate {
     public Estimate() {
     }
 
+    public Estimate(long id, String kekv, String dkCode, String nameProject,
+                    String unitOfMeasure, double quantity, double price, double totalPrice,
+                    double specialFund, double generalFund, String justification) {
+        this.id = id;
+        this.kekv = kekv;
+        this.dkCode = dkCode;
+        this.nameProject = nameProject;
+        this.unitOfMeasure = unitOfMeasure;
+        this.quantity = quantity;
+        this.price = price;
+        this.totalPrice = totalPrice;
+        this.specialFund = specialFund;
+        this.generalFund = generalFund;
+        this.justification = justification;
+    }
+
+    // КОНСТРУКТОР БЕЗ id (для створення нових записів)
     public Estimate(String kekv, String dkCode, String nameProject,
                     String unitOfMeasure, double quantity, double price, double totalPrice,
                     double specialFund, double generalFund, String justification) {

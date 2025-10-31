@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/views/header.jspf" %>
+<style>
+    <%@include file="/css/style.css" %>
+</style>
 
 <!-- Estimate table output -->
 <%--<c:if test="${not empty sevUsers}">--%>

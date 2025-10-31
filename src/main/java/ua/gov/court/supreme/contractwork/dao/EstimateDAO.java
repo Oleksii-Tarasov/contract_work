@@ -5,7 +5,10 @@ import ua.gov.court.supreme.contractwork.model.Estimate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EstimateDAO {
     private final PostgresConnector postgresConnector;
@@ -20,9 +23,13 @@ public class EstimateDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
+    private static final String SELECT_KEKV2210_SQL = """
+                    SELECT * FROM estimate WHERE kekv = '2210';
+            """;
+
     public void insertProject(Estimate newProject) {
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
 
             preparedStatement.setString(1, newProject.getKekv());
             preparedStatement.setString(2, newProject.getDkCode());
@@ -39,5 +46,42 @@ public class EstimateDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Estimate> getProjectsByKekv(int kekv) {
+        List<Estimate> estimateProjectsByKekv = new ArrayList<>();
+        String query = "";
+        
+        switch (kekv) {
+            case 2210: query = "SELECT * FROM estimate WHERE kekv = '2210'"; break;
+            case 2240: query = "SELECT * FROM estimate WHERE kekv = '2240'"; break;
+            case 3110: query = "SELECT * FROM estimate WHERE kekv = '3110'"; break;
+        }
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery();) {
+
+            while (resultSet.next()) {
+                estimateProjectsByKekv.add(new Estimate(
+                        resultSet.getLong("id"),
+                        resultSet.getString("kekv"),
+                        resultSet.getString("dk_code"),
+                        resultSet.getString("name_project"),
+                        resultSet.getString("unit_of_measure"),
+                        resultSet.getDouble("quantity"),
+                        resultSet.getDouble("price"),
+                        resultSet.getDouble("total_price"),
+                        resultSet.getDouble("special_fund"),
+                        resultSet.getDouble("general_fund"),
+                        resultSet.getString("justification")
+                ));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return estimateProjectsByKekv;
     }
 }
