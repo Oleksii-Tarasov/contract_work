@@ -25,18 +25,7 @@
                     інвентар та обмундирування
                 </th>
             </tr>
-            <%-- Ініціалізація змінних для підрахунку сум --%>
-            <c:set var="totalQuantity" value="${0}" scope="page"/>
-            <c:set var="totalPriceSum" value="${0}" scope="page"/>
-            <c:set var="totalGeneralFund" value="${0}" scope="page"/>
-            <c:set var="totalSpecialFund" value="${0}" scope="page"/>
-
-            <c:forEach var="project2210" items="${estimateKekv2210}">
-                <%-- Накопичення сум у змінних --%>
-                <c:set var="totalQuantity" value="${totalQuantity + project2210.quantity}" scope="page"/>
-                <c:set var="totalPriceSum" value="${totalPriceSum + project2210.totalPrice}" scope="page"/>
-                <c:set var="totalGeneralFund" value="${totalGeneralFund + project2210.generalFund}" scope="page"/>
-                <c:set var="totalSpecialFund" value="${totalSpecialFund + project2210.specialFund}" scope="page"/>
+            <c:forEach var="project2210" items="${projectsForEstimate2210}">
                 <tr>
                     <td></td>
                     <td><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>
@@ -49,24 +38,22 @@
                     <td><c:out value="${project2210.justification}"/></td>
                 </tr>
             </c:forEach>
-
             <tr>
                 <th></th>
                 <th style="text-align: right">ВСЬОГО ЗА 2210</th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalQuantity}" pattern="#,##0"/></th>
+                <th><fmt:formatNumber value="${totalQuantity2210}" pattern="#,##0"/></th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalPriceSum}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalGeneralFund}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalSpecialFund}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalPriceSum2210}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalGeneralFund2210}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalSpecialFund2210}" pattern="#,##0.00"/></th>
                 <th></th>
             </tr>
             <tr>
                 <th>2240</th>
                 <th colspan="8" style="text-align: left">Оплата послуг (крім комунальних)</th>
             </tr>
-
-            <c:forEach var="project2240" items="${estimateKekv2240}">
+            <c:forEach var="project2240" items="${projectsForEstimate2240}">
                 <tr>
                     <td></td>
                     <td><c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/></td>
@@ -84,11 +71,11 @@
                 <th></th>
                 <th style="text-align: right">ВСЬОГО ЗА 2240</th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalQuantity}" pattern="#,##0"/></th>
+                <th><fmt:formatNumber value="${totalQuantity2240}" pattern="#,##0"/></th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalPriceSum}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalGeneralFund}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalSpecialFund}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalPriceSum2240}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalGeneralFund2240}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalSpecialFund2240}" pattern="#,##0.00"/></th>
                 <th></th>
             </tr>
             <tr>
@@ -96,7 +83,7 @@
                 <th colspan="8" style="text-align: left">Придбання обладнання і предметів довгострокового користування
                 </th>
             </tr>
-            <c:forEach var="project3110" items="${estimateKekv3110}">
+            <c:forEach var="project3110" items="${projectsForEstimate3110}">
                 <tr>
                     <td></td>
                     <td><c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/></td>
@@ -113,11 +100,11 @@
                 <th></th>
                 <th style="text-align: right">ВСЬОГО ЗА 3110</th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalQuantity}" pattern="#,##0"/></th>
+                <th><fmt:formatNumber value="${totalQuantity3110}" pattern="#,##0"/></th>
                 <th></th>
-                <th><fmt:formatNumber value="${totalPriceSum}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalGeneralFund}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalSpecialFund}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalPriceSum3110}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalGeneralFund3110}" pattern="#,##0.00"/></th>
+                <th><fmt:formatNumber value="${totalSpecialFund3110}" pattern="#,##0.00"/></th>
                 <th></th>
             </tr>
         </table>

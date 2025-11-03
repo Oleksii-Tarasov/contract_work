@@ -50,13 +50,13 @@ public class EstimateDAO {
 
     public List<Estimate> getProjectsByKekv(int kekv) {
         List<Estimate> estimateProjectsByKekv = new ArrayList<>();
-        String query = "";
-        
-        switch (kekv) {
-            case 2210: query = "SELECT * FROM estimate WHERE kekv = '2210'"; break;
-            case 2240: query = "SELECT * FROM estimate WHERE kekv = '2240'"; break;
-            case 3110: query = "SELECT * FROM estimate WHERE kekv = '3110'"; break;
-        }
+
+        String query = switch (kekv) {
+            case 2210 -> "SELECT * FROM estimate WHERE kekv = '2210'";
+            case 2240 -> "SELECT * FROM estimate WHERE kekv = '2240'";
+            case 3110 -> "SELECT * FROM estimate WHERE kekv = '3110'";
+            default -> "";
+        };
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
