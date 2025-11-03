@@ -66,7 +66,6 @@
                     <td><c:out value="${project2240.justification}"/></td>
                 </tr>
             </c:forEach>
-
             <tr>
                 <th></th>
                 <th style="text-align: right">ВСЬОГО ЗА 2240</th>
