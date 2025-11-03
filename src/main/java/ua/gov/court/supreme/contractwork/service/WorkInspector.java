@@ -29,4 +29,8 @@ public class WorkInspector {
 
         return new EstimateTotalAmounts(quantity, priceSum, generalFund, specialFund);
     }
+
+    public void deleteProjectFromEstimate(long projectId) {
+        estimateDAO.deleteProjectFromEstimateById(projectId);
+    }
 }

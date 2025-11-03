@@ -23,10 +23,6 @@ public class EstimateDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
-    private static final String SELECT_KEKV2210_SQL = """
-                    SELECT * FROM estimate WHERE kekv = '2210';
-            """;
-
     public void insertProject(Estimate newProject) {
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
@@ -83,5 +79,25 @@ public class EstimateDAO {
         }
 
         return estimateProjectsByKekv;
+    }
+
+    public void deleteProjectFromEstimateById(long projectId) {
+        String query = "DELETE FROM estimate WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setLong(1, projectId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Project with ID " + projectId + " deleted successfully.");
+            } else {
+                System.out.println("Project with ID " + projectId + " not found or not deleted.");
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL error during deletion: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

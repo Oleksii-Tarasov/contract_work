@@ -83,3 +83,9 @@ body {
 .nav-item .dropdown-toggle {
     font-size: 1.25rem !important;
 }
+
+/* Row */
+
+.project-row:hover {
+    cursor: pointer;
+}

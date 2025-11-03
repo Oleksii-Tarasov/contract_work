@@ -1,6 +1,5 @@
 package ua.gov.court.supreme.contractwork.servlet;
 
-import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
 import javax.servlet.ServletException;
