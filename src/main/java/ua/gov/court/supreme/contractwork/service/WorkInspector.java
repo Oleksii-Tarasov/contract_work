@@ -33,4 +33,12 @@ public class WorkInspector {
     public void deleteProjectFromEstimate(long projectId) {
         estimateDAO.deleteProjectFromEstimateById(projectId);
     }
+
+    public Estimate getProjectFromEstimateById(long id) {
+        return estimateDAO.getProjectById(id);
+    }
+
+    public void updateProjectToEstimate(Estimate updatedProject) {
+        estimateDAO.updateProjectToEstimate(updatedProject);
+    }
 }

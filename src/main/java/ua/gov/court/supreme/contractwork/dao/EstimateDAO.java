@@ -44,6 +44,38 @@ public class EstimateDAO {
         }
     }
 
+    public Estimate getProjectById(long id) {
+        Estimate projectFromEstimate = null;
+        String query = "SELECT * FROM estimate WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    projectFromEstimate = new Estimate(
+                            resultSet.getLong("id"),
+                            resultSet.getString("kekv"),
+                            resultSet.getString("dk_code"),
+                            resultSet.getString("name_project"),
+                            resultSet.getString("unit_of_measure"),
+                            resultSet.getDouble("quantity"),
+                            resultSet.getDouble("price"),
+                            resultSet.getDouble("total_price"),
+                            resultSet.getDouble("special_fund"),
+                            resultSet.getDouble("general_fund"),
+                            resultSet.getString("justification")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return projectFromEstimate;
+    }
+
     public List<Estimate> getProjectsByKekv(int kekv) {
         List<Estimate> estimateProjectsByKekv = new ArrayList<>();
 
@@ -73,7 +105,6 @@ public class EstimateDAO {
                         resultSet.getString("justification")
                 ));
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -81,11 +112,40 @@ public class EstimateDAO {
         return estimateProjectsByKekv;
     }
 
+    public void updateProjectToEstimate(Estimate updatedProject) {
+        String query = """
+                UPDATE estimate SET kekv=?, dk_code=?, name_project=?, unit_of_measure=?, quantity=?,
+                price=?, total_price=?, special_fund=?, general_fund=?, justification=?
+                WHERE id=?
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, updatedProject.getKekv());
+            preparedStatement.setString(2, updatedProject.getDkCode());
+            preparedStatement.setString(3, updatedProject.getNameProject());
+            preparedStatement.setString(4, updatedProject.getUnitOfMeasure());
+            preparedStatement.setDouble(5, updatedProject.getQuantity());
+            preparedStatement.setDouble(6, updatedProject.getPrice());
+            preparedStatement.setDouble(7, updatedProject.getTotalPrice());
+            preparedStatement.setDouble(8, updatedProject.getSpecialFund());
+            preparedStatement.setDouble(9, updatedProject.getGeneralFund());
+            preparedStatement.setString(10, updatedProject.getJustification());
+            preparedStatement.setLong(11, updatedProject.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void deleteProjectFromEstimateById(long projectId) {
         String query = "DELETE FROM estimate WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setLong(1, projectId);
 
             int rowsAffected = preparedStatement.executeUpdate();

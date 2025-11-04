@@ -17,7 +17,7 @@
                 <th>Сума, грн</th>
                 <th>ЗФ</th>
                 <th>СФ</th>
-                <th>Розрахунок та обгрунтування щодо необхідності зазначеного придбання</th>
+                <th>Розрахунок та обґрунтування щодо необхідності зазначеного придбання</th>
             </tr>
             <tr>
                 <th>2210</th>
@@ -25,9 +25,9 @@
                     інвентар та обмундирування
                 </th>
             </tr>
-            <c:forEach var="project2210" items="${projectsForEstimate2210}">
+            <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="status">
                 <tr class="project-row" onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
-                    <td></td>
+                    <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
@@ -53,9 +53,9 @@
                 <th>2240</th>
                 <th colspan="8" style="text-align: left">Оплата послуг (крім комунальних)</th>
             </tr>
-            <c:forEach var="project2240" items="${projectsForEstimate2240}">
+            <c:forEach var="project2240" items="${projectsForEstimate2240}" varStatus="status">
                 <tr class="project-row" onclick="openActionModal(${project2240.id}, '${project2240.nameProject}')">
-                    <td></td>
+                    <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/></td>
                     <td><c:out value="${project2240.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2240.quantity}" pattern="#,##0"/></td>
@@ -82,9 +82,9 @@
                 <th colspan="8" style="text-align: left">Придбання обладнання і предметів довгострокового користування
                 </th>
             </tr>
-            <c:forEach var="project3110" items="${projectsForEstimate3110}">
+            <c:forEach var="project3110" items="${projectsForEstimate3110}" varStatus="status">
                 <tr class="project-row" onclick="openActionModal(${project3110.id}, '${project3110.nameProject}')">
-                    <td></td>
+                    <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/></td>
                     <td><c:out value="${project3110.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project3110.quantity}" pattern="#,##0"/></td>
@@ -173,7 +173,7 @@
         // ВСТАНОВЛЮЄМО ЗАГОЛОВОК ТУТ:
         modalTitle.textContent = 'Обраний проєкт: ' + projectName;
 
-        editButton.href = "${pageContext.request.contextPath}/edit-project?id=" + projectId;
+        editButton.href = "${pageContext.request.contextPath}/update-project?id=" + projectId;
 
         actionModal.show();
     }
