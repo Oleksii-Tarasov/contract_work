@@ -17,15 +17,14 @@ public class EstimateDAO {
         this.postgresConnector = new PostgresConnector();
     }
 
-    private static final String INSERT_SQL = """
+    public void insertProject(Estimate newProject) {
+        String query = """
             INSERT INTO estimate (kekv, dk_code, name_project, unit_of_measure,
             quantity, price, total_price, special_fund, general_fund, justification)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
-
-    public void insertProject(Estimate newProject) {
         try (Connection connection = postgresConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newProject.getKekv());
             preparedStatement.setString(2, newProject.getDkCode());
