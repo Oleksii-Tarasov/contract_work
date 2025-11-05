@@ -19,14 +19,16 @@
                 <th>СФ</th>
                 <th>Розрахунок та обґрунтування щодо необхідності зазначеного придбання</th>
             </tr>
-            <tr>
+            <tr class="black-borders">
                 <th>2210</th>
                 <th colspan="8" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т. ч. м'який
                     інвентар та обмундирування
                 </th>
             </tr>
             <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="status">
-                <tr class="project-row" onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
+                <%-- Використовуємо c:if для додавання класу, якщо informatization == true --%>
+                <tr class="project-row ${project2210.informatization ? 'informatization-row' : ''}"
+                    onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
                     <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
@@ -49,12 +51,13 @@
                 <th><fmt:formatNumber value="${totalSpecialFund2210}" pattern="#,##0.00"/></th>
                 <th></th>
             </tr>
-            <tr>
+            <tr class="black-borders">
                 <th>2240</th>
                 <th colspan="8" style="text-align: left">Оплата послуг (крім комунальних)</th>
             </tr>
             <c:forEach var="project2240" items="${projectsForEstimate2240}" varStatus="status">
-                <tr class="project-row" onclick="openActionModal(${project2240.id}, '${project2240.nameProject}')">
+                <tr class="project-row ${project2240.informatization ? 'informatization-row' : ''}"
+                    onclick="openActionModal(${project2240.id}, '${project2240.nameProject}')">
                     <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/></td>
                     <td><c:out value="${project2240.unitOfMeasure}"/></td>
@@ -77,13 +80,14 @@
                 <th><fmt:formatNumber value="${totalSpecialFund2240}" pattern="#,##0.00"/></th>
                 <th></th>
             </tr>
-            <tr>
+            <tr class="black-borders">
                 <th>3110</th>
                 <th colspan="8" style="text-align: left">Придбання обладнання і предметів довгострокового користування
                 </th>
             </tr>
             <c:forEach var="project3110" items="${projectsForEstimate3110}" varStatus="status">
-                <tr class="project-row" onclick="openActionModal(${project3110.id}, '${project3110.nameProject}')">
+                <tr class="project-row ${project3110.informatization ? 'informatization-row' : ''}"
+                    onclick="openActionModal(${project3110.id}, '${project3110.nameProject}')">
                     <td><c:out value="${status.count}"/></td>
                     <td><c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/></td>
                     <td><c:out value="${project3110.unitOfMeasure}"/></td>
@@ -171,7 +175,7 @@
         confirmDeleteBody.classList.add('d-none');
 
         // ВСТАНОВЛЮЄМО ЗАГОЛОВОК ТУТ:
-        modalTitle.textContent = 'Обраний проєкт: ' + projectName;
+        modalTitle.textContent = projectName;
 
         editButton.href = "${pageContext.request.contextPath}/update-project?id=" + projectId;
 
@@ -198,7 +202,7 @@
 
         // ПОВЕРТАЄМО ПОПЕРЕДНІЙ ЗАГОЛОВОК ПРИ СКАСУВАННІ
         // Використовуємо збережену назву проєкту
-        modalTitle.textContent = 'Обраний проєкт: ' + currentProjectName;
+        modalTitle.textContent = currentProjectName;
     }
 
     // Скидання стану модалки при її закритті будь-яким способом (хрестик, клік поза)

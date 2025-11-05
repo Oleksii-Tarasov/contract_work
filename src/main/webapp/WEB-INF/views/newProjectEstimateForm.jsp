@@ -30,7 +30,7 @@
                         <label for="nameProject" class="form-label fw-bold">Назва предмета закупівлі:</label>
                         <textarea class="form-control" id="nameProject" name="nameProject" rows="2" required></textarea>
                     </div>
-                    <!-- Обгрунтування закупівлі -->
+                    <!-- Обґрунтування закупівлі -->
                     <div class="mb-3">
                         <label for="justification" class="form-label fw-bold">Обгрунтування закупівлі:</label>
                         <textarea class="form-control" id="justification" name="justification" rows="3" required></textarea>

@@ -9,6 +9,17 @@
     font-size: 16px;
 }
 
+.black-borders th {
+    border-top: 2px solid black !important;
+    border-bottom: 2px solid black !important;
+}
+
+/* колір для рядків де проєкт стосується інформатизації */
+.table.table-striped-columns .informatization-row,
+.table.table-striped-columns .informatization-row td {
+    background-color: #ddebf7 !important;
+}
+
 .table td, .table th {
     white-space: normal;
     overflow: hidden;

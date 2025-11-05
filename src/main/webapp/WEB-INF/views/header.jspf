@@ -75,7 +75,7 @@
 
                 <h6 class="fw-bold mb-3">Позначення кольорів:</h6>
                 <ul class="list-unstyled">
-                    <li class="mb-3 p-2" style="background-color: #57bae2">
+                    <li class="mb-3 p-2" style="background-color: #ddebf7">
                         проєкт інформатизації
                     </li>
                     <%--                    <li class="mb-3 p-2" style="background-color: #FFB6C1">--%>

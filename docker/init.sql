@@ -27,30 +27,31 @@ CREATE TABLE dk_code_inf
 );
 
 CREATE OR REPLACE FUNCTION set_informatization_status()
-    RETURNS TRIGGER AS
-$$
+    RETURNS TRIGGER AS $$
 DECLARE
     code_exists   BOOLEAN DEFAULT FALSE;
     ref_code      TEXT;
     regex_pattern TEXT;
+    prefix_part   TEXT;
 BEGIN
-    -- Проходимо по всіх еталонних кодах довідника
-    FOR ref_code IN SELECT dk_code FROM dk_code_inf
+    -- Проходимо по всіх еталонних кодах довідника (без суфікса)
+    FOR ref_code IN SELECT SUBSTRING(dk_code FROM '^[0-9]+') FROM dk_code_inf
         LOOP
+        -- ref_code тепер містить тільки префікс, наприклад, '30200000' або '71200000'
+
         -- Перетворюємо еталонний код на шаблон регулярного виразу
-        -- '30200000-1' перетворюється на '^302\d{5}-\d$'
+        -- '30200000' -> '^302\d{5}'
 
-        -- 1. Замінюємо всі цифри на '\d' (будь-яка цифра)
-            regex_pattern := REGEXP_REPLACE(ref_code, '[0-9]', '\d', 'g');
+        -- Замінюємо 0 на \d (будь-яка цифра)
+        -- '30200000' стає '302\d\d\d\d\d'
+            prefix_part := REPLACE(ref_code, '0', '\d');
 
-            -- 2. Замінимо нулі на '\d', а інші цифри залишимо як є.
-            -- Замінюємо 0 на \d (будь-яка цифра)
-            -- '30200000-1' стає '302\d\d\d\d\d-\d'
-            regex_pattern := REPLACE(ref_code, '0', '\d');
-            -- Додаємо маркери початку та кінця рядка для точної відповідності
-            regex_pattern := '^' || regex_pattern || '$';
+            -- Формуємо повний регулярний вираз:
+            -- Початок (^) + наш шаблон префікса + дефіс (-) + будь-яка цифра (\d) + кінець ($)
+            regex_pattern := '^' || prefix_part || '-\d$';
 
-            -- Перевіряємо, чи вхідний код відповідає цьому регулярному виразу
+            -- Перевіряємо, чи вхідний код відповідає цьому регулярному виразу,
+            -- Наприклад, '302256000-9' ~ '^302\d{5}-\d$'
             IF NEW.dk_code ~ regex_pattern THEN
                 code_exists := TRUE;
                 EXIT; -- Знайшли збіг, виходимо з циклу

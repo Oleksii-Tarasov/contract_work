@@ -101,7 +101,8 @@ public class EstimateDAO {
                         resultSet.getDouble("total_price"),
                         resultSet.getDouble("special_fund"),
                         resultSet.getDouble("general_fund"),
-                        resultSet.getString("justification")
+                        resultSet.getString("justification"),
+                        resultSet.getBoolean("informatization")
                 ));
             }
         } catch (SQLException e) {

@@ -12,6 +12,7 @@ public class Estimate {
     private double specialFund;
     private double generalFund;
     private String justification;
+    private boolean informatization;
 
     public Estimate() {
     }
@@ -46,6 +47,24 @@ public class Estimate {
         this.specialFund = specialFund;
         this.generalFund = generalFund;
         this.justification = justification;
+    }
+
+    // КОНСТРУКТОР із полем для інформатизації
+    public Estimate(long id, String kekv, String dkCode, String nameProject,
+                    String unitOfMeasure, double quantity, double price, double totalPrice,
+                    double specialFund, double generalFund, String justification, boolean informatization) {
+        this.id = id;
+        this.kekv = kekv;
+        this.dkCode = dkCode;
+        this.nameProject = nameProject;
+        this.unitOfMeasure = unitOfMeasure;
+        this.quantity = quantity;
+        this.price = price;
+        this.totalPrice = totalPrice;
+        this.specialFund = specialFund;
+        this.generalFund = generalFund;
+        this.justification = justification;
+        this.informatization = informatization;
     }
 
     public long getId() {
@@ -134,5 +153,9 @@ public class Estimate {
 
     public void setJustification(String justification) {
         this.justification = justification;
+    }
+
+    public boolean isInformatization() {
+        return informatization;
     }
 }
