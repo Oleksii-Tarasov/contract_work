@@ -41,6 +41,6 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
 
         workInspector.updateProjectToEstimate(updatedProject);
 
-        resp.sendRedirect(req.getContextPath() + "/estimate");
+        resp.sendRedirect(req.getContextPath() + "/estimate#project-" + id);
     }
 }
