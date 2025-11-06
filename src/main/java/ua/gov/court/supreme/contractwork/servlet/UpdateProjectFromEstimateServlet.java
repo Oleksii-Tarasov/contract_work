@@ -20,7 +20,7 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
         long id = Long.parseLong(req.getParameter("id"));

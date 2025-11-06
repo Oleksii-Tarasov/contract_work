@@ -1,5 +1,6 @@
 package ua.gov.court.supreme.contractwork.db;
 
+import ua.gov.court.supreme.contractwork.exception.DatabaseException;
 import ua.gov.court.supreme.contractwork.service.PropertiesLoader;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +15,7 @@ public class PostgresConnector implements DatabaseConnector {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Failed to initialize Postgres DB connection", e);
         }
     }
 

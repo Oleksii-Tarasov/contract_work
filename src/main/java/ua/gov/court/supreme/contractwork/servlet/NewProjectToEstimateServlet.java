@@ -24,7 +24,7 @@ public class NewProjectToEstimateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
         String kekv = req.getParameter("kekv");
@@ -45,7 +45,7 @@ public class NewProjectToEstimateServlet extends HttpServlet {
             estimateDAO.insertProject(newProjectForEstimate);
             resp.sendRedirect(req.getContextPath() + "/estimate");
         } catch (Exception e) {
-            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to create project");
         }
     }
 }

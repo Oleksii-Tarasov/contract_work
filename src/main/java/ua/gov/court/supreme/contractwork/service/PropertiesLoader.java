@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.contractwork.service;
 
+import ua.gov.court.supreme.contractwork.exception.FileProcessingException;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -12,7 +14,7 @@ public class PropertiesLoader {
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FileProcessingException("Failed to load configuration file.", e);
         }
     }
 

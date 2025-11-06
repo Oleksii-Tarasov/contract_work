@@ -26,9 +26,9 @@
                 </th>
             </tr>
             <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="status">
-                <%-- Використовуємо c:if для додавання класу, якщо informatization == true --%>
                 <tr onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
                     <td><c:out value="${status.count}"/></td>
+                        <%-- Використовуємо c:if для додавання класу, якщо informatization == true --%>
                     <td id="project-${project2210.id}" class="project-row ${project2210.informatization ? 'informatization-row' : ''}"><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
