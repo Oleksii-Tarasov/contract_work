@@ -8,9 +8,11 @@ import java.util.List;
 
 public class WorkInspector {
     private final EstimateDAO estimateDAO;
+    private final  EstimateExcelGenerator estimateExcelGenerator;
 
     public WorkInspector() {
         this.estimateDAO = new EstimateDAO();
+        this.estimateExcelGenerator = new EstimateExcelGenerator();
     }
 
     public List<Estimate> getProjectsFromEstimateByKekv(int kekv) {
@@ -40,5 +42,9 @@ public class WorkInspector {
 
     public void updateProjectToEstimate(Estimate updatedProject) {
         estimateDAO.updateProjectToEstimate(updatedProject);
+    }
+
+    public void generateEstimateExcelFile() {
+        estimateExcelGenerator.generate("C:/temp/koshtorys.xlsx");
     }
 }

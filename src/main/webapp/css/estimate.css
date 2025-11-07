@@ -31,6 +31,7 @@
 /* Плавний перехід кольору для всіх комірок таблиці */
 .table tr td {
     transition: background-color 1s ease;
+    cursor: pointer;
 }
 .highlight-edited td {
     background-color: #fff3cd;

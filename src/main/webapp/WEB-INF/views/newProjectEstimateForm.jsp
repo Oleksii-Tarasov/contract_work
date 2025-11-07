@@ -42,6 +42,7 @@
                             <option value="" disabled selected>Оберіть одиницю виміру</option>
                             <option value="шт.">штук</option>
                             <option value="компл.">комплекти</option>
+                            <option value="уп.">упаковка</option>
                             <option value="кільк.">кількість</option>
                             <option value="посл.">послуги</option>
                             <option value="місяць">місяць</option>

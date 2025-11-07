@@ -109,6 +109,18 @@
             </tr>
         </table>
     </div>
+    <div class="mt-3 mb-4 text-start">
+        <a href="${pageContext.request.contextPath}/generate-estimate-excel"
+           class="btn btn-success btn-sm px-2 shadow-sm">
+            <i class="fa-solid fa-file-excel me-1"></i> Конвертувати в Excel
+        </a>
+    </div>
+<%--    <div class="mt-3 text-start">--%>
+<%--        <a href="${pageContext.request.contextPath}/generate-estimate-excel"--%>
+<%--           class="btn btn-success btn-sm px-2 shadow-sm">--%>
+<%--            <i class="fa-solid fa-file-excel me-1"></i> Конвертувати в Excel--%>
+<%--        </a>--%>
+<%--    </div>--%>
 </div>
 
 <!-- Modal Action Window (Редагувати/Видалити) -->
