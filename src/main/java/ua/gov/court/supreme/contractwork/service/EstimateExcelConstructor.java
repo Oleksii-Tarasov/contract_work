@@ -6,66 +6,53 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
-public class EstimateExcelGenerator {
+public class EstimateExcelConstructor {
 
-    private final EstimateDAO estimateDAO = new EstimateDAO();
+    public Workbook createWorkbook(EstimateDAO estimateDAO) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Кошторис");
 
-    public void generate(String filePath) {
-        try (Workbook workbook = new XSSFWorkbook()) {
+        // ====== БАЗОВИЙ СТИЛЬ ШРИФТУ ======
+        Font baseFont = workbook.createFont();
+        baseFont.setFontName("Roboto Condensed Light");
+        baseFont.setFontHeightInPoints((short) 12);
 
-            Sheet sheet = workbook.createSheet("Кошторис");
+        CellStyle baseStyle = workbook.createCellStyle();
+        baseStyle.setFont(baseFont);
 
-            // ====== БАЗОВИЙ СТИЛЬ ШРИФТУ ======
-            Font baseFont = workbook.createFont();
-            baseFont.setFontName("Roboto Condensed Light");
-            baseFont.setFontHeightInPoints((short) 12);
+        int rowIndex = 0;
 
-            CellStyle baseStyle = workbook.createCellStyle();
-            baseStyle.setFont(baseFont);
+        // ТІЛЬКИ ОДИН ЗАГОЛОВОК ДЛЯ ВСЬОГО ДОКУМЕНТА
+        rowIndex = writeHeader(workbook, sheet, rowIndex, baseStyle);
 
-            int rowIndex = 0;
+        // 2210 з заголовком таблиці
+        rowIndex = writeKekvBlock(workbook, sheet,
+                "2210", "Предмети, матеріали, обладнання та інвентар, у т. ч. м'який інвентар та обмундирування",
+                estimateDAO.getProjectsByKekv(2210), rowIndex, baseStyle, true);
 
-            // ТІЛЬКИ ОДИН ЗАГОЛОВОК ДЛЯ ВСЬОГО ДОКУМЕНТА
-            rowIndex = writeHeader(workbook, sheet, rowIndex, baseStyle);
+        // 2240 та 3110 без заголовків таблиці
+        rowIndex = writeKekvBlock(workbook, sheet,
+                "2240", "Оплата послуг (крім комунальних)",
+                estimateDAO.getProjectsByKekv(2240), rowIndex, baseStyle, false);
 
-            // 2210 з заголовком таблиці
-            rowIndex = writeKekvBlock(workbook, sheet,
-                    "2210", "Предмети, матеріали, обладнання та інвентар, у т. ч. м'який інвентар та обмундирування",
-                    estimateDAO.getProjectsByKekv(2210), rowIndex, baseStyle, true);
+        rowIndex = writeKekvBlock(workbook, sheet,
+                "3110", "Придбання обладнання і предметів довгострокового користування",
+                estimateDAO.getProjectsByKekv(3110), rowIndex, baseStyle, false);
 
-            // 2240 та 3110 без заголовків таблиці
-            rowIndex = writeKekvBlock(workbook, sheet,
-                    "2240", "Оплата послуг (крім комунальних)",
-                    estimateDAO.getProjectsByKekv(2240), rowIndex, baseStyle, false);
+        // ШИРИНА СТОВПЦІВ (Кількість робимо трішки ширше)
+        sheet.setColumnWidth(0, 6 * 256);
+        sheet.setColumnWidth(1, 50 * 256);
+        sheet.setColumnWidth(2, 10 * 256);
+        sheet.setColumnWidth(3, 14 * 256);
+        sheet.setColumnWidth(4, 14 * 256);
+        sheet.setColumnWidth(5, 14 * 256);
+        sheet.setColumnWidth(6, 14 * 256);
+        sheet.setColumnWidth(7, 14 * 256);
+        sheet.setColumnWidth(8, 70 * 256);
 
-            rowIndex = writeKekvBlock(workbook, sheet,
-                    "3110", "Придбання обладнання і предметів довгострокового користування",
-                    estimateDAO.getProjectsByKekv(3110), rowIndex, baseStyle, false);
-
-            // ШИРИНА СТОВПЦІВ (Кількість робимо трішки ширше)
-            sheet.setColumnWidth(0, 6 * 256);
-            sheet.setColumnWidth(1, 50 * 256);
-            sheet.setColumnWidth(2, 10 * 256);
-            sheet.setColumnWidth(3, 14 * 256);
-            sheet.setColumnWidth(4, 14 * 256);
-            sheet.setColumnWidth(5, 14 * 256);
-            sheet.setColumnWidth(6, 14 * 256);
-            sheet.setColumnWidth(7, 14 * 256);
-            sheet.setColumnWidth(8, 70 * 256);
-
-            try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
-                workbook.write(fileOut);
-            }
-
-            System.out.println("Excel файл створено: " + filePath);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Помилка при збереженні Excel файлу", e);
-        }
+        return workbook;
     }
 
     private int writeHeader(Workbook workbook, Sheet sheet, int rowIndex, CellStyle baseStyle) {

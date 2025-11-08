@@ -2,7 +2,6 @@ package ua.gov.court.supreme.contractwork.servlet;
 
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.model.Estimate;
-import ua.gov.court.supreme.contractwork.service.EstimateExcelGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/new-project")
-public class NewProjectToEstimateServlet extends HttpServlet {
-    private EstimateDAO estimateDAO;
-
-    public void init() {
-        estimateDAO = new EstimateDAO();
-    }
-
+public class NewProjectToEstimateServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/views/newProjectEstimateForm.jsp").forward(req, resp);
@@ -43,7 +36,7 @@ public class NewProjectToEstimateServlet extends HttpServlet {
                 quantity, price, totalPrice, specialFund, generalFund, justification);
 
         try {
-            estimateDAO.insertProject(newProjectForEstimate);
+            workInspector.insertProjectToEstimate(newProjectForEstimate);
             resp.sendRedirect(req.getContextPath() + "/estimate");
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to create project");

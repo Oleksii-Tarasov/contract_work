@@ -1,19 +1,27 @@
 package ua.gov.court.supreme.contractwork.service;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.dto.EstimateTotalAmounts;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class WorkInspector {
     private final EstimateDAO estimateDAO;
-    private final  EstimateExcelGenerator estimateExcelGenerator;
+    private final EstimateExcelConstructor estimateExcelConstructor;
 
     public WorkInspector() {
         this.estimateDAO = new EstimateDAO();
-        this.estimateExcelGenerator = new EstimateExcelGenerator();
+        this.estimateExcelConstructor = new EstimateExcelConstructor();
     }
+
+    public void insertProjectToEstimate(Estimate projectFoEstimate) {
+        estimateDAO.insertProject(projectFoEstimate);
+    }
+
 
     public List<Estimate> getProjectsFromEstimateByKekv(int kekv) {
         return estimateDAO.getProjectsByKekv(kekv);
@@ -44,7 +52,15 @@ public class WorkInspector {
         estimateDAO.updateProjectToEstimate(updatedProject);
     }
 
-    public void generateEstimateExcelFile() {
-        estimateExcelGenerator.generate("C:/temp/koshtorys.xlsx");
+    public byte[] createEstimateExcelFile() {
+        try (Workbook workbook = estimateExcelConstructor.createWorkbook(estimateDAO);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            workbook.write(baos);
+            return baos.toByteArray();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Помилка при формуванні Excel файлу", e);
+        }
     }
 }
