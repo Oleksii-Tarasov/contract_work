@@ -87,7 +87,7 @@ public class EstimateDAO {
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery();) {
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 estimateProjectsByKekv.add(new Estimate(

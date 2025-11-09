@@ -1,12 +1,12 @@
 package ua.gov.court.supreme.contractwork.dto;
 
-public class EstimateTotalAmounts {
+public class ProjectsTotalAmounts {
     private double totalQuantity;
     private double totalPriceSum;
     private double totalGeneralFund;
     private double totalSpecialFund;
 
-    public EstimateTotalAmounts(double totalQuantity, double totalPriceSum, double totalGeneralFund, double totalSpecialFund) {
+    public ProjectsTotalAmounts(double totalQuantity, double totalPriceSum, double totalGeneralFund, double totalSpecialFund) {
         this.totalQuantity = totalQuantity;
         this.totalPriceSum = totalPriceSum;
         this.totalGeneralFund = totalGeneralFund;

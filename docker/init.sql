@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS estimate;
+DROP TABLE IF EXISTS purchases;
 DROP TABLE IF EXISTS dk_code_inf;
 
 -- Таблиця Кошторису
@@ -16,6 +17,25 @@ CREATE TABLE estimate
     general_fund    NUMERIC(12, 2) NOT NULL, -- Кошти із загального фонду
     justification   TEXT           NOT NULL, -- Обґрунтування закупівлі
     informatization BOOLEAN DEFAULT FALSE    -- Належність проєкту до інформатизації
+);
+
+-- Таблиця Закупівель
+CREATE TABLE purchases
+(
+    id                SERIAL PRIMARY KEY,
+    kekv              VARCHAR(10)    NOT NULL,
+    dk_code           VARCHAR(10)    NOT NULL,
+    name_project      TEXT           NOT NULL,
+    unit_of_measure   VARCHAR(20)    NOT NULL,
+    quantity          NUMERIC(10, 2) NOT NULL,
+    price             NUMERIC(12, 2) NOT NULL,
+    total_price       NUMERIC(12, 2) NOT NULL,
+    contract_price    NUMERIC(12, 2),          -- Сума Договору
+    remaining_balance NUMERIC(12, 2),          -- Залишок коштів
+    special_fund      NUMERIC(12, 2) NOT NULL,
+    general_fund      NUMERIC(12, 2) NOT NULL,
+    justification     TEXT           NOT NULL,
+    informatization   BOOLEAN DEFAULT FALSE
 );
 
 -- Таблиця Кодів ДК інформатизації
@@ -71,11 +91,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Створення тригера
-DROP TRIGGER IF EXISTS trigger_set_informatization ON estimate;
+-- Створення тригерів
+DROP TRIGGER IF EXISTS trigger_set_informatization_estimate ON estimate;
+DROP TRIGGER IF EXISTS trigger_set_informatization_purchases ON purchases;
 
-CREATE TRIGGER trigger_set_informatization
+CREATE TRIGGER trigger_set_informatization_estimate
     BEFORE INSERT OR UPDATE OF dk_code
     ON estimate
+    FOR EACH ROW
+EXECUTE FUNCTION set_informatization_status();
+
+CREATE TRIGGER trigger_set_informatization_purchases
+    BEFORE INSERT OR UPDATE OF dk_code
+    ON purchases
     FOR EACH ROW
 EXECUTE FUNCTION set_informatization_status();

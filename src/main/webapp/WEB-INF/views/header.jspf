@@ -38,6 +38,11 @@
                                data-bs-target="#helpModal">Довідка</a>
                         </li>
                         <li>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/purchases">
+                                Закупівлі
+                            </a>
+                        </li>
+                        <li>
                             <a class="dropdown-item" href="${pageContext.request.contextPath}/estimate">
                                 Кошторис
                             </a>
