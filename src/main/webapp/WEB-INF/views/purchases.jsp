@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/views/header.jspf" %>
 <style>
-    <%@include file="/css/style.css" %>
+    <%@include file="/css/purchases.css" %>
 </style>
 
 <!-- Estimate table output -->
@@ -11,12 +11,13 @@
             <tr>
                 <th>№</th>
                 <th data-sortable="true">Назва предмета закупівлі</th>
-                <th data-sortable="true">одиниця виміру</th>
-                <th data-sortable="true">кількість</th>
-                <th data-sortable="true">ціна за одиницю</th>
-                <th data-sortable="true">Сума</th>
+                <th data-sortable="true">Одиниця виміру</th>
+                <th data-sortable="true">Кількість</th>
+                <th data-sortable="true">Ціна за одиницю</th>
+                <th data-sortable="true">Сума по кошторису</th>
                 <th data-sortable="true">Сума Договору</th>
                 <th data-sortable="true">Залишок</th>
+                <th data-sortable="true">Оплата до</th>
             </tr>
 
             <tr class="black-borders">
@@ -34,6 +35,9 @@
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
                     <td><fmt:formatNumber value="${project2210.price}" pattern="#,##0.00"/></td>
                     <td><fmt:formatNumber value="${project2210.totalPrice}" pattern="#,##0.00"/></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </c:forEach>
             <tr>
@@ -43,8 +47,8 @@
                 <th><fmt:formatNumber value="${totalQuantity2210}" pattern="#,##0"/></th>
                 <th></th>
                 <th><fmt:formatNumber value="${totalPriceSum2210}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalGeneralFund2210}" pattern="#,##0.00"/></th>
-                <th><fmt:formatNumber value="${totalSpecialFund2210}" pattern="#,##0.00"/></th>
+                <th></th>
+                <th></th>
                 <th></th>
             </tr>
         </table>

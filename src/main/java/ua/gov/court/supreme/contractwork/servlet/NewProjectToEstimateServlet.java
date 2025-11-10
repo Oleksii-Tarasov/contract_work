@@ -1,11 +1,9 @@
 package ua.gov.court.supreme.contractwork.servlet;
 
-import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,8 +34,8 @@ public class NewProjectToEstimateServlet extends BaseWorkServlet {
                 quantity, price, totalPrice, specialFund, generalFund, justification);
 
         try {
-            workInspector.insertProjectToEstimate(newProjectForEstimate);
-            resp.sendRedirect(req.getContextPath() + "/estimate");
+            int projectId = workInspector.insertProjectToEstimate(newProjectForEstimate);
+            resp.sendRedirect(req.getContextPath() + "/estimate#project-" + projectId);
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to create project");
         }

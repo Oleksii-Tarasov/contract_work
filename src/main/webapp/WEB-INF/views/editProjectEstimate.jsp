@@ -94,7 +94,10 @@
             </div>
 
             <button type="submit" class="btn btn-warning">Зберегти</button>
-            <a href="${pageContext.request.contextPath}/estimate" class="btn btn-secondary">Скасувати</a>
+            <a href="${pageContext.request.contextPath}/estimate#project-${projectForUpdate.id}"
+               class="btn btn-secondary">
+                Скасувати
+            </a>
         </form>
     </div>
 </div>

@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/generate-purchases-table")
-public class CreateContrcatsTableServlet extends BaseWorkServlet {
+public class CreatePurchasesFromEstimateServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         workInspector.createPurchasesFromEstimate();
 
-        resp.sendRedirect(req.getContextPath() + "/");
+        resp.sendRedirect(req.getContextPath() + "/purchases");
     }
 }

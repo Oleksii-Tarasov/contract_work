@@ -9,26 +9,28 @@ import java.io.IOException;
 @WebServlet("/delete-project")
 public class DeleteProjectFromEstimateServlet extends BaseWorkServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json;charset=UTF-8");
+
         String idParam = req.getParameter("id");
 
-        if (idParam != null && !idParam.isEmpty()) {
-            try {
-                long projectId = Long.parseLong(idParam);
+        if (idParam == null || idParam.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"success\": false, \"message\": \"Missing project ID.\"}");
+            return;
+        }
 
-                workInspector.deleteProjectFromEstimate(projectId);
+        try {
+            long projectId = Long.parseLong(idParam);
+            workInspector.deleteProjectFromEstimate(projectId);
 
-                resp.sendRedirect(req.getContextPath() + "/estimate");
-            } catch (NumberFormatException e) {
-                // Обробка помилки, якщо ID не є числом
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid project ID format.");
-            } catch (Exception e) {
-                // Обробка інших помилок (наприклад, помилка БД)
-                throw new ServletException("Error deleting project", e);
-            }
-        } else {
-            // Обробка помилки, якщо параметр 'id' відсутній
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing project ID.");
+            resp.getWriter().write("{\"success\": true, \"deletedId\": " + projectId + "}");
+        } catch (NumberFormatException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"success\": false, \"message\": \"Invalid project ID format.\"}");
+        } catch (Exception e) {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"success\": false, \"message\": \"Error deleting project.\"}");
         }
     }
 }

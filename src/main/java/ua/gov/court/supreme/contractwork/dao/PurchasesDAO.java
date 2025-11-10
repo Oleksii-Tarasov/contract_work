@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class PurchasesDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
+                java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
+                LocalDate paymentTo = (sqlDatePaymentTo != null) ? sqlDatePaymentTo.toLocalDate() : null;
+
                 purchasesProjectsByKekv.add(new Purchases(
                         resultSet.getLong("id"),
                         resultSet.getString("kekv"),
@@ -61,6 +65,7 @@ public class PurchasesDAO {
                         resultSet.getDouble("total_price"),
                         resultSet.getDouble("contract_price"),
                         resultSet.getDouble("remaining_balance"),
+                        paymentTo,
                         resultSet.getDouble("special_fund"),
                         resultSet.getDouble("general_fund"),
                         resultSet.getString("justification"),

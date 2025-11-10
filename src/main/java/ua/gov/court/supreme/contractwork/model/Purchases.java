@@ -1,5 +1,7 @@
 package ua.gov.court.supreme.contractwork.model;
 
+import java.time.LocalDate;
+
 public class Purchases {
     private long id;
     private String kekv;
@@ -11,6 +13,7 @@ public class Purchases {
     private double totalPrice;
     private double contractPrice;
     private double remainingBalance;
+    private LocalDate paymentTo;
     private double specialFund;
     private double generalFund;
     private String justification;
@@ -18,7 +21,7 @@ public class Purchases {
 
     public Purchases(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice, double remainingBalance,
-                     double specialFund, double generalFund, String justification) {
+                     LocalDate paymentTo, double specialFund, double generalFund, String justification) {
         this.id = id;
         this.kekv = kekv;
         this.dkCode = dkCode;
@@ -29,6 +32,7 @@ public class Purchases {
         this.totalPrice = totalPrice;
         this.contractPrice = contractPrice;
         this.remainingBalance = remainingBalance;
+        this.paymentTo = paymentTo;
         this.specialFund = specialFund;
         this.generalFund = generalFund;
         this.justification = justification;
@@ -55,7 +59,7 @@ public class Purchases {
     // КОНСТРУКТОР із полем інформатизації
     public Purchases(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice,
-                     double remainingBalance, double specialFund, double generalFund, String justification, boolean informatization) {
+                     double remainingBalance, LocalDate paymentTo, double specialFund, double generalFund, String justification, boolean informatization) {
         this.id = id;
         this.kekv = kekv;
         this.dkCode = dkCode;
@@ -66,6 +70,7 @@ public class Purchases {
         this.totalPrice = totalPrice;
         this.contractPrice = contractPrice;
         this.remainingBalance = remainingBalance;
+        this.paymentTo = paymentTo;
         this.specialFund = specialFund;
         this.generalFund = generalFund;
         this.justification = justification;
@@ -110,6 +115,10 @@ public class Purchases {
 
     public double getRemainingBalance() {
         return remainingBalance;
+    }
+
+    public LocalDate getPaymentTo() {
+        return paymentTo;
     }
 
     public double getSpecialFund() {

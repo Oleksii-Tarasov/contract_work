@@ -32,6 +32,7 @@ CREATE TABLE purchases
     total_price       NUMERIC(12, 2) NOT NULL,
     contract_price    NUMERIC(12, 2),          -- Сума Договору
     remaining_balance NUMERIC(12, 2),          -- Залишок коштів
+    payment_to        DATE,                     -- Гранична дата оплати по Договору
     special_fund      NUMERIC(12, 2) NOT NULL,
     general_fund      NUMERIC(12, 2) NOT NULL,
     justification     TEXT           NOT NULL,

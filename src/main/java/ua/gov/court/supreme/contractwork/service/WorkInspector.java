@@ -24,8 +24,8 @@ public class WorkInspector {
 
     // Робота із Кошторисом
 
-    public void insertProjectToEstimate(Estimate projectFoEstimate) {
-        estimateDAO.insertProject(projectFoEstimate);
+    public int insertProjectToEstimate(Estimate projectFoEstimate) {
+        return estimateDAO.insertProject(projectFoEstimate); // Повертає id створеного запису
     }
 
     public List<Estimate> getProjectsFromEstimateByKekv(int kekv) {

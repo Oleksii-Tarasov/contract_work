@@ -3,10 +3,7 @@ package ua.gov.court.supreme.contractwork.dao;
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +14,14 @@ public class EstimateDAO {
         this.postgresConnector = new PostgresConnector();
     }
 
-    public void insertProject(Estimate newProject) {
+    public int insertProject(Estimate newProject) {
         String query = """
             INSERT INTO estimate (kekv, dk_code, name_project, unit_of_measure,
             quantity, price, total_price, special_fund, general_fund, justification)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
         try (Connection connection = postgresConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, newProject.getKekv());
             preparedStatement.setString(2, newProject.getDkCode());
@@ -38,9 +35,17 @@ public class EstimateDAO {
             preparedStatement.setString(10, newProject.getJustification());
 
             preparedStatement.execute();
+
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1); // Повертаємо id вставленого запису
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return -1;
     }
 
     public Estimate getProjectById(long id) {
