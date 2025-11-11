@@ -10,31 +10,36 @@
         <table class="table table-striped-columns">
             <tr>
                 <th>№</th>
-                <th data-sortable="true">Назва предмета закупівлі</th>
-                <th data-sortable="true">Одиниця виміру</th>
-                <th data-sortable="true">Кількість</th>
-                <th data-sortable="true">Ціна за одиницю</th>
-                <th data-sortable="true">Сума по кошторису</th>
-                <th data-sortable="true">Сума Договору</th>
+                <th>Назва предмета закупівлі</th>
+                <th>Одиниця виміру</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Сума по кошторису</th>
+                <th>Сума Договору</th>
                 <th data-sortable="true">Залишок</th>
-                <th data-sortable="true">Оплата до</th>
+                <th>Оплата до</th>
+                <th data-sortable="true">Відповідальний виконавець</th>
             </tr>
 
             <tr class="black-borders">
                 <th>2210</th>
-                <th colspan="8" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т. ч. м'який
+                <th colspan="9" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т. ч. м'який
                     інвентар та обмундирування
                 </th>
             </tr>
             <c:forEach var="project2210" items="${projectsForPurchases2210}" varStatus="status">
-                <tr onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
+                <tr id="project-${project2210.id}">
                     <td><c:out value="${status.count}"/></td>
-                        <%--                    <td id="project-${project2210.id}" class="project-row ${project2210.informatization ? 'informatization-row' : ''}"><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>--%>
-                    <td><c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/></td>
+                        <%-- informatization == true --%>
+                    <td class="${project2210.informatization ? 'informatization-row' : ''}"
+                        onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
+                        <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
+                    </td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
                     <td><fmt:formatNumber value="${project2210.price}" pattern="#,##0.00"/></td>
                     <td><fmt:formatNumber value="${project2210.totalPrice}" pattern="#,##0.00"/></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -50,9 +55,11 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </table>
     </div>
 </div>
 
 <%@include file="/WEB-INF/views/footer.jspf" %>
+<%@include file="/WEB-INF/views/tableCommonScripts.jspf" %>
