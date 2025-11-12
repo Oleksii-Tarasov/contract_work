@@ -6,15 +6,18 @@ public class Purchases extends BaseEstimateItem {
     private double contractPrice;
     private double remainingBalance;
     private LocalDate paymentTo;
+    private String ResponsibleExecutor;
 
     public Purchases(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice,
-                     double remainingBalance, LocalDate paymentTo, double specialFund, double generalFund, String justification, boolean informatization) {
+                     double remainingBalance, LocalDate paymentTo, double specialFund, double generalFund,
+                     String justification, boolean informatization) {
         super(id, kekv, dkCode, nameProject, unitOfMeasure, quantity, price,
                 totalPrice, specialFund, generalFund, justification, informatization);
         this.contractPrice = contractPrice;
         this.remainingBalance = remainingBalance;
         this.paymentTo = paymentTo;
+//        this.ResponsibleExecutor = ResponsibleExecutor;
     }
 
     //    without id for new inserts

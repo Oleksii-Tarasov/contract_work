@@ -52,10 +52,41 @@ public class EstimateExcelConstructor {
         sheet.setColumnWidth(7, 14 * 256);
         sheet.setColumnWidth(8, 70 * 256);
 
+        rowIndex+=2;
+
+        rowIndex = writeFooter(workbook, sheet, rowIndex, baseStyle);
+
         return workbook;
     }
 
     private int writeHeader(Workbook workbook, Sheet sheet, int rowIndex, CellStyle baseStyle) {
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.cloneStyleFrom(baseStyle);
+        headerStyle.setAlignment(HorizontalAlignment.LEFT);
+        headerStyle.setVerticalAlignment(VerticalAlignment.TOP);
+
+        Font headerFont = workbook.createFont();
+        headerFont.setFontName("Roboto Condensed Light");
+        headerFont.setFontHeightInPoints((short) 12);
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+
+        // === Один рядок із трьома фрагментами тексту ===
+        Row headerRow = sheet.createRow(rowIndex++);
+        Cell headerCell = headerRow.createCell(8);
+        headerCell.setCellValue("""
+        
+        ПОГОДЖУЮ
+        
+        Керівник Апарату Верховного Суду
+        
+        ______________ Віктор КАПУСТИНСЬКИЙ
+        """);
+        headerCell.setCellStyle(headerStyle);
+        headerCell.getCellStyle().setWrapText(true); // дозволяє перенесення рядків у межах однієї клітинки
+
+        rowIndex += 2;
+
         CellStyle titleStyle = workbook.createCellStyle();
         titleStyle.cloneStyleFrom(baseStyle);
 
@@ -85,25 +116,25 @@ public class EstimateExcelConstructor {
                                List<Estimate> list, int rowIndex, CellStyle baseStyle, boolean writeHeader) {
 
         // ===== СТИЛЬ ЗАГОЛОВКА ТАБЛИЦІ =====
-        CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.cloneStyleFrom(baseStyle);
+        CellStyle headerTableStyle = workbook.createCellStyle();
+        headerTableStyle.cloneStyleFrom(baseStyle);
 
-        Font headerFont = workbook.createFont();
-        headerFont.setFontName("Roboto Condensed Light");
-        headerFont.setFontHeightInPoints((short) 12);
-        headerFont.setBold(true);
-        headerStyle.setFont(headerFont);
-        headerStyle.setAlignment(HorizontalAlignment.CENTER);
-        headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        headerStyle.setBorderTop(BorderStyle.THIN);
-        headerStyle.setBorderBottom(BorderStyle.THIN);
-        headerStyle.setBorderLeft(BorderStyle.THIN);
-        headerStyle.setBorderRight(BorderStyle.THIN);
-        headerStyle.setWrapText(true);
+        Font headerTableFont = workbook.createFont();
+        headerTableFont.setFontName("Roboto Condensed Light");
+        headerTableFont.setFontHeightInPoints((short) 12);
+        headerTableFont.setBold(true);
+        headerTableStyle.setFont(headerTableFont);
+        headerTableStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerTableStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        headerTableStyle.setBorderTop(BorderStyle.THIN);
+        headerTableStyle.setBorderBottom(BorderStyle.THIN);
+        headerTableStyle.setBorderLeft(BorderStyle.THIN);
+        headerTableStyle.setBorderRight(BorderStyle.THIN);
+        headerTableStyle.setWrapText(true);
 
         if (writeHeader) {
-            Row headerRow = sheet.createRow(rowIndex++);
-            headerRow.setHeightInPoints(30);
+            Row headerTableRow = sheet.createRow(rowIndex++);
+            headerTableRow.setHeightInPoints(30);
 
             String[] headers = {
                     "№ з/п",
@@ -118,9 +149,9 @@ public class EstimateExcelConstructor {
             };
 
             for (int i = 0; i < headers.length; i++) {
-                Cell cell = headerRow.createCell(i);
+                Cell cell = headerTableRow.createCell(i);
                 cell.setCellValue(headers[i]);
-                cell.setCellStyle(headerStyle);
+                cell.setCellStyle(headerTableStyle);
             }
         }
 
@@ -234,6 +265,29 @@ public class EstimateExcelConstructor {
         totalRow.getCell(6).setCellStyle(sumCenter);
         totalRow.getCell(7).setCellStyle(sumCenter);
         totalRow.createCell(8).setCellStyle(sumCenter);
+
+        return rowIndex;
+    }
+
+    private int writeFooter(Workbook workbook, Sheet sheet, int rowIndex, CellStyle baseStyle) {
+        CellStyle footerStyle = workbook.createCellStyle();
+        footerStyle.cloneStyleFrom(baseStyle);
+        footerStyle.setAlignment(HorizontalAlignment.LEFT);
+
+        Font footerFont = workbook.createFont();
+        footerFont.setFontName("Roboto Condensed Light");
+        footerFont.setFontHeightInPoints((short) 14);
+        footerFont.setBold(true);
+        footerStyle.setFont(footerFont);
+
+        Row footerRow = sheet.createRow(rowIndex++);
+        Cell footerCell1 = footerRow.createCell(1);
+        footerCell1.setCellValue("Начальник управління інформатизації");
+        Cell footerCell5 = footerRow.createCell(7);
+        footerCell5.setCellValue("Денис ЩЕГОЛІХІН");
+
+        footerCell1.setCellStyle(footerStyle);
+        footerCell5.setCellStyle(footerStyle);
 
         return rowIndex;
     }
