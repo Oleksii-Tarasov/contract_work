@@ -12,7 +12,7 @@ public class GenerateEstimateExcelServlet extends BaseWorkServlet {
         byte[] excelData = workInspector.createEstimateExcelFile();
 
         resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        resp.setHeader("Content-Disposition", "attachment; filename=\"кошторис2025.xlsx\"");
+        resp.setHeader("Content-Disposition", "attachment; filename=\"koshtorys_2025.xlsx\"");
         resp.setContentLength(excelData.length);
 
         resp.getOutputStream().write(excelData);

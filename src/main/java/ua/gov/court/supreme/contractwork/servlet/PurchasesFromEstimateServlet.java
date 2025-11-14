@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/generate-purchases-table")
-public class CreatePurchasesFromEstimateServlet extends BaseWorkServlet {
+public class PurchasesFromEstimateServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         workInspector.createPurchasesFromEstimate();

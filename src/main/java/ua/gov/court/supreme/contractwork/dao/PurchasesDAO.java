@@ -1,7 +1,9 @@
 package ua.gov.court.supreme.contractwork.dao;
 
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
+import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,9 +42,12 @@ public class PurchasesDAO {
         List<Purchases> purchasesProjectsByKekv = new ArrayList<>();
 
         String query = switch (kekv) {
-            case 2210 -> "SELECT * FROM purchases WHERE kekv = '2210'";
-            case 2240 -> "SELECT * FROM purchases WHERE kekv = '2240'";
-            case 3110 -> "SELECT * FROM purchases WHERE kekv = '3110'";
+            case 2210 -> "SELECT p.*, u.* FROM purchases p " +
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2210'";
+            case 2240 -> "SELECT p.*, u.* FROM purchases p " +
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2240'";
+            case 3110 -> "SELECT p.*, u.* FROM purchases p " +
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '3110'";
             default -> "";
         };
 
@@ -51,8 +56,20 @@ public class PurchasesDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
+                User user = new User(
+                        resultSet.getLong("id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("middle_name"),
+                        resultSet.getString("short_name"),
+                        resultSet.getString("position")
+                );
+
                 java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
                 LocalDate paymentTo = (sqlDatePaymentTo != null) ? sqlDatePaymentTo.toLocalDate() : null;
+
+                int statusInt = resultSet.getInt("status");
+                ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
 
                 purchasesProjectsByKekv.add(new Purchases(
                         resultSet.getLong("id"),
@@ -69,7 +86,9 @@ public class PurchasesDAO {
                         resultSet.getDouble("special_fund"),
                         resultSet.getDouble("general_fund"),
                         resultSet.getString("justification"),
-                        resultSet.getBoolean("informatization")
+                        resultSet.getBoolean("informatization"),
+                        user,
+                        projectStatus
                 ));
             }
         } catch (SQLException e) {

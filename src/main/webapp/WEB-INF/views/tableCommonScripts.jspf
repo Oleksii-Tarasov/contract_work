@@ -1,36 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!-- Modal Action Window (Редагувати/Видалити) -->
-<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="actionModalLabel">Вибраний проєкт: <strong id="projectNamePlaceholder"></strong></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Тіло 1: Вибір дії -->
-            <div class="modal-body" id="actionBody">
-                <p class="mt-3">
-                    <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
-                    <!-- Змінюємо onclick на виклик нової функції confirmDelete() -->
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Видалити</button>
-                </p>
-            </div>
-
-            <!-- Тіло 2: Підтвердження видалення (сховане за замовчуванням) -->
-            <div class="modal-body d-none" id="confirmDeleteBody">
-                <p>Ви впевнені, що хочете видалити проєкт <strong id="projectNameConfirmPlaceholder"></strong>?</p>
-                <!-- Кнопка, яка веде на сервлет видалення -->
-                <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
-                <!-- Кнопка скасування, що повертає до першого тіла -->
-                <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
 <%--Функціонал модального вікна--%>
 <script>
     var actionModalEl = document.getElementById('actionModal');

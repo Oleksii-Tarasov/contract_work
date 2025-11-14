@@ -1,23 +1,27 @@
 package ua.gov.court.supreme.contractwork.model;
 
+import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
+
 import java.time.LocalDate;
 
 public class Purchases extends BaseEstimateItem {
     private double contractPrice;
     private double remainingBalance;
     private LocalDate paymentTo;
-    private String ResponsibleExecutor;
+    private User responsibleExecutor;
+    private ProjectStatus projectStatus;
 
     public Purchases(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice,
                      double remainingBalance, LocalDate paymentTo, double specialFund, double generalFund,
-                     String justification, boolean informatization) {
+                     String justification, boolean informatization, User responsibleExecutor, ProjectStatus projectStatus) {
         super(id, kekv, dkCode, nameProject, unitOfMeasure, quantity, price,
                 totalPrice, specialFund, generalFund, justification, informatization);
         this.contractPrice = contractPrice;
         this.remainingBalance = remainingBalance;
         this.paymentTo = paymentTo;
-//        this.ResponsibleExecutor = ResponsibleExecutor;
+        this.responsibleExecutor = responsibleExecutor;
+        this.projectStatus = projectStatus;
     }
 
     //    without id for new inserts
@@ -48,5 +52,13 @@ public class Purchases extends BaseEstimateItem {
 
     public LocalDate getPaymentTo() {
         return paymentTo;
+    }
+
+    public User getResponsibleExecutor() {
+        return responsibleExecutor;
+    }
+
+    public ProjectStatus getProjectStatus() {
+        return projectStatus;
     }
 }

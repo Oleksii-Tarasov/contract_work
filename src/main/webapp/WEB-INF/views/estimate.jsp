@@ -25,9 +25,9 @@
                     інвентар та обмундирування
                 </th>
             </tr>
-            <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="status">
+            <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="projectStatus">
                 <tr id="project-${project2210.id}">
-                    <td><c:out value="${status.count}"/></td>
+                    <td><c:out value="${projectStatus.count}"/></td>
                         <%-- informatization == true --%>
                     <td class="${project2210.informatization ? 'informatization-row' : ''}"
                         onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
@@ -57,9 +57,9 @@
                 <th>2240</th>
                 <th colspan="8" style="text-align: left">Оплата послуг (крім комунальних)</th>
             </tr>
-            <c:forEach var="project2240" items="${projectsForEstimate2240}" varStatus="status">
+            <c:forEach var="project2240" items="${projectsForEstimate2240}" varStatus="projectStatus">
                 <tr id="project-${project2240.id}">
-                    <td><c:out value="${status.count}"/></td>
+                    <td><c:out value="${projectStatus.count}"/></td>
                     <td class="${project2240.informatization ? 'informatization-row' : ''}"
                         onclick="openActionModal(${project2240.id}, '${project2240.nameProject}')">
                         <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
@@ -89,9 +89,9 @@
                 <th colspan="8" style="text-align: left">Придбання обладнання і предметів довгострокового користування
                 </th>
             </tr>
-            <c:forEach var="project3110" items="${projectsForEstimate3110}" varStatus="status">
+            <c:forEach var="project3110" items="${projectsForEstimate3110}" varStatus="projectStatus">
                 <tr id="project-${project3110.id}">
-                    <td><c:out value="${status.count}"/></td>
+                    <td><c:out value="${projectStatus.count}"/></td>
                     <td class="${project3110.informatization ? 'informatization-row' : ''}"
                         onclick="openActionModal(${project3110.id}, '${project3110.nameProject}')">
                         <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
@@ -127,6 +127,37 @@
             <i class="fa-solid fa-file-excel me-1"></i>
             Створити проєкт закупівель на основі кошторису
         </a>
+    </div>
+</div>
+
+<!-- Modal Action Window (Редагувати/Видалити) -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionModalLabel">Вибраний проєкт: <strong id="projectNamePlaceholder"></strong></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Тіло 1: Вибір дії -->
+            <div class="modal-body" id="actionBody">
+                <p class="mt-3">
+                    <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
+                    <!-- Змінюємо onclick на виклик нової функції confirmDelete() -->
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Видалити</button>
+                </p>
+            </div>
+
+            <!-- Тіло 2: Підтвердження видалення (сховане за замовчуванням) -->
+            <div class="modal-body d-none" id="confirmDeleteBody">
+                <p>Ви впевнені, що хочете видалити проєкт <strong id="projectNameConfirmPlaceholder"></strong>?</p>
+                <!-- Кнопка, яка веде на сервлет видалення -->
+                <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
+                <!-- Кнопка скасування, що повертає до першого тіла -->
+                <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
+            </div>
+
+        </div>
     </div>
 </div>
 

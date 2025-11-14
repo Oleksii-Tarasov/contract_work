@@ -1,6 +1,19 @@
 DROP TABLE IF EXISTS estimate;
 DROP TABLE IF EXISTS purchases;
 DROP TABLE IF EXISTS dk_code_inf;
+DROP TABLE IF EXISTS users;
+
+-- Таблиця Користувачів
+CREATE TABLE users (
+                       id SERIAL PRIMARY KEY,
+                       last_name VARCHAR(255) NOT NULL,
+                       first_name VARCHAR(255) NOT NULL,
+                       middle_name VARCHAR(255) NOT NULL,
+                       short_name VARCHAR(100),            -- Прізвище та ініціали
+                       position VARCHAR(150),              -- Посада
+                       login VARCHAR(100) UNIQUE NOT NULL,
+                       password_hash VARCHAR(255) NOT NULL
+);
 
 -- Таблиця Кошторису
 CREATE TABLE estimate
@@ -24,19 +37,21 @@ CREATE TABLE purchases
 (
     id                SERIAL PRIMARY KEY,
     kekv              VARCHAR(10)    NOT NULL,
-    dk_code           VARCHAR(10)    NOT NULL,
+    dk_code           VARCHAR(10),
     name_project      TEXT           NOT NULL,
     unit_of_measure   VARCHAR(20)    NOT NULL,
     quantity          NUMERIC(10, 2) NOT NULL,
     price             NUMERIC(12, 2) NOT NULL,
     total_price       NUMERIC(12, 2) NOT NULL,
-    contract_price    NUMERIC(12, 2),          -- Сума Договору
-    remaining_balance NUMERIC(12, 2),          -- Залишок коштів
-    payment_to        DATE,                     -- Гранична дата оплати по Договору
+    contract_price    NUMERIC(12, 2) DEFAULT 0,         -- Сума Договору
+    remaining_balance NUMERIC(12, 2),                   -- Залишок коштів
+    payment_to        DATE,                             -- Гранична дата оплати по Договору
     special_fund      NUMERIC(12, 2) NOT NULL,
     general_fund      NUMERIC(12, 2) NOT NULL,
     justification     TEXT           NOT NULL,
-    informatization   BOOLEAN DEFAULT FALSE
+    informatization   BOOLEAN DEFAULT FALSE,
+    responsible_executor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    status            SMALLINT DEFAULT 0                -- Статус закупівлі
 );
 
 -- Таблиця Кодів ДК інформатизації
