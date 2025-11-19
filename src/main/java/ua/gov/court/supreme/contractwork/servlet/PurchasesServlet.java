@@ -1,6 +1,7 @@
 package ua.gov.court.supreme.contractwork.servlet;
 
 import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,9 @@ public class PurchasesServlet extends BaseWorkServlet {
         req.setAttribute("projectsForPurchases3110", projectsForPurchases3110);
         req.setAttribute("totalQuantity3110", workInspector.getPurchasesTotalAmounts(projectsForPurchases3110).getTotalQuantity());
         req.setAttribute("totalPriceSum3110", workInspector.getPurchasesTotalAmounts(projectsForPurchases3110).getTotalPriceSum());
+
+        List<User> users = workInspector.getAllUsers();
+        req.setAttribute("users", users);
 
         getServletContext().getRequestDispatcher("/WEB-INF/views/purchases.jsp").forward(req,resp);
     }

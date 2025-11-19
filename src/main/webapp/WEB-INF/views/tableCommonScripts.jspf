@@ -117,7 +117,7 @@
                 // Додаємо підсвітку на весь рядок
                 row.classList.add("highlight-edited");
 
-                // Через 10 сек повертаємо початковий стан
+                // Через 5 сек повертаємо початковий стан
                 setTimeout(() => {
                     row.classList.remove("highlight-edited");
                 }, 5000); // 5 секунд

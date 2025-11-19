@@ -30,7 +30,8 @@
     cursor: pointer;
 }
 .highlight-edited td {
-    background-color: #fff3cd;
+    background-color: #fff3cd; !important;
+    transition: background-color 1s ease;
 }
 
 .table td, .table th {

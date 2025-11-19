@@ -10,10 +10,10 @@ public class User {
     private String login;
     private String password;
 
-    public User(long id, String firstName, String lastName, String middleName, String shortName, String position, String login, String password) {
+    public User(long id, String lastName, String firstName,  String middleName, String shortName, String position, String login, String password) {
         this.id = id;
-        this.firstName = firstName;
         this.lastName = lastName;
+        this.firstName = firstName;
         this.middleName = middleName;
         this.shortName = shortName;
         this.position = position;
@@ -21,10 +21,10 @@ public class User {
         this.password = password;
     }
 
-    public User(long id, String firstName, String lastName, String middleName, String shortName, String position) {
+    public User(long id, String lastName, String firstName,  String middleName, String shortName, String position) {
         this.id = id;
-        this.firstName = firstName;
         this.lastName = lastName;
+        this.firstName = firstName;
         this.middleName = middleName;
         this.shortName = shortName;
         this.position = position;

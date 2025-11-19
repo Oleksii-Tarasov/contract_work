@@ -5,10 +5,7 @@ import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Purchases;
 import ua.gov.court.supreme.contractwork.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +14,18 @@ public class PurchasesDAO {
     private final PostgresConnector postgresConnector;
 
     public PurchasesDAO() {
-        this.postgresConnector = new  PostgresConnector();
+        this.postgresConnector = new PostgresConnector();
     }
 
     public void insertProjectsFromEstimate() {
         String query = """
-            TRUNCATE TABLE purchases RESTART IDENTITY;
-            INSERT INTO purchases (kekv, dk_code, name_project, unit_of_measure,
-            quantity, price, total_price, special_fund, general_fund, justification)
-            SELECT kekv, dk_code, name_project, unit_of_measure,
-            quantity, price, total_price, special_fund, general_fund, justification
-            FROM estimate
-            """;
+                TRUNCATE TABLE purchases RESTART IDENTITY;
+                INSERT INTO purchases (kekv, dk_code, name_project, unit_of_measure,
+                quantity, price, total_price, special_fund, general_fund, justification)
+                SELECT kekv, dk_code, name_project, unit_of_measure,
+                quantity, price, total_price, special_fund, general_fund, justification
+                FROM estimate
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -96,5 +93,43 @@ public class PurchasesDAO {
         }
 
         return purchasesProjectsByKekv;
+    }
+
+    public Long getExecutorIdFromProject(long projectId) {
+        String query = "SELECT responsible_executor_id FROM purchases WHERE id = ?";
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                long id = resultSet.getLong(1);
+                return resultSet.wasNull() ? null : id;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateProjectExecutor(long projectId, Long executorId) {
+        String query = "UPDATE purchases SET responsible_executor_id = ? WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            if (executorId == null) {
+                preparedStatement.setNull(1, Types.BIGINT);
+            } else {
+                preparedStatement.setLong(1, executorId);
+            }
+            preparedStatement.setLong(2, projectId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

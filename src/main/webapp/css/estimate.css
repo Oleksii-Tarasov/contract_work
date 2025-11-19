@@ -33,6 +33,7 @@ tr {
 }
 .highlight-edited td {
     background-color: #fff3cd;
+    transition: background-color 1s ease;
 }
 
 .table td, .table th {

@@ -3,9 +3,11 @@ package ua.gov.court.supreme.contractwork.service;
 import org.apache.poi.ss.usermodel.Workbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.dao.PurchasesDAO;
+import ua.gov.court.supreme.contractwork.dao.UserDAO;
 import ua.gov.court.supreme.contractwork.dto.ProjectsTotalAmounts;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,11 +16,13 @@ import java.util.List;
 public class WorkInspector {
     private final EstimateDAO estimateDAO;
     private final PurchasesDAO purchasesDAO;
+    private final UserDAO userDAO;
     private final EstimateExcelConstructor estimateExcelConstructor;
 
     public WorkInspector() {
         this.estimateDAO = new EstimateDAO();
         this.purchasesDAO = new PurchasesDAO();
+        this.userDAO = new UserDAO();
         this.estimateExcelConstructor = new EstimateExcelConstructor();
     }
 
@@ -90,5 +94,19 @@ public class WorkInspector {
         double specialFund = projectsFromPurchases.stream().mapToDouble(Purchases::getSpecialFund).sum();
 
         return new ProjectsTotalAmounts(quantity, priceSum, generalFund, specialFund);
+    }
+
+    // Робота із користувачами
+
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    public long getExecutorIdFromProject(long projectId) {
+        return purchasesDAO.getExecutorIdFromProject(projectId);
+    }
+
+    public void updateProjectExecutor(long projectId, Long executorId) {
+        purchasesDAO.updateProjectExecutor(projectId, executorId);
     }
 }
