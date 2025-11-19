@@ -132,4 +132,21 @@ public class PurchasesDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateJustification(long projectId, String justification) {
+        String query = "UPDATE purchases SET justification = ? WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            if (justification == null || justification.trim().isEmpty()) {
+                preparedStatement.setNull(1, Types.VARCHAR);
+            } else {
+                preparedStatement.setString(1, justification.trim());
+            }
+            preparedStatement.setLong(2, projectId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

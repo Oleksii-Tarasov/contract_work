@@ -84,7 +84,13 @@
                 <div class="row">
                     <div class="col-6 border-end">
                         <p><strong>Обґрунтування:</strong></p>
-                        <p id="justificationText" class="mb-3 text-muted"></p>
+<%--                        <p id="justificationText" class="mb-3 text-muted"></p>--%>
+                        <textarea
+                                id="justificationText"
+                                class="form-control mb-3"
+                                rows="5">
+                        </textarea>
+
 
                         <p><strong>Відповідальний виконавець:</strong>
                             <select id="executorSelectModal" class="user-select"></select>
@@ -132,6 +138,9 @@
         let currentProjectName = '';
         let executorWasChanged = false;
 
+        let originalJustification = "";
+        let justificationWasChanged = false;
+
         window.openActionModal = function(projectId, projectName, justification, projectStatus, executorId) {
             currentProjectId = projectId;
             currentProjectName = projectName;
@@ -140,7 +149,11 @@
             confirmDeleteBody.classList.add('d-none');
 
             modalTitle.textContent = projectName;
-            document.getElementById('justificationText').textContent = justification || '—';
+            const justificationField = document.getElementById('justificationText');
+            justificationField.value = justification || "";
+            originalJustification = justification || "";
+            justificationWasChanged = false;
+
             document.getElementById('projectStatus').textContent = projectStatus;
 
             // --- 1. Селектор у модалці та очищаємо його ---
@@ -234,7 +247,25 @@
         };
 
         actionModalEl.addEventListener('hidden.bs.modal', () => {
-            if (executorWasChanged) location.reload();
+            if (justificationWasChanged && currentProjectId !== null) {
+
+                const newJustification = document.getElementById("justificationText").value;
+
+                // ЗБЕРІГАЄМО ID ДО fetch — гарантовано
+                localStorage.setItem("updatedJustificationProjectId", currentProjectId);
+
+                fetch("/contractwork/update-justification", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "projectId=" + currentProjectId + "&justification=" + encodeURIComponent(newJustification)
+                })
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+            else if (executorWasChanged) {
+                location.reload();
+            }
             currentProjectId = null;
             currentProjectName = '';
         });
@@ -249,6 +280,12 @@
                 body: "projectId=" + projectId + "&userId=" + userId
             }).then(()=> { executorWasChanged = true; localStorage.setItem("updatedExecutorProjectId", projectId); });
         });
+
+        // Зміна обґрунтування
+        document.getElementById("justificationText").addEventListener("input", function () {
+            justificationWasChanged = (this.value.trim() !== originalJustification.trim());
+        });
+
 
         // === СКРОЛ/ПІДСВІТКА ===
         function centerAndHighlight(row) {
@@ -265,6 +302,9 @@
         // --- 1) Відновлення позиції скролу (тільки якщо немає hash і немає updatedId) ---
         const savedScroll = localStorage.getItem("scrollPositionEstimate");
         const updatedId = localStorage.getItem("updatedExecutorProjectId");
+        const updatedJustId = localStorage.getItem("updatedJustificationProjectId");
+
+
         const hasHash = !!window.location.hash;
 
         if (!hasHash && !updatedId && savedScroll !== null) {
@@ -284,6 +324,13 @@
             requestAnimationFrame(() => {
                 centerAndHighlight(row);
                 localStorage.removeItem("updatedExecutorProjectId");
+            });
+        } else if (updatedJustId) {
+            const rid = "project-" + updatedJustId;
+            const row = document.getElementById(rid);
+            requestAnimationFrame(() => {
+                centerAndHighlight(row);
+                localStorage.removeItem("updatedJustificationProjectId");
             });
         }
 

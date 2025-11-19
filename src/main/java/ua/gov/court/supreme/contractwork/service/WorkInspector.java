@@ -96,6 +96,10 @@ public class WorkInspector {
         return new ProjectsTotalAmounts(quantity, priceSum, generalFund, specialFund);
     }
 
+    public void updateJustification(long projectId, String justification) {
+        purchasesDAO.updateJustification(projectId, justification);
+    }
+
     // Робота із користувачами
 
     public List<User> getAllUsers() {
