@@ -73,7 +73,7 @@ public class WorkInspector {
         }
     }
 
-    // Робота із Закупівлями
+    // PURCHASES
 
     public void createPurchasesFromEstimate() {
         purchasesDAO.insertProjectsFromEstimate();
@@ -85,15 +85,17 @@ public class WorkInspector {
 
     public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchases> projectsFromPurchases) {
         if (projectsFromPurchases == null) {
-            return new ProjectsTotalAmounts(0, 0, 0, 0);
+            return new ProjectsTotalAmounts(0, 0, 0, 0, 0);
         }
 
         double quantity = projectsFromPurchases.stream().mapToDouble(Purchases::getQuantity).sum();
         double priceSum = projectsFromPurchases.stream().mapToDouble(Purchases::getTotalPrice).sum();
+        double remainingBalance = projectsFromPurchases.stream().mapToDouble(Purchases::getRemainingBalance).sum();
         double generalFund = projectsFromPurchases.stream().mapToDouble(Purchases::getGeneralFund).sum();
         double specialFund = projectsFromPurchases.stream().mapToDouble(Purchases::getSpecialFund).sum();
 
-        return new ProjectsTotalAmounts(quantity, priceSum, generalFund, specialFund);
+
+        return new ProjectsTotalAmounts(quantity, priceSum, remainingBalance, generalFund, specialFund);
     }
 
     public void updateJustification(long projectId, String justification) {

@@ -27,7 +27,6 @@
                     інвентар та обмундирування
                 </th>
             </tr>
-
             <c:forEach var="project2210" items="${projectsForPurchases2210}" varStatus="projectStatus">
                 <tr id="project-${project2210.id}">
                     <td><c:out value="${projectStatus.count}"/></td>
@@ -47,7 +46,7 @@
                     <td class="${project2210.projectStatus.cssClass}">
                         <fmt:formatNumber value="${project2210.contractPrice}" pattern="#,##0.00"/>
                     </td>
-                    <td></td>
+                    <td><fmt:formatNumber value="${project2210.remainingBalance}" pattern="#,##0.00"/></td>
                     <td></td>
                     <td>
                         <c:out value="${project2210.responsibleExecutor != null ? project2210.responsibleExecutor.shortName : ''}"/>
@@ -63,7 +62,97 @@
                 <th></th>
                 <th><fmt:formatNumber value="${totalPriceSum2210}" pattern="#,##0.00"/></th>
                 <th></th>
+                <th><fmt:formatNumber value="${totalRemainingBalance2210}" pattern="#,##0.00"/></th>
                 <th></th>
+                <th></th>
+            </tr>
+
+            <tr class="black-borders">
+                <th>2240</th>
+                <th colspan="9" style="text-align: left">Оплата послуг (крім комунальних)
+                </th>
+            </tr>
+            <c:forEach var="project2240" items="${projectsForPurchases2240}" varStatus="projectStatus">
+                <tr id="project-${project2240.id}">
+                    <td><c:out value="${projectStatus.count}"/></td>
+                    <td class="${project2240.informatization ? 'informatization-row' : ''}"
+                        onclick="openActionModal(
+                            ${project2240.id},
+                                '${fn:escapeXml(project2240.nameProject)}',
+                                '${fn:escapeXml(project2240.justification)}',
+                                '${fn:escapeXml(project2240.projectStatus.displayName)}',
+                                '${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.id : ""}')">
+                        <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
+                    </td>
+                    <td><c:out value="${project2240.unitOfMeasure}"/></td>
+                    <td><fmt:formatNumber value="${project2240.quantity}" pattern="#,##0"/></td>
+                    <td><fmt:formatNumber value="${project2240.price}" pattern="#,##0.00"/></td>
+                    <td><fmt:formatNumber value="${project2240.totalPrice}" pattern="#,##0.00"/></td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2240.contractPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td><fmt:formatNumber value="${project2240.remainingBalance}" pattern="#,##0.00"/></td>
+                    <td></td>
+                    <td>
+                        <c:out value="${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.shortName : ''}"/>
+                    </td>
+                </tr>
+            </c:forEach>
+
+            <tr>
+                <th></th>
+                <th style="text-align: right">ВСЬОГО ЗА 2240</th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalQuantity2240}" pattern="#,##0"/></th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalPriceSum2240}" pattern="#,##0.00"/></th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalRemainingBalance2240}" pattern="#,##0.00"/></th>
+                <th></th>
+                <th></th>
+            </tr>
+
+            <tr class="black-borders">
+                <th>3110</th>
+                <th colspan="9" style="text-align: left">Придбання обладнання і предметів довгострокового користування
+                </th>
+            </tr>
+            <c:forEach var="project3110" items="${projectsForPurchases3110}" varStatus="projectStatus">
+                <tr id="project-${project3110.id}">
+                    <td><c:out value="${projectStatus.count}"/></td>
+                    <td class="${project3110.informatization ? 'informatization-row' : ''}"
+                        onclick="openActionModal(
+                            ${project3110.id},
+                                '${fn:escapeXml(project3110.nameProject)}',
+                                '${fn:escapeXml(project3110.justification)}',
+                                '${fn:escapeXml(project3110.projectStatus.displayName)}',
+                                '${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.id : ""}')">
+                        <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
+                    </td>
+                    <td><c:out value="${project3110.unitOfMeasure}"/></td>
+                    <td><fmt:formatNumber value="${project3110.quantity}" pattern="#,##0"/></td>
+                    <td><fmt:formatNumber value="${project3110.price}" pattern="#,##0.00"/></td>
+                    <td><fmt:formatNumber value="${project3110.totalPrice}" pattern="#,##0.00"/></td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project3110.contractPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td><fmt:formatNumber value="${project3110.remainingBalance}" pattern="#,##0.00"/></td>
+                    <td></td>
+                    <td>
+                        <c:out value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}"/>
+                    </td>
+                </tr>
+            </c:forEach>
+
+            <tr>
+                <th></th>
+                <th style="text-align: right">ВСЬОГО ЗА 3110</th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalQuantity3110}" pattern="#,##0"/></th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalPriceSum3110}" pattern="#,##0.00"/></th>
+                <th></th>
+                <th><fmt:formatNumber value="${totalRemainingBalance3110}" pattern="#,##0.00"/></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -83,7 +172,7 @@
             <div class="modal-body" id="actionBody">
                 <div class="row">
                     <div class="col-6 border-end">
-                        <p><strong>Обґрунтування:</strong></p>
+                        <p><strong>Обґрунтування/Примітки:</strong></p>
 <%--                        <p id="justificationText" class="mb-3 text-muted"></p>--%>
                         <textarea
                                 id="justificationText"
