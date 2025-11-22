@@ -35,8 +35,7 @@
                             ${project2210.id},
                                 '${fn:escapeXml(project2210.nameProject)}',
                                 '${fn:escapeXml(project2210.justification)}',
-                                '${fn:escapeXml(project2210.projectStatus.displayName)}',
-                                '${project2210.responsibleExecutor != null ? project2210.responsibleExecutor.id : ""}')">
+                                '${fn:escapeXml(project2210.projectStatus.displayName)}')">
                         <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
                     </td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
@@ -80,8 +79,7 @@
                             ${project2240.id},
                                 '${fn:escapeXml(project2240.nameProject)}',
                                 '${fn:escapeXml(project2240.justification)}',
-                                '${fn:escapeXml(project2240.projectStatus.displayName)}',
-                                '${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.id : ""}')">
+                                '${fn:escapeXml(project2240.projectStatus.displayName)}')">
                         <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
                     </td>
                     <td><c:out value="${project2240.unitOfMeasure}"/></td>
@@ -125,8 +123,7 @@
                             ${project3110.id},
                                 '${fn:escapeXml(project3110.nameProject)}',
                                 '${fn:escapeXml(project3110.justification)}',
-                                '${fn:escapeXml(project3110.projectStatus.displayName)}',
-                                '${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.id : ""}')">
+                                '${fn:escapeXml(project3110.projectStatus.displayName)}')">
                         <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
                     </td>
                     <td><c:out value="${project3110.unitOfMeasure}"/></td>
@@ -173,21 +170,20 @@
                 <div class="row">
                     <div class="col-6 border-end">
                         <p><strong>Обґрунтування/Примітки:</strong></p>
-<%--                        <p id="justificationText" class="mb-3 text-muted"></p>--%>
                         <textarea
                                 id="justificationText"
                                 class="form-control mb-3"
                                 rows="5">
                         </textarea>
 
-
                         <p><strong>Відповідальний виконавець:</strong>
-                            <select id="executorSelectModal" class="user-select"></select>
+                            <select id="executorSelectModal" class="executor-select-clean"></select>
                         </p>
                     </div>
                     <div class="col-6">
                         <p><strong>Статус закупівлі:</strong>
                             <span id="projectStatus" class="mb-3 text-muted"></span>
+<%--                            <select id="projectStatusSelect" class="executor-select-clean"></select>--%>
                         </p>
                         <p><strong>Документи:</strong></p>
                     </div>
@@ -230,7 +226,7 @@
         let originalJustification = "";
         let justificationWasChanged = false;
 
-        window.openActionModal = function(projectId, projectName, justification, projectStatus, executorId) {
+        window.openActionModal = function(projectId, projectName, justification, projectStatus) {
             currentProjectId = projectId;
             currentProjectName = projectName;
 
@@ -266,62 +262,23 @@
             })();
             </c:forEach>
 
-            // --- 4. Питаємо сервер, хто зараз виконавець і встановлюємо його (fallback: executorId) ---
+            // --- 4. Отримуємо виконавця з сервера і встановлюємо у select ---
             fetch("/contractwork/executor?projectId=" + projectId)
-                .then(response => {
-                    if (!response.ok) throw new Error("network");
-                    return response.json();
-                })
+                .then(r => r.json())
                 .then(data => {
-                    const serverExecutorId = data && data.executorId ? String(data.executorId) : "";
-                    const desired = serverExecutorId || (executorId && executorId !== "null" ? String(executorId) : "");
+                    const serverId = data && data.executorId != null ? String(data.executorId) : "";
 
-                    if (desired !== "") {
-                        select.value = desired;
-                    } else {
+                    // встановлюємо отримане або пусте значення
+                    select.value = serverId;
+
+                    // якщо select.value НЕ співпало з тим, що ми поставили — ставимо пустий варіант
+                    if (select.value !== serverId) {
                         select.value = "";
-                    }
-
-                    // fallback — якщо .value не спрацювало
-                    if (String(select.value) !== String(desired)) {
-                        let found = false;
-                        for (let i = 0; i < select.options.length; i++) {
-                            if (String(select.options[i].value).trim() === String(desired).trim()) {
-                                select.options[i].selected = true;
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            const empty = Array.from(select.options).find(o => String(o.value).trim() === "");
-                            if (empty) empty.selected = true;
-                            else select.selectedIndex = 0;
-                        }
                     }
                 })
                 .catch(err => {
-                    console.warn("fetch executor failed:", err);
-                    const fallback = executorId && executorId !== "null" ? String(executorId) : "";
-                    if (fallback !== "") {
-                        select.value = fallback;
-                        if (String(select.value) !== String(fallback)) {
-                            let found = false;
-                            for (let i = 0; i < select.options.length; i++) {
-                                if (String(select.options[i].value).trim() === String(fallback).trim()) {
-                                    select.options[i].selected = true;
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found) {
-                                const empty = Array.from(select.options).find(o => String(o.value).trim() === "");
-                                if (empty) empty.selected = true;
-                            }
-                        }
-                    } else {
-                        const empty = Array.from(select.options).find(o => String(o.value).trim() === "");
-                        if (empty) empty.selected = true;
-                    }
+                    console.warn("executor fetch failed:", err);
+                    select.value = "";
                 });
 
             editButton.href = "${pageContext.request.contextPath}/update-project?id=" + projectId;

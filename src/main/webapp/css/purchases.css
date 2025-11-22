@@ -120,3 +120,28 @@
 .status-cancelled {
     background-color: #fce4d6 !important;  /* червоний */
 }
+
+/* Мінімалістичний селектор під стиль таблиці */
+.executor-select-clean {
+    border: none !important;
+    background-color: transparent !important;
+    padding-left: 0;
+    padding-right: 18px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 0.95rem;
+    color: #212529;
+    outline: none !important;
+    box-shadow: none !important;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='12' height='12' viewBox='0 0 16 16' fill='none' stroke='%23666'%3E%3Cpath d='M4 6l4 4 4-4' stroke-width='2'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right center !important;
+    background-size: 12px !important;
+    cursor: pointer;
+}
+
+/* При фокусі не малювати рамок */
+.executor-select-clean:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
