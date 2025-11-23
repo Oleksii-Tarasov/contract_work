@@ -149,4 +149,22 @@ public class PurchasesDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateProjectStatus(long projectId, ProjectStatus status) {
+        String query = "UPDATE purchases SET status = ? WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            if (status == null) {
+                preparedStatement.setNull(1, Types.INTEGER);
+            } else {
+                preparedStatement.setInt(1, status.getDbValue());
+            }
+
+            preparedStatement.setLong(2, projectId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

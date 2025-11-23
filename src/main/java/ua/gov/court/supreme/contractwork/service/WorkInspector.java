@@ -5,6 +5,7 @@ import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.dao.PurchasesDAO;
 import ua.gov.court.supreme.contractwork.dao.UserDAO;
 import ua.gov.court.supreme.contractwork.dto.ProjectsTotalAmounts;
+import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 import ua.gov.court.supreme.contractwork.model.Purchases;
 import ua.gov.court.supreme.contractwork.model.User;
@@ -96,6 +97,14 @@ public class WorkInspector {
 
 
         return new ProjectsTotalAmounts(quantity, priceSum, remainingBalance, generalFund, specialFund);
+    }
+
+    public ProjectStatus[] getProjectStatuses() {
+        return ProjectStatus.values();
+    }
+
+    public void updateProjectStatus(long projectId, ProjectStatus projectStatus) {
+        purchasesDAO.updateProjectStatus(projectId, projectStatus);
     }
 
     public void updateJustification(long projectId, String justification) {

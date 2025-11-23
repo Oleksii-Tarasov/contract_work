@@ -35,8 +35,8 @@
                             ${project2210.id},
                                 '${fn:escapeXml(project2210.nameProject)}',
                                 '${fn:escapeXml(project2210.justification)}',
-                                '${fn:escapeXml(project2210.projectStatus.displayName)}')">
-                        <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
+                            ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'})">
+                    <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
                     </td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
@@ -79,7 +79,7 @@
                             ${project2240.id},
                                 '${fn:escapeXml(project2240.nameProject)}',
                                 '${fn:escapeXml(project2240.justification)}',
-                                '${fn:escapeXml(project2240.projectStatus.displayName)}')">
+                            ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'})">
                         <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
                     </td>
                     <td><c:out value="${project2240.unitOfMeasure}"/></td>
@@ -123,7 +123,7 @@
                             ${project3110.id},
                                 '${fn:escapeXml(project3110.nameProject)}',
                                 '${fn:escapeXml(project3110.justification)}',
-                                '${fn:escapeXml(project3110.projectStatus.displayName)}')">
+                            ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'})">
                         <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
                     </td>
                     <td><c:out value="${project3110.unitOfMeasure}"/></td>
@@ -182,8 +182,7 @@
                     </div>
                     <div class="col-6">
                         <p><strong>Статус закупівлі:</strong>
-                            <span id="projectStatus" class="mb-3 text-muted"></span>
-<%--                            <select id="projectStatusSelect" class="executor-select-clean"></select>--%>
+                            <select id="projectStatusSelect" class="executor-select-clean"></select>
                         </p>
                         <p><strong>Документи:</strong></p>
                     </div>
@@ -216,12 +215,16 @@
         const confirmDeleteBody = document.getElementById("confirmDeleteBody");
         const editButton = document.getElementById("editButton");
         const executorSelectModal = document.getElementById("executorSelectModal");
+
+        const projectStatusSelect = document.getElementById("projectStatusSelect")
+
         const projectNameConfirmPlaceholder = document.getElementById("projectNameConfirmPlaceholder");
         const confirmDeleteButton = document.getElementById("confirmDeleteButton");
 
         let currentProjectId = null;
         let currentProjectName = '';
         let executorWasChanged = false;
+        let projectStatusChanged = false;
 
         let originalJustification = "";
         let justificationWasChanged = false;
@@ -239,8 +242,32 @@
             originalJustification = justification || "";
             justificationWasChanged = false;
 
-            document.getElementById('projectStatus').textContent = projectStatus;
+            // === Статус закупівлі ===
+            const statusSelect = document.getElementById("projectStatusSelect");
+            statusSelect.innerHTML = "";
 
+            // Заповнення ENUM статусів (генерується на стороні JSP)
+            <c:forEach var="st" items="${projectStatuses}">
+            (function() {
+                const opt = document.createElement("option");
+                opt.value = "${st.dbValue}";
+                opt.textContent = "${fn:escapeXml(st.displayName)}";
+                statusSelect.appendChild(opt);
+            })();
+            </c:forEach>
+
+            // Встановлюємо поточний статус
+            statusSelect.value = projectStatus !== "null" ? projectStatus : "";
+            if (statusSelect.value !== projectStatus) {
+                for (let i = 0; i < statusSelect.options.length; i++) {
+                    if (String(statusSelect.options[i].value) === String(projectStatus)) {
+                        statusSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+
+            // === Відплвідальний виконавець ===
             // --- 1. Селектор у модалці та очищаємо його ---
             const select = document.getElementById("executorSelectModal");
             select.innerHTML = "";
@@ -271,7 +298,7 @@
                     // встановлюємо отримане або пусте значення
                     select.value = serverId;
 
-                    // якщо select.value НЕ співпало з тим, що ми поставили — ставимо пустий варіант
+                    // якщо select.value НЕ збігається з тим, що ми поставили — ставимо пустий варіант
                     if (select.value !== serverId) {
                         select.value = "";
                     }
@@ -312,6 +339,10 @@
             else if (executorWasChanged) {
                 location.reload();
             }
+            else if (projectStatusChanged) {
+                location.reload();
+            }
+
             currentProjectId = null;
             currentProjectName = '';
         });
@@ -325,6 +356,18 @@
                 headers: {"Content-Type":"application/x-www-form-urlencoded"},
                 body: "projectId=" + projectId + "&userId=" + userId
             }).then(()=> { executorWasChanged = true; localStorage.setItem("updatedExecutorProjectId", projectId); });
+        });
+
+        // Зміна статусу закупівлі
+        projectStatusSelect.addEventListener("change", function () {
+            const projectId = currentProjectId;
+            const statusValue = this.value || "";
+
+            fetch("/contractwork/update-status", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "projectId=" + projectId + "&status=" + statusValue
+            }).then(() => { projectStatusChanged = true; localStorage.setItem("updatedStatusProjectId", projectId); });
         });
 
         // Зміна обґрунтування
@@ -379,6 +422,17 @@
                 localStorage.removeItem("updatedJustificationProjectId");
             });
         }
+        // Підсвітка після оновлення статусу
+        const updatedStatusId = localStorage.getItem("updatedStatusProjectId");
+        if (updatedStatusId) {
+            const rid = "project-" + updatedStatusId;
+            const row = document.getElementById(rid);
+            requestAnimationFrame(() => {
+                centerAndHighlight(row);
+                localStorage.removeItem("updatedStatusProjectId");
+            });
+        }
+
 
         if (savedScroll !== null) {
             localStorage.removeItem("scrollPositionEstimate");

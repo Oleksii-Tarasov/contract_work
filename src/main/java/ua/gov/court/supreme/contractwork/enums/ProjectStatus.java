@@ -1,7 +1,7 @@
 package ua.gov.court.supreme.contractwork.enums;
 
 public enum ProjectStatus {
-    NEW(0, ""),
+    NEW(0, "-- не розпочато --"),
     IN_PROGRESS(1, "В роботі"),
     COMPLETED(2, "Завершена"),
     CANCELLED(3, "Не відбулася");
