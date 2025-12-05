@@ -167,4 +167,18 @@ public class PurchasesDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateContractPrice(long projectId, double contractPrice) {
+        String query = "UPDATE purchases SET contract_price = ? WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, contractPrice);
+            preparedStatement.setLong(2, projectId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

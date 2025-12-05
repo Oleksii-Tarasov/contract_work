@@ -16,6 +16,7 @@
                 <th>Ціна за одиницю</th>
                 <th>Сума по кошторису</th>
                 <th>Сума Договору</th>
+
                 <th data-sortable="true">Залишок</th>
                 <th>Оплата до</th>
                 <th data-sortable="true">Відповідальний виконавець</th>
@@ -33,8 +34,9 @@
                     <td class="${project2210.informatization ? 'informatization-row' : ''}"
                         onclick="openActionModal(
                             ${project2210.id},
-                                '${fn:escapeXml(project2210.nameProject)}',
-                                '${fn:escapeXml(project2210.justification)}',
+                            '${fn:escapeXml(project2210.nameProject)}',
+                            '${fn:escapeXml(project2210.justification)}',
+                            '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
                             ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'})">
                     <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
                     </td>
@@ -184,6 +186,16 @@
                         <p><strong>Статус закупівлі:</strong>
                             <select id="projectStatusSelect" class="executor-select-clean"></select>
                         </p>
+
+                        <p><strong>Сума Договору:</strong>
+                            <input
+                                    id="contractPriceInput"
+                                    type="text"
+                                    class="form-control"
+                                    style="max-width: 200px"
+                            />
+                        </p>
+
                         <p><strong>Документи:</strong></p>
                     </div>
                 </div>
@@ -229,7 +241,10 @@
         let originalJustification = "";
         let justificationWasChanged = false;
 
-        window.openActionModal = function(projectId, projectName, justification, projectStatus) {
+        let originalContractPrice = "";
+        let contractPriceWasChanged = false;
+
+        window.openActionModal = function(projectId, projectName, justification, contractPrice, projectStatus) {
             currentProjectId = projectId;
             currentProjectName = projectName;
 
@@ -308,6 +323,14 @@
                     select.value = "";
                 });
 
+            // === Сума Договору ===
+            const priceInput = document.getElementById("contractPriceInput");
+            const formattedPrice = formatPriceForInput(contractPrice);
+
+            priceInput.value = formattedPrice;
+            originalContractPrice = formattedPrice;
+            contractPriceWasChanged = false;
+
             editButton.href = "${pageContext.request.contextPath}/update-project?id=" + projectId;
 
             actionModal.show();
@@ -335,6 +358,19 @@
                     .then(() => {
                         location.reload();
                     });
+            }
+            else if (contractPriceWasChanged && currentProjectId !== null) {
+                const newPrice = document.getElementById("contractPriceInput").value
+                    .replace(/\s/g, '')
+                    .replace(",", ".");
+
+                localStorage.setItem("updatedContractPriceProjectId", currentProjectId);
+
+                fetch("/contractwork/update-contract-price", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "projectId=" + currentProjectId + "&contractPrice=" + encodeURIComponent(newPrice)
+                }).then(() => { location.reload(); });
             }
             else if (executorWasChanged) {
                 location.reload();
@@ -373,6 +409,11 @@
         // Зміна обґрунтування
         document.getElementById("justificationText").addEventListener("input", function () {
             justificationWasChanged = (this.value.trim() !== originalJustification.trim());
+        });
+
+        // Зміна суми Договору
+        document.getElementById("contractPriceInput").addEventListener("input", function () {
+            contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
         });
 
 
@@ -422,7 +463,7 @@
                 localStorage.removeItem("updatedJustificationProjectId");
             });
         }
-        // Підсвітка після оновлення статусу
+        // Підсвітка після оновлення проєкту
         const updatedStatusId = localStorage.getItem("updatedStatusProjectId");
         if (updatedStatusId) {
             const rid = "project-" + updatedStatusId;
@@ -432,6 +473,17 @@
                 localStorage.removeItem("updatedStatusProjectId");
             });
         }
+
+        const updatedContractPriceId = localStorage.getItem("updatedContractPriceProjectId");
+        if (updatedContractPriceId) {
+            const rid = "project-" + updatedContractPriceId;
+            const row = document.getElementById(rid);
+            requestAnimationFrame(() => {
+                centerAndHighlight(row);
+                localStorage.removeItem("updatedContractPriceProjectId");
+            });
+        }
+
 
 
         if (savedScroll !== null) {
@@ -443,4 +495,19 @@
             localStorage.setItem("scrollPositionEstimate", window.scrollY);
         });
     });
+
+    function formatPriceForInput(value) {
+        if (value === null || value === undefined || value === "" || value === "null") {
+            return "";
+        }
+
+        const num = Number(value);
+
+        if (isNaN(num)) return "";
+
+        return num.toLocaleString("uk-UA", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 </script>

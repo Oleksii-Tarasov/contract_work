@@ -27,7 +27,7 @@ public class WorkInspector {
         this.estimateExcelConstructor = new EstimateExcelConstructor();
     }
 
-    // Робота із Кошторисом
+    // Estimate
 
     public int insertProjectToEstimate(Estimate projectFoEstimate) {
         return estimateDAO.insertProject(projectFoEstimate); // Повертає id створеного запису
@@ -109,6 +109,10 @@ public class WorkInspector {
 
     public void updateJustification(long projectId, String justification) {
         purchasesDAO.updateJustification(projectId, justification);
+    }
+
+    public void updateContractPrice(long projectId, double contractPrice) {
+        purchasesDAO.updateContractPrice(projectId, contractPrice);
     }
 
     // Робота із користувачами

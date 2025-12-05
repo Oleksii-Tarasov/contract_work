@@ -24,7 +24,6 @@ public class UpdateProjectStatusServlet extends BaseWorkServlet {
             }
 
             workInspector.updateProjectStatus(projectId, status);
-//            projectDao.updateStatus(projectId, status);
 
             resp.setStatus(HttpServletResponse.SC_OK);
 
