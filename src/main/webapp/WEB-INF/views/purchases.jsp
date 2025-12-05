@@ -34,11 +34,11 @@
                     <td class="${project2210.informatization ? 'informatization-row' : ''}"
                         onclick="openActionModal(
                             ${project2210.id},
-                            '${fn:escapeXml(project2210.nameProject)}',
-                            '${fn:escapeXml(project2210.justification)}',
-                            '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
+                                '${fn:escapeXml(project2210.nameProject)}',
+                                '${fn:escapeXml(project2210.justification)}',
+                                '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
                             ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'})">
-                    <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
+                        <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
                     </td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
@@ -81,6 +81,7 @@
                             ${project2240.id},
                                 '${fn:escapeXml(project2240.nameProject)}',
                                 '${fn:escapeXml(project2240.justification)}',
+                                '${project2240.contractPrice != null ? project2240.contractPrice : 'null'}',
                             ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'})">
                         <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
                     </td>
@@ -125,6 +126,7 @@
                             ${project3110.id},
                                 '${fn:escapeXml(project3110.nameProject)}',
                                 '${fn:escapeXml(project3110.justification)}',
+                                '${project3110.contractPrice != null ? project3110.contractPrice : 'null'}',
                             ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'})">
                         <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
                     </td>
@@ -218,7 +220,7 @@
 <%@include file="/WEB-INF/views/footer.jspf" %>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
 
         const actionModalEl = document.getElementById('actionModal');
         const actionModal = new bootstrap.Modal(actionModalEl);
@@ -244,7 +246,7 @@
         let originalContractPrice = "";
         let contractPriceWasChanged = false;
 
-        window.openActionModal = function(projectId, projectName, justification, contractPrice, projectStatus) {
+        window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus) {
             currentProjectId = projectId;
             currentProjectName = projectName;
 
@@ -263,7 +265,7 @@
 
             // Заповнення ENUM статусів (генерується на стороні JSP)
             <c:forEach var="st" items="${projectStatuses}">
-            (function() {
+            (function () {
                 const opt = document.createElement("option");
                 opt.value = "${st.dbValue}";
                 opt.textContent = "${fn:escapeXml(st.displayName)}";
@@ -296,7 +298,7 @@
             // --- 3. ВСІ опції користувачів (вставлено JSP-генерацію опцій) ---
             <%-- JSP: згенерувати опції користувачів --%>
             <c:forEach var="u" items="${users}">
-            (function() {
+            (function () {
                 const opt = document.createElement("option");
                 opt.value = "${u.id}";
                 opt.textContent = "${fn:escapeXml(u.shortName)}";
@@ -336,7 +338,7 @@
             actionModal.show();
         };
 
-        window.cancelDelete = function() {
+        window.cancelDelete = function () {
             actionBody.classList.remove('d-none');
             confirmDeleteBody.classList.add('d-none');
             modalTitle.textContent = currentProjectName;
@@ -352,14 +354,13 @@
 
                 fetch("/contractwork/update-justification", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     body: "projectId=" + currentProjectId + "&justification=" + encodeURIComponent(newJustification)
                 })
                     .then(() => {
                         location.reload();
                     });
-            }
-            else if (contractPriceWasChanged && currentProjectId !== null) {
+            } else if (contractPriceWasChanged && currentProjectId !== null) {
                 const newPrice = document.getElementById("contractPriceInput").value
                     .replace(/\s/g, '')
                     .replace(",", ".");
@@ -368,14 +369,14 @@
 
                 fetch("/contractwork/update-contract-price", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     body: "projectId=" + currentProjectId + "&contractPrice=" + encodeURIComponent(newPrice)
-                }).then(() => { location.reload(); });
-            }
-            else if (executorWasChanged) {
+                }).then(() => {
+                    location.reload();
+                });
+            } else if (executorWasChanged) {
                 location.reload();
-            }
-            else if (projectStatusChanged) {
+            } else if (projectStatusChanged) {
                 location.reload();
             }
 
@@ -384,14 +385,17 @@
         });
 
         // Зміна виконавця
-        executorSelectModal.addEventListener("change", function() {
+        executorSelectModal.addEventListener("change", function () {
             const projectId = currentProjectId;
             const userId = this.value || "";
             fetch("/contractwork/executor", {
                 method: "POST",
-                headers: {"Content-Type":"application/x-www-form-urlencoded"},
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: "projectId=" + projectId + "&userId=" + userId
-            }).then(()=> { executorWasChanged = true; localStorage.setItem("updatedExecutorProjectId", projectId); });
+            }).then(() => {
+                executorWasChanged = true;
+                localStorage.setItem("updatedExecutorProjectId", projectId);
+            });
         });
 
         // Зміна статусу закупівлі
@@ -401,9 +405,12 @@
 
             fetch("/contractwork/update-status", {
                 method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: "projectId=" + projectId + "&status=" + statusValue
-            }).then(() => { projectStatusChanged = true; localStorage.setItem("updatedStatusProjectId", projectId); });
+            }).then(() => {
+                projectStatusChanged = true;
+                localStorage.setItem("updatedStatusProjectId", projectId);
+            });
         });
 
         // Зміна обґрунтування
@@ -424,7 +431,7 @@
             const rect = row.getBoundingClientRect();
             const absoluteTop = window.scrollY + rect.top;
             const targetTop = Math.max(0, Math.floor(absoluteTop - (window.innerHeight - rect.height) / 2));
-            window.scrollTo({ top: targetTop, behavior: "smooth" });
+            window.scrollTo({top: targetTop, behavior: "smooth"});
             row.classList.add("highlight-edited");
             setTimeout(() => row.classList.remove("highlight-edited"), 5000);
         }
@@ -438,7 +445,7 @@
         const hasHash = !!window.location.hash;
 
         if (!hasHash && !updatedId && savedScroll !== null) {
-            window.scrollTo({ top: parseInt(savedScroll, 10) || 0, behavior: "instant" });
+            window.scrollTo({top: parseInt(savedScroll, 10) || 0, behavior: "instant"});
             localStorage.removeItem("scrollPositionEstimate");
         }
 
@@ -483,7 +490,6 @@
                 localStorage.removeItem("updatedContractPriceProjectId");
             });
         }
-
 
 
         if (savedScroll !== null) {

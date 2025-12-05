@@ -84,6 +84,10 @@ public class WorkInspector {
         return purchasesDAO.getProjectsByKekv(kekv);
     }
 
+    public Purchases getProjectFromPurchasesById(long id) {
+        return purchasesDAO.getProjectById(id);
+    }
+
     public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchases> projectsFromPurchases) {
         if (projectsFromPurchases == null) {
             return new ProjectsTotalAmounts(0, 0, 0, 0, 0);
@@ -112,7 +116,10 @@ public class WorkInspector {
     }
 
     public void updateContractPrice(long projectId, double contractPrice) {
-        purchasesDAO.updateContractPrice(projectId, contractPrice);
+        Purchases purchase = purchasesDAO.getProjectById(projectId);
+        double remainingBalance = purchase.getTotalPrice() - contractPrice;
+
+        purchasesDAO.updateContractPrice(projectId, contractPrice, remainingBalance);
     }
 
     // Робота із користувачами

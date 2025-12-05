@@ -21,9 +21,9 @@ public class PurchasesDAO {
         String query = """
                 TRUNCATE TABLE purchases RESTART IDENTITY;
                 INSERT INTO purchases (kekv, dk_code, name_project, unit_of_measure,
-                quantity, price, total_price, special_fund, general_fund, justification)
+                quantity, price, total_price, remaining_balance, special_fund, general_fund, justification)
                 SELECT kekv, dk_code, name_project, unit_of_measure,
-                quantity, price, total_price, special_fund, general_fund, justification
+                quantity, price, total_price, total_price, special_fund, general_fund, justification
                 FROM estimate
                 """;
 
@@ -53,7 +53,7 @@ public class PurchasesDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                User user = new User(
+                User responsibleExecutor = new User(
                         resultSet.getLong("id"),
                         resultSet.getString("last_name"),
                         resultSet.getString("first_name"),
@@ -84,7 +84,7 @@ public class PurchasesDAO {
                         resultSet.getDouble("general_fund"),
                         resultSet.getString("justification"),
                         resultSet.getBoolean("informatization"),
-                        user,
+                        responsibleExecutor,
                         projectStatus
                 ));
             }
@@ -93,6 +93,62 @@ public class PurchasesDAO {
         }
 
         return purchasesProjectsByKekv;
+    }
+
+    public Purchases getProjectById(long id) {
+        Purchases purchase = null;
+        String query = "SELECT p.*, u.* FROM purchases p " +
+                "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    User responsibleExecutor = new User(
+                            resultSet.getLong("id"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("middle_name"),
+                            resultSet.getString("short_name"),
+                            resultSet.getString("position")
+                    );
+
+                    java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
+                    LocalDate paymentTo = (sqlDatePaymentTo != null) ? sqlDatePaymentTo.toLocalDate() : null;
+
+                    int statusInt = resultSet.getInt("status");
+                    ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
+
+                    purchase = new Purchases(
+                            resultSet.getLong("id"),
+                            resultSet.getString("kekv"),
+                            resultSet.getString("dk_code"),
+                            resultSet.getString("name_project"),
+                            resultSet.getString("unit_of_measure"),
+                            resultSet.getDouble("quantity"),
+                            resultSet.getDouble("price"),
+                            resultSet.getDouble("total_price"),
+                            resultSet.getDouble("contract_price"),
+                            resultSet.getDouble("remaining_balance"),
+                            paymentTo,
+                            resultSet.getDouble("special_fund"),
+                            resultSet.getDouble("general_fund"),
+                            resultSet.getString("justification"),
+                            resultSet.getBoolean("informatization"),
+                            responsibleExecutor,
+                            projectStatus
+                    );
+                }
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return purchase;
     }
 
     public Long getExecutorIdFromProject(long projectId) {
@@ -137,7 +193,7 @@ public class PurchasesDAO {
         String query = "UPDATE purchases SET justification = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (justification == null || justification.trim().isEmpty()) {
                 preparedStatement.setNull(1, Types.VARCHAR);
             } else {
@@ -154,7 +210,7 @@ public class PurchasesDAO {
         String query = "UPDATE purchases SET status = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (status == null) {
                 preparedStatement.setNull(1, Types.INTEGER);
             } else {
@@ -168,13 +224,14 @@ public class PurchasesDAO {
         }
     }
 
-    public void updateContractPrice(long projectId, double contractPrice) {
-        String query = "UPDATE purchases SET contract_price = ? WHERE id = ?";
+    public void updateContractPrice(long projectId, double contractPrice, double remainingBalance) {
+        String query = "UPDATE purchases SET contract_price = ?, remaining_balance = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setDouble(1, contractPrice);
-            preparedStatement.setLong(2, projectId);
+            preparedStatement.setDouble(2, remainingBalance);
+            preparedStatement.setLong(3, projectId);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
