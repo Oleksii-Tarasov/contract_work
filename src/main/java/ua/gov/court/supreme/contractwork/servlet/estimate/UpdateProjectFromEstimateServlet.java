@@ -1,6 +1,7 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.estimate;
 
 import ua.gov.court.supreme.contractwork.model.Estimate;
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/update-project")
+@WebServlet("/estimate/update-project")
 public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -16,7 +17,7 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
 
         req.setAttribute("projectForUpdate", workInspector.getProjectFromEstimateById(id));
 
-        req.getRequestDispatcher("/WEB-INF/views/editProjectEstimate.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/estimate/projectEstimateEditForm.jsp").forward(req, resp);
     }
 
     @Override

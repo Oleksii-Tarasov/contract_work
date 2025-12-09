@@ -1,4 +1,6 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.estimate;
+
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;

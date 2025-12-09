@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/WEB-INF/views/header.jspf" %>
+<%@include file="/WEB-INF/views/layout/header.jspf" %>
 
 <div class="container-sm mt-3">
     <div class="bg-white p-4 rounded shadow">
         <h5 class="mb-3 fw-bold">Редагування проєкту</h5>
 
         <!-- action веде на сервлет або контролер для оновлення -->
-        <form method="post" action="${pageContext.request.contextPath}/update-project">
+        <form method="post" action="${pageContext.request.contextPath}/estimate/update-project">
             <!-- приховане поле для ID -->
             <input type="hidden" name="id" value="${projectForUpdate.id}">
 
@@ -163,4 +163,4 @@
     });
 </script>
 
-<%@include file="/WEB-INF/views/footer.jspf" %>
+<%@include file="/WEB-INF/views/layout/footer.jspf" %>

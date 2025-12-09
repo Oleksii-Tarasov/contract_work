@@ -40,11 +40,11 @@ public class PurchasesDAO {
 
         String query = switch (kekv) {
             case 2210 -> "SELECT p.*, u.* FROM purchases p " +
-                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2210'";
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2210' ORDER BY p.id ASC";
             case 2240 -> "SELECT p.*, u.* FROM purchases p " +
-                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2240'";
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '2240' ORDER BY p.id ASC";
             case 3110 -> "SELECT p.*, u.* FROM purchases p " +
-                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '3110'";
+                    "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.kekv = '3110' ORDER BY p.id ASC";
             default -> "";
         };
 
@@ -232,6 +232,25 @@ public class PurchasesDAO {
             preparedStatement.setDouble(1, contractPrice);
             preparedStatement.setDouble(2, remainingBalance);
             preparedStatement.setLong(3, projectId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updatePaymentDueDate(long projectId, LocalDate paymentDate) {
+        String query = "UPDATE purchases SET payment_to = ? WHERE id = ?";
+
+        try (Connection connection = postgresConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            if (paymentDate != null) {
+                preparedStatement.setDate(1, Date.valueOf(paymentDate));
+            } else {
+                preparedStatement.setNull(1, Types.DATE);
+            }
+
+            preparedStatement.setLong(2, projectId);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

@@ -84,9 +84,9 @@ public class EstimateDAO {
         List<Estimate> estimateProjectsByKekv = new ArrayList<>();
 
         String query = switch (kekv) {
-            case 2210 -> "SELECT * FROM estimate WHERE kekv = '2210'";
-            case 2240 -> "SELECT * FROM estimate WHERE kekv = '2240'";
-            case 3110 -> "SELECT * FROM estimate WHERE kekv = '3110'";
+            case 2210 -> "SELECT * FROM estimate WHERE kekv = '2210' ORDER BY id ASC";
+            case 2240 -> "SELECT * FROM estimate WHERE kekv = '2240' ORDER BY id ASC";
+            case 3110 -> "SELECT * FROM estimate WHERE kekv = '3110' ORDER BY id ASC";
             default -> "";
         };
 

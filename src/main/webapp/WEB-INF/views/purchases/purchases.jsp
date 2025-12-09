@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@include file="/WEB-INF/views/header.jspf" %>
+<%@include file="/WEB-INF/views/layout/header.jspf" %>
 <style>
     <%@include file="/css/purchases.css" %>
 </style>
@@ -37,19 +37,24 @@
                                 '${fn:escapeXml(project2210.nameProject)}',
                                 '${fn:escapeXml(project2210.justification)}',
                                 '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
-                            ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'})">
+                            ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'},
+                                '${project2210.paymentTo != null ? fn:substring(project2210.paymentTo, 0, 10) : ''}'
+                                )">
                         <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
                     </td>
-                    <td><c:out value="${project2210.unitOfMeasure}"/></td>
-                    <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
-                    <td><fmt:formatNumber value="${project2210.price}" pattern="#,##0.00"/></td>
-                    <td><fmt:formatNumber value="${project2210.totalPrice}" pattern="#,##0.00"/></td>
+                    <td class="${project2210.projectStatus.cssClass}"><c:out value="${project2210.unitOfMeasure}"/></td>
+                    <td class="${project2210.projectStatus.cssClass}"><fmt:formatNumber value="${project2210.quantity}"
+                                                                                        pattern="#,##0"/></td>
+                    <td class="${project2210.projectStatus.cssClass}"><fmt:formatNumber value="${project2210.price}"
+                                                                                        pattern="#,##0.00"/></td>
+                    <td class="${project2210.projectStatus.cssClass}"><fmt:formatNumber
+                            value="${project2210.totalPrice}" pattern="#,##0.00"/></td>
                     <td class="${project2210.projectStatus.cssClass}">
                         <fmt:formatNumber value="${project2210.contractPrice}" pattern="#,##0.00"/>
                     </td>
                     <td><fmt:formatNumber value="${project2210.remainingBalance}" pattern="#,##0.00"/></td>
-                    <td></td>
-                    <td>
+                    <td><c:out value="${project2210.paymentTo}"/></td>
+                    <td class="${project2210.projectStatus.cssClass}">
                         <c:out value="${project2210.responsibleExecutor != null ? project2210.responsibleExecutor.shortName : ''}"/>
                     </td>
                 </tr>
@@ -82,19 +87,24 @@
                                 '${fn:escapeXml(project2240.nameProject)}',
                                 '${fn:escapeXml(project2240.justification)}',
                                 '${project2240.contractPrice != null ? project2240.contractPrice : 'null'}',
-                            ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'})">
+                            ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'},
+                                '${project2240.paymentTo != null ? fn:substring(project2240.paymentTo, 0, 10) : ''}'
+                                )">
                         <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
                     </td>
-                    <td><c:out value="${project2240.unitOfMeasure}"/></td>
-                    <td><fmt:formatNumber value="${project2240.quantity}" pattern="#,##0"/></td>
-                    <td><fmt:formatNumber value="${project2240.price}" pattern="#,##0.00"/></td>
-                    <td><fmt:formatNumber value="${project2240.totalPrice}" pattern="#,##0.00"/></td>
+                    <td class="${project2240.projectStatus.cssClass}"><c:out value="${project2240.unitOfMeasure}"/></td>
+                    <td class="${project2240.projectStatus.cssClass}"><fmt:formatNumber value="${project2240.quantity}"
+                                                                                        pattern="#,##0"/></td>
+                    <td class="${project2240.projectStatus.cssClass}"><fmt:formatNumber value="${project2240.price}"
+                                                                                        pattern="#,##0.00"/></td>
+                    <td class="${project2240.projectStatus.cssClass}"><fmt:formatNumber
+                            value="${project2240.totalPrice}" pattern="#,##0.00"/></td>
                     <td class="${project2240.projectStatus.cssClass}">
                         <fmt:formatNumber value="${project2240.contractPrice}" pattern="#,##0.00"/>
                     </td>
                     <td><fmt:formatNumber value="${project2240.remainingBalance}" pattern="#,##0.00"/></td>
-                    <td></td>
-                    <td>
+                    <td><c:out value="${project2240.paymentTo}"/></td>
+                    <td class="${project2240.projectStatus.cssClass}">
                         <c:out value="${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.shortName : ''}"/>
                     </td>
                 </tr>
@@ -127,19 +137,24 @@
                                 '${fn:escapeXml(project3110.nameProject)}',
                                 '${fn:escapeXml(project3110.justification)}',
                                 '${project3110.contractPrice != null ? project3110.contractPrice : 'null'}',
-                            ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'})">
+                            ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'},
+                                '${project3110.paymentTo != null ? fn:substring(project3110.paymentTo, 0, 10) : ''}'
+                                )">
                         <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
                     </td>
-                    <td><c:out value="${project3110.unitOfMeasure}"/></td>
-                    <td><fmt:formatNumber value="${project3110.quantity}" pattern="#,##0"/></td>
-                    <td><fmt:formatNumber value="${project3110.price}" pattern="#,##0.00"/></td>
-                    <td><fmt:formatNumber value="${project3110.totalPrice}" pattern="#,##0.00"/></td>
+                    <td class="${project3110.projectStatus.cssClass}"><c:out value="${project3110.unitOfMeasure}"/></td>
+                    <td class="${project3110.projectStatus.cssClass}"><fmt:formatNumber value="${project3110.quantity}"
+                                                                                        pattern="#,##0"/></td>
+                    <td class="${project3110.projectStatus.cssClass}"><fmt:formatNumber value="${project3110.price}"
+                                                                                        pattern="#,##0.00"/></td>
+                    <td class="${project3110.projectStatus.cssClass}"><fmt:formatNumber
+                            value="${project3110.totalPrice}" pattern="#,##0.00"/></td>
                     <td class="${project3110.projectStatus.cssClass}">
                         <fmt:formatNumber value="${project3110.contractPrice}" pattern="#,##0.00"/>
                     </td>
                     <td><fmt:formatNumber value="${project3110.remainingBalance}" pattern="#,##0.00"/></td>
-                    <td></td>
-                    <td>
+                    <td><c:out value="${project3110.paymentTo}"/></td>
+                    <td class="${project3110.projectStatus.cssClass}">
                         <c:out value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}"/>
                     </td>
                 </tr>
@@ -173,7 +188,7 @@
             <div class="modal-body" id="actionBody">
                 <div class="row">
                     <div class="col-6 border-end">
-                        <p><strong>Обґрунтування/Примітки:</strong></p>
+                        <strong>Обґрунтування/Примітки:</strong>
                         <textarea
                                 id="justificationText"
                                 class="form-control mb-3"
@@ -185,39 +200,65 @@
                         </p>
                     </div>
                     <div class="col-6">
-                        <p><strong>Статус закупівлі:</strong>
-                            <select id="projectStatusSelect" class="executor-select-clean"></select>
-                        </p>
+                        <strong>Статус закупівлі:</strong>
+                        <select id="projectStatusSelect" class="executor-select-clean"></select>
 
-                        <p><strong>Сума Договору:</strong>
-                            <input
-                                    id="contractPriceInput"
-                                    type="text"
-                                    class="form-control"
-                                    style="max-width: 200px"
-                            />
-                        </p>
+                        <div class="row g-3" style="max-width: 420px">
 
-                        <p><strong>Документи:</strong></p>
+                            <div class="row g-3" style="max-width: 420px">
+
+                                <!-- Заголовки -->
+                                <div class="col-6 mb-1">
+                                    <strong>Сума Договору:</strong>
+                                </div>
+                                <div class="col-6 mb-1">
+                                    <strong>Оплата до:</strong>
+                                </div>
+
+                                <!-- Поля -->
+                                <div class="col-6 mt-0">
+                                    <input
+                                            id="contractPriceInput"
+                                            type="text"
+                                            class="form-control"
+                                            style="max-width: 180px"
+                                    />
+                                </div>
+                                <div class="col-6 mt-0">
+                                    <div class="input-group" style="max-width: 180px">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                        </span>
+                                        <input
+                                                type="date"
+                                                id="paymentDueDateInput"
+                                                class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p><strong>Документи:</strong></p>
+                        </div>
                     </div>
+
+                    <p class="mt-3">
+                        <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Видалити</button>
+                    </p>
                 </div>
 
-                <p class="mt-3">
-                    <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Видалити</button>
-                </p>
-            </div>
-
-            <div class="modal-body d-none" id="confirmDeleteBody">
-                <p>Ви впевнені, що хочете видалити проєкт <strong id="projectNameConfirmPlaceholder"></strong>?</p>
-                <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
-                <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
+                <div class="modal-body d-none" id="confirmDeleteBody">
+                    <p>Ви впевнені, що хочете видалити проєкт <strong id="projectNameConfirmPlaceholder"></strong>?</p>
+                    <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
+                    <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<%@include file="/WEB-INF/views/footer.jspf" %>
+<%@include file="/WEB-INF/views/layout/footer.jspf" %>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -246,7 +287,10 @@
         let originalContractPrice = "";
         let contractPriceWasChanged = false;
 
-        window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus) {
+        let originalPaymentDueDate = "";
+        let paymentDueDateWasChanged = false;
+
+        window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus, paymentDueDate) {
             currentProjectId = projectId;
             currentProjectName = projectName;
 
@@ -333,7 +377,14 @@
             originalContractPrice = formattedPrice;
             contractPriceWasChanged = false;
 
-            editButton.href = "${pageContext.request.contextPath}/update-project?id=" + projectId;
+            // === Оплата до ===
+            const paymentInput = document.getElementById("paymentDueDateInput");
+            paymentInput.value = paymentDueDate || "";
+            originalPaymentDueDate = paymentInput.value;
+            paymentDueDateWasChanged = false;
+
+            //
+            editButton.href = "${pageContext.request.contextPath}/purchases/update-project?id=" + projectId;
 
             actionModal.show();
         };
@@ -360,7 +411,9 @@
                     .then(() => {
                         location.reload();
                     });
-            } else if (contractPriceWasChanged && currentProjectId !== null) {
+            }
+
+            if (contractPriceWasChanged && currentProjectId !== null) {
                 const newPrice = document.getElementById("contractPriceInput").value
                     .replace(/\s/g, '')
                     .replace(",", ".");
@@ -374,10 +427,32 @@
                 }).then(() => {
                     location.reload();
                 });
-            } else if (executorWasChanged) {
+            }
+
+            if (executorWasChanged) {
                 location.reload();
-            } else if (projectStatusChanged) {
+            }
+
+            if (projectStatusChanged) {
                 location.reload();
+            }
+
+            if (paymentDueDateWasChanged && currentProjectId !== null) {
+
+                const newDateRaw = document.getElementById("paymentDueDateInput").value;
+                const newDate = newDateRaw === "" ? null : newDateRaw;
+
+                localStorage.setItem("updatedPaymentDueDateProjectId", currentProjectId);
+
+                fetch("/contractwork/update-payment-date", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body:
+                        "projectId=" + currentProjectId +
+                        "&paymentDueDate=" + encodeURIComponent(newDate ?? "")
+                }).then(() => {
+                    location.reload();
+                });
             }
 
             currentProjectId = null;
@@ -423,24 +498,40 @@
             contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
         });
 
+        // Зміна "Оплата до"
+        document.getElementById("paymentDueDateInput")
+            .addEventListener("input", function () {
+                paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
+            });
+
 
         // === СКРОЛ/ПІДСВІТКА ===
         function centerAndHighlight(row) {
             if (!row) return;
-            // обчислюємо top для центрованого показу
+
             const rect = row.getBoundingClientRect();
             const absoluteTop = window.scrollY + rect.top;
-            const targetTop = Math.max(0, Math.floor(absoluteTop - (window.innerHeight - rect.height) / 2));
+            const targetTop = Math.max(0, Math.floor(
+                absoluteTop - (window.innerHeight - rect.height) / 2
+            ));
+
             window.scrollTo({top: targetTop, behavior: "smooth"});
-            row.classList.add("highlight-edited");
-            setTimeout(() => row.classList.remove("highlight-edited"), 5000);
+
+            // 🔹 тільки перша клітинка (№)
+            const firstCell = row.querySelector("td:first-child");
+
+            if (firstCell) {
+                firstCell.classList.add("highlight-edited");
+                setTimeout(() => {
+                    firstCell.classList.remove("highlight-edited");
+                }, 5000);
+            }
         }
 
         // --- 1) Відновлення позиції скролу (тільки якщо немає hash і немає updatedId) ---
         const savedScroll = localStorage.getItem("scrollPositionEstimate");
         const updatedId = localStorage.getItem("updatedExecutorProjectId");
         const updatedJustId = localStorage.getItem("updatedJustificationProjectId");
-
 
         const hasHash = !!window.location.hash;
 
@@ -481,6 +572,7 @@
             });
         }
 
+        // Підсвітка після оновлення ціни
         const updatedContractPriceId = localStorage.getItem("updatedContractPriceProjectId");
         if (updatedContractPriceId) {
             const rid = "project-" + updatedContractPriceId;
@@ -491,6 +583,16 @@
             });
         }
 
+        // Підсвітка після оновлення дати
+        const updatedPaymentDateId = localStorage.getItem("updatedPaymentDueDateProjectId");
+        if (updatedPaymentDateId) {
+            const rid = "project-" + updatedPaymentDateId;
+            const row = document.getElementById(rid);
+            requestAnimationFrame(() => {
+                centerAndHighlight(row);
+                localStorage.removeItem("updatedPaymentDueDateProjectId");
+            });
+        }
 
         if (savedScroll !== null) {
             localStorage.removeItem("scrollPositionEstimate");

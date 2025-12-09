@@ -1,6 +1,7 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.estimate;
 
 import ua.gov.court.supreme.contractwork.model.Estimate;
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +36,6 @@ public class EstimateServlet extends BaseWorkServlet {
         req.setAttribute("totalGeneralFund3110", workInspector.getEstimateTotalAmounts(projectsForEstimate3110).getTotalGeneralFund());
         req.setAttribute("totalSpecialFund3110", workInspector.getEstimateTotalAmounts(projectsForEstimate3110).getTotalSpecialFund());
 
-        getServletContext().getRequestDispatcher("/WEB-INF/views/estimate.jsp").forward(req,resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/estimate/estimate.jsp").forward(req,resp);
     }
 }

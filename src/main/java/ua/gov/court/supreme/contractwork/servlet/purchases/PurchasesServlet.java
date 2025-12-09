@@ -1,6 +1,7 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.purchases;
 
 import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +36,6 @@ public class PurchasesServlet extends BaseWorkServlet {
 
         req.setAttribute("projectStatuses", workInspector.getProjectStatuses());
 
-        getServletContext().getRequestDispatcher("/WEB-INF/views/purchases.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/purchases/purchases.jsp").forward(req, resp);
     }
 }

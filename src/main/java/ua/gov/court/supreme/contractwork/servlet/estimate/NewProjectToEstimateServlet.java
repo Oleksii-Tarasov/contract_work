@@ -1,6 +1,7 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.estimate;
 
 import ua.gov.court.supreme.contractwork.model.Estimate;
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/new-project")
+@WebServlet("/estimate/new-project")
 public class NewProjectToEstimateServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/WEB-INF/views/newProjectEstimateForm.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/estimate/projectEstimateForm.jsp").forward(req, resp);
     }
 
     @Override

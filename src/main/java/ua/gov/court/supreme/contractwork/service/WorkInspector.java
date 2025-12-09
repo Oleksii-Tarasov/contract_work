@@ -12,6 +12,7 @@ import ua.gov.court.supreme.contractwork.model.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class WorkInspector {
@@ -120,6 +121,10 @@ public class WorkInspector {
         double remainingBalance = purchase.getTotalPrice() - contractPrice;
 
         purchasesDAO.updateContractPrice(projectId, contractPrice, remainingBalance);
+    }
+
+    public void updatePaymentDueDate(long projectId, LocalDate paymentDate) {
+        purchasesDAO.updatePaymentDueDate(projectId, paymentDate);
     }
 
     // Робота із користувачами

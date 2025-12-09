@@ -48,7 +48,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/new-project">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/estimate/new-project">
                                 Додати проєкт до кошторису
                             </a>
                         </li>

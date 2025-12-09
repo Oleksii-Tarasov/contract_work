@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/WEB-INF/views/header.jspf" %>
+<%@include file="/WEB-INF/views/layout/header.jspf" %>
 
 <style>
     <%@include file="/css/estimate.css" %>
@@ -156,10 +156,112 @@
                 <!-- Кнопка скасування, що повертає до першого тіла -->
                 <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
             </div>
-
         </div>
     </div>
 </div>
 
-<%@include file="/WEB-INF/views/footer.jspf" %>
-<%@include file="/WEB-INF/views/tableCommonScripts.jspf" %>
+<%@include file="/WEB-INF/views/layout/footer.jspf" %>
+<%@include file="/WEB-INF/views/layout/tableCommonScripts.jspf" %>
+
+<%--Функціонал модального вікна--%>
+<script>
+    var actionModalEl = document.getElementById('actionModal');
+    var actionModal = new bootstrap.Modal(actionModalEl);
+
+    // Елемент заголовка модального вікна
+    var modalTitle = document.getElementById("actionModalLabel");
+
+    // Елементи першого тіла
+    var actionBody = document.getElementById("actionBody");
+    var editButton = document.getElementById("editButton");
+
+    // Елементи другого тіла (підтвердження)
+    var confirmDeleteBody = document.getElementById("confirmDeleteBody");
+    var projectNameConfirmPlaceholder = document.getElementById("projectNameConfirmPlaceholder");
+    var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+
+    let currentProjectId = null;
+    let currentProjectName = '';
+
+    function openActionModal(projectId, projectName) {
+        currentProjectId = projectId;
+        currentProjectName = projectName;
+
+        // Переконуємося, що завжди показуємо спочатку тіло вибору дії
+        actionBody.classList.remove('d-none');
+        confirmDeleteBody.classList.add('d-none');
+
+        // ВСТАНОВЛЮЄМО ЗАГОЛОВОК ТУТ:
+        modalTitle.textContent = projectName;
+
+        editButton.href = "${pageContext.request.contextPath}/estimate/update-project?id=" + projectId;
+        // editButton.href = contextPath +"/update-project?id=" + projectId;
+
+        actionModal.show();
+    }
+
+    // Функція переходу до вікна підтвердження
+    function confirmDelete() {
+        // Ховаємо перше тіло і показуємо друге
+        actionBody.classList.add('d-none');
+        confirmDeleteBody.classList.remove('d-none');
+
+        // ОНОВЛЮЄМО ЗАГОЛОВОК ДЛЯ ПІДТВЕРДЖЕННЯ
+        modalTitle.textContent = 'Підтвердження видалення';
+        projectNameConfirmPlaceholder.textContent = currentProjectName;
+
+        confirmDeleteButton.onclick = function (event) {
+            event.preventDefault();
+            if (!currentProjectId) return;
+
+            fetch("${pageContext.request.contextPath}/estimate/delete-project", {
+                // fetch(contextPath + "/delete-project", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "id=" + encodeURIComponent(currentProjectId)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // === ПЛАВНЕ ВИДАЛЕННЯ РЯДКА ===
+                        const row = document.getElementById("project-" + data.deletedId);
+                        if (row && row.tagName === "TR") {
+                            row.style.transition = "background-color 0.5s ease, opacity 0.5s ease";
+                            row.style.backgroundColor = "#f8d7da";
+                            row.style.opacity = "0";
+                            setTimeout(() => row.remove(), 500);
+                        }
+
+                        // Закриваємо модалку
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
+                        modal.hide();
+                    } else {
+                        alert("Помилка: " + (data.message || "Не вдалося видалити проєкт."));
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Виникла помилка при видаленні проєкту.");
+                });
+        };
+    }
+
+    // Функція скасування видалення (повернення до першого тіла)
+    function cancelDelete() {
+        actionBody.classList.remove('d-none');
+        confirmDeleteBody.classList.add('d-none');
+
+        // ПОВЕРТАЄМО ПОПЕРЕДНІЙ ЗАГОЛОВОК ПРИ СКАСУВАННІ
+        // Використовуємо збережену назву проєкту
+        modalTitle.textContent = currentProjectName;
+    }
+
+    // Скидання стану модалки при її закритті будь-яким способом (хрестик, клік поза)
+    actionModalEl.addEventListener('hidden.bs.modal', function (event) {
+        // Ми не викликаємо cancelDelete() тут напряму, щоб уникнути
+        // можливих конфліктів життєвого циклу модалки Bootstrap.
+        // Достатньо того, що openActionModal() скидає стан при наступному відкритті.
+        currentProjectId = null;
+        currentProjectName = '';
+    });
+</script>

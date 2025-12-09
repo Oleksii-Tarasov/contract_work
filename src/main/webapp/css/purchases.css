@@ -27,10 +27,14 @@
 /* Плавний перехід кольору для всіх комірок таблиці */
 .table tr td {
     transition: background-color 1s ease;
+}
+
+.table tr td:nth-child(2) {
     cursor: pointer;
 }
-.highlight-edited td {
-    background-color: #fff3cd; !important;
+
+td.highlight-edited {
+    background-color: #fff3cd !important;
     transition: background-color 1s ease;
 }
 

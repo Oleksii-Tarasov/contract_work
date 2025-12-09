@@ -1,4 +1,6 @@
-package ua.gov.court.supreme.contractwork.servlet;
+package ua.gov.court.supreme.contractwork.servlet.purchases;
+
+import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
