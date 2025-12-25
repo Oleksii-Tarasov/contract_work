@@ -1,6 +1,7 @@
 package ua.gov.court.supreme.contractwork.dao;
 
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
+import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequest;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Purchases;
 import ua.gov.court.supreme.contractwork.model.User;
@@ -255,6 +256,39 @@ public class PurchasesDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void updatePurchasesFields(ProjectUpdateRequest dto) {
+
+        long projectId = dto.getId();
+
+        // 1. Обґрунтування
+        if (dto.getJustification() != null) {
+            updateJustification(projectId, dto.getJustification());
+        }
+
+        // 2. Статус
+        if (dto.getProjectStatus() != null) {
+            updateProjectStatus(projectId, dto.getProjectStatus());
+        }
+
+        // 3. Виконавець
+        if (dto.getExecutorId() != null) {
+            updateProjectExecutor(projectId, dto.getExecutorId());
+        }
+
+        // 4. Сума договору + залишок
+        if (dto.getContractPrice() != null) {
+            Purchases purchase = getProjectById(projectId);
+            double remainingBalance = purchase.getTotalPrice() - dto.getContractPrice();
+            updateContractPrice(projectId, dto.getContractPrice(), remainingBalance);
+        }
+
+        // 5. Оплата до
+        if (dto.getPaymentTo() != null || dto.getPaymentTo() == null) {
+            // null теж свідоме оновлення
+            updatePaymentDueDate(projectId, dto.getPaymentTo());
         }
     }
 }

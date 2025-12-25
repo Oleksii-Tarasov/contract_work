@@ -20,22 +20,7 @@
 }
 
 .project-row {
-    scroll-margin-top: 200px; /* під header'а */
-}
-
-/* Тимчасове підсвічування відредагованого рядка */
-/* Плавний перехід кольору для всіх комірок таблиці */
-.table tr td {
-    transition: background-color 1s ease;
-}
-
-.table tr td:nth-child(2) {
-    cursor: pointer;
-}
-
-td.highlight-edited {
-    background-color: #fff3cd !important;
-    transition: background-color 1s ease;
+    scroll-margin-top: 200px; /* під header */
 }
 
 .table td, .table th {
@@ -64,6 +49,9 @@ td.highlight-edited {
 .table td:nth-child(2) {  /* Найменування */
     min-width: 150px;
     width: 35%;
+}
+.table tr td:nth-child(2) {
+    cursor: pointer;
 }
 .table th:nth-child(3),
 .table td:nth-child(3) {  /* Одиниця виміру */
@@ -125,7 +113,7 @@ td.highlight-edited {
     background-color: #fce4d6 !important;  /* червоний */
 }
 
-/* Мінімалістичний селектор під стиль таблиці */
+/* селектор */
 .executor-select-clean {
     border: none !important;
     background-color: transparent !important;
@@ -148,4 +136,25 @@ td.highlight-edited {
 .executor-select-clean:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+/* Підсвічування першої комірки (№) */
+/* Анімація "Затримка + Затухання" */
+@keyframes fadeBlueHold {
+    0% {
+        background-color: #86b3e4;
+        color: white;
+    }
+    80% {
+        background-color: #86b3e4;
+        color: white;
+    }
+    100% {
+        background-color: transparent;
+        color: inherit;
+    }
+}
+
+.highlight-cell {
+    animation: fadeBlueHold 3s ease-in-out forwards;
 }

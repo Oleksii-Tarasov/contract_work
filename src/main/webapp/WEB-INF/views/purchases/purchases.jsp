@@ -263,6 +263,21 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
+        // Перевірка підсвічування після перезавантаження
+        const updatedProjectId = localStorage.getItem("updatedProjectId");
+        if (updatedProjectId) {
+            const row = document.getElementById("project-" + updatedProjectId);
+            if (row) {
+                const firstCell = row.querySelector("td:first-child");
+                if (firstCell) {
+                    firstCell.classList.add("highlight-cell");
+                }
+                // Прокрутка до зміненого рядка
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            localStorage.removeItem("updatedProjectId");
+        }
+
         const actionModalEl = document.getElementById('actionModal');
         const actionModal = new bootstrap.Modal(actionModalEl);
         const modalTitle = document.getElementById("actionModalLabel");
@@ -307,7 +322,7 @@
             const statusSelect = document.getElementById("projectStatusSelect");
             statusSelect.innerHTML = "";
 
-            // Заповнення ENUM статусів (генерується на стороні JSP)
+            // --- 1. Заповнення ENUM статусів (генерується на стороні JSP)
             <c:forEach var="st" items="${projectStatuses}">
             (function () {
                 const opt = document.createElement("option");
@@ -317,7 +332,7 @@
             })();
             </c:forEach>
 
-            // Встановлюємо поточний статус
+            // --- 2. Встановлюємо поточний статус
             statusSelect.value = projectStatus !== "null" ? projectStatus : "";
             if (statusSelect.value !== projectStatus) {
                 for (let i = 0; i < statusSelect.options.length; i++) {
@@ -328,7 +343,7 @@
                 }
             }
 
-            // === Відплвідальний виконавець ===
+            // === Відповідальний виконавець ===
             // --- 1. Селектор у модалці та очищаємо його ---
             const select = document.getElementById("executorSelectModal");
             select.innerHTML = "";
@@ -396,104 +411,77 @@
         };
 
         actionModalEl.addEventListener('hidden.bs.modal', () => {
-            if (justificationWasChanged && currentProjectId !== null) {
 
-                const newJustification = document.getElementById("justificationText").value;
+            if (!currentProjectId) return;
 
-                // ЗБЕРІГАЄМО ID ДО fetch — гарантовано
-                localStorage.setItem("updatedJustificationProjectId", currentProjectId);
+            const payload = { id: currentProjectId };
 
-                fetch("/contractwork/update-justification", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: "projectId=" + currentProjectId + "&justification=" + encodeURIComponent(newJustification)
-                })
-                    .then(() => {
-                        location.reload();
-                    });
+            if (justificationWasChanged) {
+                payload.justification =
+                    document.getElementById("justificationText").value;
             }
 
-            if (contractPriceWasChanged && currentProjectId !== null) {
-                const newPrice = document.getElementById("contractPriceInput").value
-                    .replace(/\s/g, '')
-                    .replace(",", ".");
+            if (contractPriceWasChanged) {
+                payload.contractPrice = Number(
+                    document.getElementById("contractPriceInput")
+                        .value.replace(/\s/g, '').replace(',', '.')
+                );
+            }
 
-                localStorage.setItem("updatedContractPriceProjectId", currentProjectId);
-
-                fetch("/contractwork/update-contract-price", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: "projectId=" + currentProjectId + "&contractPrice=" + encodeURIComponent(newPrice)
-                }).then(() => {
-                    location.reload();
-                });
+            if (paymentDueDateWasChanged) {
+                payload.paymentTo =
+                    document.getElementById("paymentDueDateInput").value || null;
             }
 
             if (executorWasChanged) {
-                location.reload();
+                payload.executorId = executorSelectModal.value || null;
             }
 
             if (projectStatusChanged) {
-                location.reload();
+                payload.projectStatus = Number(projectStatusSelect.value);
             }
 
-            if (paymentDueDateWasChanged && currentProjectId !== null) {
+            // якщо зміни відсутні — не виконувати POST
+            if (Object.keys(payload).length === 1) {
+                currentProjectId = null;
+                currentProjectName = '';
+                return;
+            }
 
-                const newDateRaw = document.getElementById("paymentDueDateInput").value;
-                const newDate = newDateRaw === "" ? null : newDateRaw;
+            // Зберігаємо ID перед відправкою/перезавантаженням
+            localStorage.setItem("updatedProjectId", currentProjectId);
 
-                localStorage.setItem("updatedPaymentDueDateProjectId", currentProjectId);
-
-                fetch("/contractwork/update-payment-date", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body:
-                        "projectId=" + currentProjectId +
-                        "&paymentDueDate=" + encodeURIComponent(newDate ?? "")
-                }).then(() => {
+            fetch("/contractwork/purchases/update-project-fields", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+        .then(() => {
                     location.reload();
+                })
+                .catch(err => {
+                    console.error("Update failed", err);
+                    localStorage.removeItem("updatedProjectId");
                 });
-            }
 
             currentProjectId = null;
             currentProjectName = '';
         });
 
-        // Зміна виконавця
         executorSelectModal.addEventListener("change", function () {
-            const projectId = currentProjectId;
-            const userId = this.value || "";
-            fetch("/contractwork/executor", {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "projectId=" + projectId + "&userId=" + userId
-            }).then(() => {
-                executorWasChanged = true;
-                localStorage.setItem("updatedExecutorProjectId", projectId);
-            });
+            executorWasChanged = true;
         });
 
-        // Зміна статусу закупівлі
         projectStatusSelect.addEventListener("change", function () {
-            const projectId = currentProjectId;
-            const statusValue = this.value || "";
-
-            fetch("/contractwork/update-status", {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "projectId=" + projectId + "&status=" + statusValue
-            }).then(() => {
-                projectStatusChanged = true;
-                localStorage.setItem("updatedStatusProjectId", projectId);
-            });
+            projectStatusChanged = true;
         });
 
-        // Зміна обґрунтування
+        // Зміна Обґрунтування
         document.getElementById("justificationText").addEventListener("input", function () {
             justificationWasChanged = (this.value.trim() !== originalJustification.trim());
         });
 
-        // Зміна суми Договору
+        // Зміна Суми Договору
         document.getElementById("contractPriceInput").addEventListener("input", function () {
             contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
         });
@@ -502,105 +490,6 @@
         document.getElementById("paymentDueDateInput")
             .addEventListener("input", function () {
                 paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
-            });
-
-
-        // === СКРОЛ/ПІДСВІТКА ===
-        function centerAndHighlight(row) {
-            if (!row) return;
-
-            const rect = row.getBoundingClientRect();
-            const absoluteTop = window.scrollY + rect.top;
-            const targetTop = Math.max(0, Math.floor(
-                absoluteTop - (window.innerHeight - rect.height) / 2
-            ));
-
-            window.scrollTo({top: targetTop, behavior: "smooth"});
-
-            // 🔹 тільки перша клітинка (№)
-            const firstCell = row.querySelector("td:first-child");
-
-            if (firstCell) {
-                firstCell.classList.add("highlight-edited");
-                setTimeout(() => {
-                    firstCell.classList.remove("highlight-edited");
-                }, 5000);
-            }
-        }
-
-        // --- 1) Відновлення позиції скролу (тільки якщо немає hash і немає updatedId) ---
-        const savedScroll = localStorage.getItem("scrollPositionEstimate");
-        const updatedId = localStorage.getItem("updatedExecutorProjectId");
-        const updatedJustId = localStorage.getItem("updatedJustificationProjectId");
-
-        const hasHash = !!window.location.hash;
-
-        if (!hasHash && !updatedId && savedScroll !== null) {
-            window.scrollTo({top: parseInt(savedScroll, 10) || 0, behavior: "instant"});
-            localStorage.removeItem("scrollPositionEstimate");
-        }
-
-        // --- 2) Підсвітка за хешом або за оновленням (має пріоритет над відновленням) ---
-        if (hasHash) {
-            const id = window.location.hash.slice(1);
-            const row = document.getElementById(id);
-            // дати браузеру закінчити layout перш ніж скролити
-            requestAnimationFrame(() => centerAndHighlight(row));
-        } else if (updatedId) {
-            const rid = "project-" + updatedId;
-            const row = document.getElementById(rid);
-            requestAnimationFrame(() => {
-                centerAndHighlight(row);
-                localStorage.removeItem("updatedExecutorProjectId");
-            });
-        } else if (updatedJustId) {
-            const rid = "project-" + updatedJustId;
-            const row = document.getElementById(rid);
-            requestAnimationFrame(() => {
-                centerAndHighlight(row);
-                localStorage.removeItem("updatedJustificationProjectId");
-            });
-        }
-        // Підсвітка після оновлення проєкту
-        const updatedStatusId = localStorage.getItem("updatedStatusProjectId");
-        if (updatedStatusId) {
-            const rid = "project-" + updatedStatusId;
-            const row = document.getElementById(rid);
-            requestAnimationFrame(() => {
-                centerAndHighlight(row);
-                localStorage.removeItem("updatedStatusProjectId");
-            });
-        }
-
-        // Підсвітка після оновлення ціни
-        const updatedContractPriceId = localStorage.getItem("updatedContractPriceProjectId");
-        if (updatedContractPriceId) {
-            const rid = "project-" + updatedContractPriceId;
-            const row = document.getElementById(rid);
-            requestAnimationFrame(() => {
-                centerAndHighlight(row);
-                localStorage.removeItem("updatedContractPriceProjectId");
-            });
-        }
-
-        // Підсвітка після оновлення дати
-        const updatedPaymentDateId = localStorage.getItem("updatedPaymentDueDateProjectId");
-        if (updatedPaymentDateId) {
-            const rid = "project-" + updatedPaymentDateId;
-            const row = document.getElementById(rid);
-            requestAnimationFrame(() => {
-                centerAndHighlight(row);
-                localStorage.removeItem("updatedPaymentDueDateProjectId");
-            });
-        }
-
-        if (savedScroll !== null) {
-            localStorage.removeItem("scrollPositionEstimate");
-        }
-
-        // Збереження позиції скролу перед переходом
-        window.addEventListener("beforeunload", () => {
-            localStorage.setItem("scrollPositionEstimate", window.scrollY);
         });
     });
 

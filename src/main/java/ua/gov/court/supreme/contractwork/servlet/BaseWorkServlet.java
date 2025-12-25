@@ -6,7 +6,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-public class BaseWorkServlet extends HttpServlet {
+public abstract class BaseWorkServlet extends HttpServlet {
     protected WorkInspector workInspector;
 
     @Override

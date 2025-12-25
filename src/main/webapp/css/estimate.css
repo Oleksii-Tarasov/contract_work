@@ -19,9 +19,6 @@
     background-color: #ddebf7 !important; /* ніжний блакитний */
 }
 
-/*.project-row {*/
-/*    scroll-margin-top: 200px; !* під header'а *!*/
-/*}*/
 tr {
     scroll-margin-top: 200px; /* висота фіксованого хедера */
 }
