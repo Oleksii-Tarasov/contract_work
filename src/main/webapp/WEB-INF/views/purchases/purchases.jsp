@@ -182,7 +182,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="actionModalLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body" id="actionBody">
@@ -263,7 +263,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        // Перевірка підсвічування після перезавантаження
+        // --- 1. СКРОЛ/ПІДСВІЧУВАННЯ ---
         const updatedProjectId = localStorage.getItem("updatedProjectId");
         if (updatedProjectId) {
             const row = document.getElementById("project-" + updatedProjectId);
@@ -272,12 +272,12 @@
                 if (firstCell) {
                     firstCell.classList.add("highlight-cell");
                 }
-                // Прокрутка до зміненого рядка
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             localStorage.removeItem("updatedProjectId");
         }
 
+        // --- 2. ЕЛЕМЕНТИ ТА ЗМІННІ ---
         const actionModalEl = document.getElementById('actionModal');
         const actionModal = new bootstrap.Modal(actionModalEl);
         const modalTitle = document.getElementById("actionModalLabel");
@@ -285,44 +285,112 @@
         const confirmDeleteBody = document.getElementById("confirmDeleteBody");
         const editButton = document.getElementById("editButton");
         const executorSelectModal = document.getElementById("executorSelectModal");
-
-        const projectStatusSelect = document.getElementById("projectStatusSelect")
-
-        const projectNameConfirmPlaceholder = document.getElementById("projectNameConfirmPlaceholder");
-        const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        const projectStatusSelect = document.getElementById("projectStatusSelect");
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
 
         let currentProjectId = null;
         let currentProjectName = '';
         let executorWasChanged = false;
         let projectStatusChanged = false;
-
         let originalJustification = "";
         let justificationWasChanged = false;
-
         let originalContractPrice = "";
         let contractPriceWasChanged = false;
-
         let originalPaymentDueDate = "";
         let paymentDueDateWasChanged = false;
 
+        // --- 3. ФУНКЦІЇ КЕРУВАННЯ КНОПКОЮ ТА ЗБЕРЕЖЕННЯМ ---
+        function transformCloseToSave() {
+            if (modalCloseBtn.classList.contains('btn-save-check')) return;
+            modalCloseBtn.classList.remove('btn-close');
+            modalCloseBtn.classList.add('btn-save-check');
+            modalCloseBtn.innerHTML = '&#10004;&#xFE0E;';
+            modalCloseBtn.setAttribute('title', 'Зберегти зміни');
+        }
+
+        function resetModalCloseButton() {
+            modalCloseBtn.classList.add('btn-close');
+            modalCloseBtn.classList.remove('btn-save-check');
+            modalCloseBtn.innerHTML = '';
+            modalCloseBtn.removeAttribute('title');
+        }
+
+        function saveProjectChanges() {
+            if (!currentProjectId) return;
+
+            const payload = { id: currentProjectId };
+            if (justificationWasChanged) payload.justification = document.getElementById("justificationText").value;
+            if (contractPriceWasChanged) {
+                payload.contractPrice = Number(document.getElementById("contractPriceInput").value.replace(/\s/g, '').replace(',', '.'));
+            }
+            if (paymentDueDateWasChanged) payload.paymentTo = document.getElementById("paymentDueDateInput").value || null;
+            if (executorWasChanged) payload.executorId = executorSelectModal.value || null;
+            if (projectStatusChanged) payload.projectStatus = Number(projectStatusSelect.value);
+
+            // Якщо реально нічого не змінили, просто закриваємо
+            if (Object.keys(payload).length === 1) {
+                actionModal.hide();
+                return;
+            }
+
+            localStorage.setItem("updatedProjectId", currentProjectId);
+
+            fetch("/contractwork/purchases/update-project-fields", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+                .then(() => {
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("Update failed", err);
+                    localStorage.removeItem("updatedProjectId");
+                });
+        }
+
+        // --- 4. СЛУХАЧІ ПОДІЙ ---
+        // Обробка кліку по кнопці (хрестик або галочка)
+        modalCloseBtn.addEventListener('click', function (e) {
+            if (this.classList.contains('btn-save-check')) {
+                saveProjectChanges();
+            }
+        });
+
+        actionModalEl.addEventListener('hidden.bs.modal', () => {
+            currentProjectId = null;
+            currentProjectName = '';
+            executorWasChanged = false;
+            projectStatusChanged = false;
+            justificationWasChanged = false;
+            contractPriceWasChanged = false;
+            paymentDueDateWasChanged = false;
+            resetModalCloseButton();
+        });
+
+        // --- 5. ВІДКРИТТЯ МОДАЛКИ (БЕЗ ЗМІН) ---
         window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus, paymentDueDate) {
+            resetModalCloseButton();
+
+            executorWasChanged = false;
+            projectStatusChanged = false;
+            justificationWasChanged = false;
+            contractPriceWasChanged = false;
+            paymentDueDateWasChanged = false;
+
             currentProjectId = projectId;
             currentProjectName = projectName;
-
             actionBody.classList.remove('d-none');
-            confirmDeleteBody.classList.add('d-none');
-
+            document.getElementById("confirmDeleteBody").classList.add('d-none');
             modalTitle.textContent = projectName;
+
             const justificationField = document.getElementById('justificationText');
             justificationField.value = justification || "";
             originalJustification = justification || "";
-            justificationWasChanged = false;
 
-            // === Статус закупівлі ===
+            // Статус закупівлі
             const statusSelect = document.getElementById("projectStatusSelect");
             statusSelect.innerHTML = "";
-
-            // --- 1. Заповнення ENUM статусів (генерується на стороні JSP)
             <c:forEach var="st" items="${projectStatuses}">
             (function () {
                 const opt = document.createElement("option");
@@ -331,31 +399,11 @@
                 statusSelect.appendChild(opt);
             })();
             </c:forEach>
-
-            // --- 2. Встановлюємо поточний статус
             statusSelect.value = projectStatus !== "null" ? projectStatus : "";
-            if (statusSelect.value !== projectStatus) {
-                for (let i = 0; i < statusSelect.options.length; i++) {
-                    if (String(statusSelect.options[i].value) === String(projectStatus)) {
-                        statusSelect.options[i].selected = true;
-                        break;
-                    }
-                }
-            }
 
-            // === Відповідальний виконавець ===
-            // --- 1. Селектор у модалці та очищаємо його ---
+            // Відповідальний виконавець
             const select = document.getElementById("executorSelectModal");
-            select.innerHTML = "";
-
-            // --- 2. Опція "не вибрано" ---
-            const emptyOpt = document.createElement("option");
-            emptyOpt.value = "";
-            emptyOpt.textContent = "-- не вибрано --";
-            select.appendChild(emptyOpt);
-
-            // --- 3. ВСІ опції користувачів (вставлено JSP-генерацію опцій) ---
-            <%-- JSP: згенерувати опції користувачів --%>
+            select.innerHTML = '<option value="">-- не вибрано --</option>';
             <c:forEach var="u" items="${users}">
             (function () {
                 const opt = document.createElement("option");
@@ -365,146 +413,52 @@
             })();
             </c:forEach>
 
-            // --- 4. Отримуємо виконавця з сервера і встановлюємо у select ---
             fetch("/contractwork/executor?projectId=" + projectId)
                 .then(r => r.json())
                 .then(data => {
                     const serverId = data && data.executorId != null ? String(data.executorId) : "";
-
-                    // встановлюємо отримане або пусте значення
                     select.value = serverId;
-
-                    // якщо select.value НЕ збігається з тим, що ми поставили — ставимо пустий варіант
-                    if (select.value !== serverId) {
-                        select.value = "";
-                    }
-                })
-                .catch(err => {
-                    console.warn("executor fetch failed:", err);
-                    select.value = "";
+                    if (select.value !== serverId) select.value = "";
                 });
 
-            // === Сума Договору ===
+            // Ціна та Дата
             const priceInput = document.getElementById("contractPriceInput");
             const formattedPrice = formatPriceForInput(contractPrice);
-
             priceInput.value = formattedPrice;
             originalContractPrice = formattedPrice;
-            contractPriceWasChanged = false;
 
-            // === Оплата до ===
             const paymentInput = document.getElementById("paymentDueDateInput");
             paymentInput.value = paymentDueDate || "";
             originalPaymentDueDate = paymentInput.value;
-            paymentDueDateWasChanged = false;
 
-            //
             editButton.href = "${pageContext.request.contextPath}/purchases/update-project?id=" + projectId;
-
             actionModal.show();
         };
 
-        window.cancelDelete = function () {
-            actionBody.classList.remove('d-none');
-            confirmDeleteBody.classList.add('d-none');
-            modalTitle.textContent = currentProjectName;
-        };
+        // --- 6. ВІДСТЕЖЕННЯ ЗМІН ---
+        executorSelectModal.addEventListener("change", () => { executorWasChanged = true; transformCloseToSave(); });
+        projectStatusSelect.addEventListener("change", () => { projectStatusChanged = true; transformCloseToSave(); });
 
-        actionModalEl.addEventListener('hidden.bs.modal', () => {
-
-            if (!currentProjectId) return;
-
-            const payload = { id: currentProjectId };
-
-            if (justificationWasChanged) {
-                payload.justification =
-                    document.getElementById("justificationText").value;
-            }
-
-            if (contractPriceWasChanged) {
-                payload.contractPrice = Number(
-                    document.getElementById("contractPriceInput")
-                        .value.replace(/\s/g, '').replace(',', '.')
-                );
-            }
-
-            if (paymentDueDateWasChanged) {
-                payload.paymentTo =
-                    document.getElementById("paymentDueDateInput").value || null;
-            }
-
-            if (executorWasChanged) {
-                payload.executorId = executorSelectModal.value || null;
-            }
-
-            if (projectStatusChanged) {
-                payload.projectStatus = Number(projectStatusSelect.value);
-            }
-
-            // якщо зміни відсутні — не виконувати POST
-            if (Object.keys(payload).length === 1) {
-                currentProjectId = null;
-                currentProjectName = '';
-                return;
-            }
-
-            // Зберігаємо ID перед відправкою/перезавантаженням
-            localStorage.setItem("updatedProjectId", currentProjectId);
-
-            fetch("/contractwork/purchases/update-project-fields", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-        .then(() => {
-                    location.reload();
-                })
-                .catch(err => {
-                    console.error("Update failed", err);
-                    localStorage.removeItem("updatedProjectId");
-                });
-
-            currentProjectId = null;
-            currentProjectName = '';
-        });
-
-        executorSelectModal.addEventListener("change", function () {
-            executorWasChanged = true;
-        });
-
-        projectStatusSelect.addEventListener("change", function () {
-            projectStatusChanged = true;
-        });
-
-        // Зміна Обґрунтування
         document.getElementById("justificationText").addEventListener("input", function () {
             justificationWasChanged = (this.value.trim() !== originalJustification.trim());
+            transformCloseToSave();
         });
 
-        // Зміна Суми Договору
         document.getElementById("contractPriceInput").addEventListener("input", function () {
             contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
+            transformCloseToSave();
         });
 
-        // Зміна "Оплата до"
-        document.getElementById("paymentDueDateInput")
-            .addEventListener("input", function () {
-                paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
+        document.getElementById("paymentDueDateInput").addEventListener("input", function () {
+            paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
+            transformCloseToSave();
         });
     });
 
     function formatPriceForInput(value) {
-        if (value === null || value === undefined || value === "" || value === "null") {
-            return "";
-        }
-
+        if (value === null || value === undefined || value === "" || value === "null") return "";
         const num = Number(value);
-
         if (isNaN(num)) return "";
-
-        return num.toLocaleString("uk-UA", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        return num.toLocaleString("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 </script>
