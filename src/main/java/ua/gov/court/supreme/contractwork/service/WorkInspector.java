@@ -29,7 +29,7 @@ public class WorkInspector {
         this.estimateExcelConstructor = new EstimateExcelConstructor();
     }
 
-    // Estimate
+    // ESTIMATE
 
     public int insertProjectToEstimate(Estimate projectFoEstimate) {
         return estimateDAO.insertProject(projectFoEstimate); // Повертає id створеного запису
@@ -44,7 +44,7 @@ public class WorkInspector {
             return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
-        double quantity = projectsFromEstimate.stream().mapToDouble(Estimate::getQuantity).sum();
+        int quantity = projectsFromEstimate.stream().mapToInt(Estimate::getQuantity).sum();
         BigDecimal priceSum = projectsFromEstimate.stream().map(Estimate::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal generalFund = projectsFromEstimate.stream().map(Estimate::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal specialFund = projectsFromEstimate.stream().map(Estimate::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -63,6 +63,8 @@ public class WorkInspector {
     public void updateProjectToEstimate(Estimate updatedProject) {
         estimateDAO.updateProjectToEstimate(updatedProject);
     }
+
+    // EXCEL FILE
 
     public byte[] createEstimateExcelFile() {
         try (Workbook workbook = estimateExcelConstructor.createWorkbook(estimateDAO);
@@ -99,7 +101,7 @@ public class WorkInspector {
             return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
-        double quantity = projectsFromPurchases.stream().mapToDouble(Purchase::getQuantity).sum();
+        int quantity = projectsFromPurchases.stream().mapToInt(Purchase::getQuantity).sum();
         BigDecimal priceSum = projectsFromPurchases.stream().map(Purchase::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal remainingBalance = projectsFromPurchases.stream().map(Purchase::getRemainingBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal generalFund = projectsFromPurchases.stream().map(Purchase::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -132,7 +134,7 @@ public class WorkInspector {
         purchaseDAO.updatePaymentDueDate(projectId, paymentDate);
     }
 
-    // Робота із користувачами
+    // USERS
 
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();

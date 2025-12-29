@@ -31,7 +31,7 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
             String dkCode = req.getParameter("dkCode");
             String projectName = req.getParameter("projectName");
             String unitOfMeasure = req.getParameter("unitOfMeasure");
-            double quantity = Double.parseDouble(req.getParameter("quantity"));
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
             BigDecimal price = new BigDecimal(req.getParameter("price"));
             BigDecimal totalPrice = new BigDecimal(req.getParameter("totalPrice"));
             BigDecimal specialFund = new BigDecimal(req.getParameter("specialFund"));

@@ -39,7 +39,7 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
             String projectName = req.getParameter("projectName");
             String justification = req.getParameter("justification");
             String unitOfMeasure = req.getParameter("unitOfMeasure");
-            double quantity = Double.parseDouble(req.getParameter("quantity"));
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
             BigDecimal price = parseBigDecimalSafe(req.getParameter("price"));
             BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(quantity));
             BigDecimal generalFund = parseBigDecimalSafe(req.getParameter("generalFund"));

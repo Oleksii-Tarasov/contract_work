@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Purchase extends BaseEstimateItem {
+public class Purchase extends Estimate {
     private BigDecimal contractPrice;
     private BigDecimal remainingBalance;
     private LocalDate paymentTo;

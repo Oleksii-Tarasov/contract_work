@@ -1,13 +1,27 @@
 package ua.gov.court.supreme.contractwork.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+
 @Data
-@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
-public class Estimate extends BaseEstimateItem {
+@AllArgsConstructor
+public class Estimate {
+    protected long id;
+    protected String kekv;
+    protected String dkCode;
+    protected String projectName;
+    protected String unitOfMeasure;
+    protected int quantity;
+    protected BigDecimal price;
+    protected BigDecimal totalPrice;
+    protected BigDecimal specialFund;
+    protected BigDecimal generalFund;
+    protected String justification;
+    protected boolean informatization;
 }

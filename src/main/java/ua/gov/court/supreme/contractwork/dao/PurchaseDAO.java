@@ -82,7 +82,7 @@ public class PurchaseDAO {
                         .dkCode(resultSet.getString("dk_code"))
                         .projectName(resultSet.getString("project_name"))
                         .unitOfMeasure(resultSet.getString("unit_of_measure"))
-                        .quantity(resultSet.getDouble("quantity"))
+                        .quantity(resultSet.getInt("quantity"))
                         .price(resultSet.getBigDecimal("price"))
                         .totalPrice(resultSet.getBigDecimal("total_price"))
                         .contractPrice(resultSet.getBigDecimal("contract_price"))
@@ -141,7 +141,7 @@ public class PurchaseDAO {
                             .dkCode(resultSet.getString("dk_code"))
                             .projectName(resultSet.getString("project_name"))
                             .unitOfMeasure(resultSet.getString("unit_of_measure"))
-                            .quantity(resultSet.getDouble("quantity"))
+                            .quantity(resultSet.getInt("quantity"))
                             .price(resultSet.getBigDecimal("price"))
                             .totalPrice(resultSet.getBigDecimal("total_price"))
                             .contractPrice(resultSet.getBigDecimal("contract_price"))
@@ -156,7 +156,6 @@ public class PurchaseDAO {
                             .build();
                 }
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
