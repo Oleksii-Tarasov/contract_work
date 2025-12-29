@@ -30,8 +30,8 @@
                     <td><c:out value="${projectStatus.count}"/></td>
                         <%-- informatization == true --%>
                     <td class="${project2210.informatization ? 'informatization-row' : ''}"
-                        onclick="openActionModal(${project2210.id}, '${project2210.nameProject}')">
-                        <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.nameProject}"/>
+                        onclick="openActionModal(${project2210.id}, '${project2210.projectName}')">
+                        <c:out value="${project2210.dkCode}"/> - <c:out value="${project2210.projectName}"/>
                     </td>
                     <td><c:out value="${project2210.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/></td>
@@ -61,8 +61,8 @@
                 <tr id="project-${project2240.id}">
                     <td><c:out value="${projectStatus.count}"/></td>
                     <td class="${project2240.informatization ? 'informatization-row' : ''}"
-                        onclick="openActionModal(${project2240.id}, '${project2240.nameProject}')">
-                        <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.nameProject}"/>
+                        onclick="openActionModal(${project2240.id}, '${project2240.projectName}')">
+                        <c:out value="${project2240.dkCode}"/> - <c:out value="${project2240.projectName}"/>
                     </td>
                     <td><c:out value="${project2240.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project2240.quantity}" pattern="#,##0"/></td>
@@ -93,8 +93,8 @@
                 <tr id="project-${project3110.id}">
                     <td><c:out value="${projectStatus.count}"/></td>
                     <td class="${project3110.informatization ? 'informatization-row' : ''}"
-                        onclick="openActionModal(${project3110.id}, '${project3110.nameProject}')">
-                        <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.nameProject}"/>
+                        onclick="openActionModal(${project3110.id}, '${project3110.projectName}')">
+                        <c:out value="${project3110.dkCode}"/> - <c:out value="${project3110.projectName}"/>
                     </td>
                     <td><c:out value="${project3110.unitOfMeasure}"/></td>
                     <td><fmt:formatNumber value="${project3110.quantity}" pattern="#,##0"/></td>

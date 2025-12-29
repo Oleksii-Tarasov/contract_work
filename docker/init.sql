@@ -21,7 +21,7 @@ CREATE TABLE estimate
     id              SERIAL PRIMARY KEY,      -- Унікальний ідентифікатор запису
     kekv            VARCHAR(10)    NOT NULL, -- Код КЕКВ
     dk_code         VARCHAR(10)    NOT NULL, -- Код ДК
-    name_project    TEXT           NOT NULL, -- Назва предмета закупівлі
+    project_name    TEXT           NOT NULL, -- Назва предмета закупівлі
     unit_of_measure VARCHAR(20)    NOT NULL, -- Одиниця виміру
     quantity        NUMERIC(10, 2) NOT NULL, -- Кількість
     price           NUMERIC(12, 2) NOT NULL, -- Ціна за одиницю
@@ -38,7 +38,7 @@ CREATE TABLE purchases
     id                SERIAL PRIMARY KEY,
     kekv              VARCHAR(10)    NOT NULL,
     dk_code           VARCHAR(10),
-    name_project      TEXT           NOT NULL,
+    project_name      TEXT           NOT NULL,
     unit_of_measure   VARCHAR(20)    NOT NULL,
     quantity          NUMERIC(10, 2) NOT NULL,
     price             NUMERIC(12, 2) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE dk_code_inf
 (
     id           SERIAL PRIMARY KEY,
     dk_code      VARCHAR(10) NOT NULL,
-    name_project TEXT        NOT NULL
+    project_name TEXT        NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION set_informatization_status()

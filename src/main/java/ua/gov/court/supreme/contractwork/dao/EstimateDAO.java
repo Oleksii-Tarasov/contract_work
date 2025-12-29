@@ -16,7 +16,7 @@ public class EstimateDAO {
 
     public int insertProject(Estimate newProject) {
         String query = """
-            INSERT INTO estimate (kekv, dk_code, name_project, unit_of_measure,
+            INSERT INTO estimate (kekv, dk_code, project_name, unit_of_measure,
             quantity, price, total_price, special_fund, general_fund, justification)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
@@ -25,7 +25,7 @@ public class EstimateDAO {
 
             preparedStatement.setString(1, newProject.getKekv());
             preparedStatement.setString(2, newProject.getDkCode());
-            preparedStatement.setString(3, newProject.getNameProject());
+            preparedStatement.setString(3, newProject.getProjectName());
             preparedStatement.setString(4, newProject.getUnitOfMeasure());
             preparedStatement.setDouble(5, newProject.getQuantity());
             preparedStatement.setDouble(6, newProject.getPrice());
@@ -62,7 +62,7 @@ public class EstimateDAO {
                             resultSet.getLong("id"),
                             resultSet.getString("kekv"),
                             resultSet.getString("dk_code"),
-                            resultSet.getString("name_project"),
+                            resultSet.getString("project_name"),
                             resultSet.getString("unit_of_measure"),
                             resultSet.getDouble("quantity"),
                             resultSet.getDouble("price"),
@@ -99,7 +99,7 @@ public class EstimateDAO {
                         resultSet.getLong("id"),
                         resultSet.getString("kekv"),
                         resultSet.getString("dk_code"),
-                        resultSet.getString("name_project"),
+                        resultSet.getString("project_name"),
                         resultSet.getString("unit_of_measure"),
                         resultSet.getDouble("quantity"),
                         resultSet.getDouble("price"),
@@ -119,7 +119,7 @@ public class EstimateDAO {
 
     public void updateProjectToEstimate(Estimate updatedProject) {
         String query = """
-                UPDATE estimate SET kekv=?, dk_code=?, name_project=?, unit_of_measure=?, quantity=?,
+                UPDATE estimate SET kekv=?, dk_code=?, project_name=?, unit_of_measure=?, quantity=?,
                 price=?, total_price=?, special_fund=?, general_fund=?, justification=?
                 WHERE id=?
                 """;
@@ -128,7 +128,7 @@ public class EstimateDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, updatedProject.getKekv());
             preparedStatement.setString(2, updatedProject.getDkCode());
-            preparedStatement.setString(3, updatedProject.getNameProject());
+            preparedStatement.setString(3, updatedProject.getProjectName());
             preparedStatement.setString(4, updatedProject.getUnitOfMeasure());
             preparedStatement.setDouble(5, updatedProject.getQuantity());
             preparedStatement.setDouble(6, updatedProject.getPrice());

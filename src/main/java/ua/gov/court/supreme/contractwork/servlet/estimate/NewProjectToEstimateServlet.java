@@ -22,7 +22,7 @@ public class NewProjectToEstimateServlet extends BaseWorkServlet {
 
         String kekv = req.getParameter("kekv");
         String dkCode = req.getParameter("dkCode");
-        String nameProject = req.getParameter("nameProject");
+        String projectName = req.getParameter("projectName");
         String unitOfMeasure = req.getParameter("unitOfMeasure");
         double quantity = Double.parseDouble(req.getParameter("quantity"));
         double price = Double.parseDouble(req.getParameter("price"));
@@ -31,7 +31,7 @@ public class NewProjectToEstimateServlet extends BaseWorkServlet {
         double generalFund = Double.parseDouble(req.getParameter("generalFund"));
         String justification = req.getParameter("justification");
 
-        Estimate newProjectForEstimate = new Estimate(kekv, dkCode, nameProject, unitOfMeasure,
+        Estimate newProjectForEstimate = new Estimate(kekv, dkCode, projectName, unitOfMeasure,
                 quantity, price, totalPrice, specialFund, generalFund, justification);
 
         try {

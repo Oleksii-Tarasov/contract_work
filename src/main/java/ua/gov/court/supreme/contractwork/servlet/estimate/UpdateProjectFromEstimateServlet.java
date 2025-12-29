@@ -27,7 +27,7 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
         long id = Long.parseLong(req.getParameter("id"));
         String kekv = req.getParameter("kekv");
         String dkCode = req.getParameter("dkCode");
-        String nameProject = req.getParameter("nameProject");
+        String projectName = req.getParameter("projectName");
         String unitOfMeasure = req.getParameter("unitOfMeasure");
         double quantity = Double.parseDouble(req.getParameter("quantity"));
         double price = Double.parseDouble(req.getParameter("price"));
@@ -36,7 +36,7 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
         double generalFund = Double.parseDouble(req.getParameter("generalFund"));
         String justification = req.getParameter("justification");
 
-        Estimate updatedProject = new Estimate(id, kekv, dkCode, nameProject, unitOfMeasure,
+        Estimate updatedProject = new Estimate(id, kekv, dkCode, projectName, unitOfMeasure,
                 quantity, price, totalPrice, specialFund, generalFund, justification);
 
 

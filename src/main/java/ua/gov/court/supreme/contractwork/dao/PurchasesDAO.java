@@ -21,9 +21,9 @@ public class PurchasesDAO {
     public void insertProjectsFromEstimate() {
         String query = """
                 TRUNCATE TABLE purchases RESTART IDENTITY;
-                INSERT INTO purchases (kekv, dk_code, name_project, unit_of_measure,
+                INSERT INTO purchases (kekv, dk_code, project_name, unit_of_measure,
                 quantity, price, total_price, remaining_balance, special_fund, general_fund, justification)
-                SELECT kekv, dk_code, name_project, unit_of_measure,
+                SELECT kekv, dk_code, project_name, unit_of_measure,
                 quantity, price, total_price, total_price, special_fund, general_fund, justification
                 FROM estimate
                 """;
@@ -79,7 +79,7 @@ public class PurchasesDAO {
                         resultSet.getLong("id"),
                         resultSet.getString("kekv"),
                         resultSet.getString("dk_code"),
-                        resultSet.getString("name_project"),
+                        resultSet.getString("project_name"),
                         resultSet.getString("unit_of_measure"),
                         resultSet.getDouble("quantity"),
                         resultSet.getDouble("price"),
@@ -138,7 +138,7 @@ public class PurchasesDAO {
                             resultSet.getLong("id"),
                             resultSet.getString("kekv"),
                             resultSet.getString("dk_code"),
-                            resultSet.getString("name_project"),
+                            resultSet.getString("project_name"),
                             resultSet.getString("unit_of_measure"),
                             resultSet.getDouble("quantity"),
                             resultSet.getDouble("price"),
@@ -310,7 +310,7 @@ public class PurchasesDAO {
                 UPDATE purchases SET 
                     kekv = ?, 
                     dk_code = ?, 
-                    name_project = ?, 
+                    project_name = ?, 
                     justification = ?, 
                     unit_of_measure = ?, 
                     quantity = ?, 
@@ -331,7 +331,7 @@ public class PurchasesDAO {
 
             ps.setString(1, updatedProject.getKekv());
             ps.setString(2, updatedProject.getDkCode());
-            ps.setString(3, updatedProject.getNameProject());
+            ps.setString(3, updatedProject.getProjectName());
             ps.setString(4, updatedProject.getJustification());
             ps.setString(5, updatedProject.getUnitOfMeasure());
             ps.setDouble(6, updatedProject.getQuantity());

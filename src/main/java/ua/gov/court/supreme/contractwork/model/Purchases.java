@@ -11,11 +11,11 @@ public class Purchases extends BaseEstimateItem {
     private User responsibleExecutor;
     private ProjectStatus projectStatus;
 
-    public Purchases(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure,
+    public Purchases(long id, String kekv, String dkCode, String projectName, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice,
                      double remainingBalance, LocalDate paymentTo, double specialFund, double generalFund,
                      String justification, boolean informatization, User responsibleExecutor, ProjectStatus projectStatus) {
-        super(id, kekv, dkCode, nameProject, unitOfMeasure, quantity, price,
+        super(id, kekv, dkCode, projectName, unitOfMeasure, quantity, price,
                 totalPrice, specialFund, generalFund, justification, informatization);
         this.contractPrice = contractPrice;
         this.remainingBalance = remainingBalance;
@@ -25,12 +25,12 @@ public class Purchases extends BaseEstimateItem {
     }
 
     //    without id for new inserts
-    public Purchases(String kekv, String dkCode, String nameProject, String unitOfMeasure,
+    public Purchases(String kekv, String dkCode, String projectName, String unitOfMeasure,
                      double quantity, double price, double totalPrice, double contractPrice,
                      double remainingBalance, double specialFund, double generalFund, String justification) {
         this.kekv = kekv;
         this.dkCode = dkCode;
-        this.nameProject = nameProject;
+        this.projectName = projectName;
         this.unitOfMeasure = unitOfMeasure;
         this.quantity = quantity;
         this.price = price;

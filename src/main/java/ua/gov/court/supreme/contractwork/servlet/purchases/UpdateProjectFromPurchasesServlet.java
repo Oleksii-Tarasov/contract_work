@@ -34,7 +34,7 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
             long id = Long.parseLong(req.getParameter("id"));
             String kekv = req.getParameter("kekv");
             String dkCode = req.getParameter("dkCode");
-            String nameProject = req.getParameter("nameProject");
+            String projectName = req.getParameter("projectName");
             String justification = req.getParameter("justification");
             String unitOfMeasure = req.getParameter("unitOfMeasure");
             double quantity = Double.parseDouble(req.getParameter("quantity"));
@@ -69,7 +69,7 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
                     id,
                     kekv,
                     dkCode,
-                    nameProject,
+                    projectName,
                     unitOfMeasure,
                     quantity,
                     price,

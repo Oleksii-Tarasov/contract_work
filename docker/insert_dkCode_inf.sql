@@ -1,4 +1,4 @@
-INSERT INTO dk_code_inf (dk_code, name_project)
+INSERT INTO dk_code_inf (dk_code, project_name)
 VALUES ('30200000-1', 'Комп’ютерне обладнання та приладдя'),
        ('32320000-2', 'Телевізійне й аудіовізуальне обладнання'),
        ('32400000-7', 'Мережі'),

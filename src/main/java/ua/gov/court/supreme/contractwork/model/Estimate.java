@@ -4,21 +4,21 @@ public class Estimate extends BaseEstimateItem {
 
     public Estimate() {}
 
-    public Estimate(long id, String kekv, String dkCode, String nameProject,
+    public Estimate(long id, String kekv, String dkCode, String projectName,
                     String unitOfMeasure, double quantity, double price, double totalPrice,
                     double specialFund, double generalFund, String justification, boolean informatization) {
-        super(id, kekv, dkCode, nameProject, unitOfMeasure, quantity, price,
+        super(id, kekv, dkCode, projectName, unitOfMeasure, quantity, price,
                 totalPrice, specialFund, generalFund, justification, informatization);
     }
 
     //    without informatization
-    public Estimate(long id, String kekv, String dkCode, String nameProject,
+    public Estimate(long id, String kekv, String dkCode, String projectName,
                     String unitOfMeasure, double quantity, double price, double totalPrice,
                     double specialFund, double generalFund, String justification) {
         this.id = id;
         this.kekv = kekv;
         this.dkCode = dkCode;
-        this.nameProject = nameProject;
+        this.projectName = projectName;
         this.unitOfMeasure = unitOfMeasure;
         this.quantity = quantity;
         this.price = price;
@@ -29,12 +29,12 @@ public class Estimate extends BaseEstimateItem {
     }
 
     //    without id for new inserts
-    public Estimate(String kekv, String dkCode, String nameProject,
+    public Estimate(String kekv, String dkCode, String projectName,
                     String unitOfMeasure, double quantity, double price, double totalPrice,
                     double specialFund, double generalFund, String justification) {
         this.kekv = kekv;
         this.dkCode = dkCode;
-        this.nameProject = nameProject;
+        this.projectName = projectName;
         this.unitOfMeasure = unitOfMeasure;
         this.quantity = quantity;
         this.price = price;
@@ -56,8 +56,8 @@ public class Estimate extends BaseEstimateItem {
         return dkCode;
     }
 
-    public String getNameProject() {
-        return nameProject;
+    public String getProjectName() {
+        return projectName;
     }
 
     public String getUnitOfMeasure() {

@@ -4,7 +4,7 @@ public abstract class BaseEstimateItem {
     protected long id;
     protected String kekv;
     protected String dkCode;
-    protected String nameProject;
+    protected String projectName;
     protected String unitOfMeasure;
     protected double quantity;
     protected double price;
@@ -16,11 +16,11 @@ public abstract class BaseEstimateItem {
 
     public BaseEstimateItem() {}
 
-    public BaseEstimateItem(long id, String kekv, String dkCode, String nameProject, String unitOfMeasure, double quantity, double price, double totalPrice, double specialFund, double generalFund, String justification, boolean informatization) {
+    public BaseEstimateItem(long id, String kekv, String dkCode, String projectName, String unitOfMeasure, double quantity, double price, double totalPrice, double specialFund, double generalFund, String justification, boolean informatization) {
         this.id = id;
         this.kekv = kekv;
         this.dkCode = dkCode;
-        this.nameProject = nameProject;
+        this.projectName = projectName;
         this.unitOfMeasure = unitOfMeasure;
         this.quantity = quantity;
         this.price = price;
@@ -43,8 +43,8 @@ public abstract class BaseEstimateItem {
         return dkCode;
     }
 
-    public String getNameProject() {
-        return nameProject;
+    public String getProjectName() {
+        return projectName;
     }
 
     public String getUnitOfMeasure() {

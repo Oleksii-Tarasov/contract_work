@@ -209,7 +209,7 @@ public class EstimateExcelConstructor {
             totalSF += project.getSpecialFund();
 
             row.createCell(0).setCellValue(index++);
-            row.createCell(1).setCellValue(project.getDkCode() + " " + project.getNameProject());
+            row.createCell(1).setCellValue(project.getDkCode() + " " + project.getProjectName());
             row.createCell(2).setCellValue(project.getUnitOfMeasure());
             row.createCell(3).setCellValue(project.getQuantity());
             row.createCell(4).setCellValue(project.getPrice());

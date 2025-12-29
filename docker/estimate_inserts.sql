@@ -1,5 +1,5 @@
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30120000-6',
@@ -14,7 +14,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30230000-0',
@@ -29,7 +29,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30230000-0',
@@ -44,7 +44,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '32420000-3',
@@ -59,7 +59,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '32330000-5',
@@ -74,7 +74,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '31150000-2',
@@ -89,7 +89,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30230000-0',
@@ -104,7 +104,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30216110-0',
@@ -119,7 +119,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '30230000-0',
@@ -134,7 +134,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '31440000-2',
@@ -149,7 +149,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2210',
     '32550000-3',
@@ -164,7 +164,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48320000-7',
@@ -179,7 +179,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48440000-4',
@@ -194,7 +194,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72220000-3',
@@ -209,7 +209,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72220000-3',
@@ -224,7 +224,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72250000-2',
@@ -239,7 +239,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48450000-7',
@@ -254,7 +254,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48510000-6',
@@ -269,7 +269,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48760000-3',
@@ -284,7 +284,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72320000-4',
@@ -299,7 +299,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72260000-5',
@@ -314,7 +314,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72250000-2',
@@ -329,7 +329,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72410000-7',
@@ -344,7 +344,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72510000-3',
@@ -359,7 +359,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50310000-1',
@@ -374,7 +374,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50320000-4',
@@ -389,7 +389,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50310000-1',
@@ -404,7 +404,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '71620000-0',
@@ -419,7 +419,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50710000-5',
@@ -434,7 +434,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50340000-0',
@@ -449,7 +449,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '71620000-0',
@@ -464,7 +464,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '71630000-3',
@@ -479,7 +479,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '90510000-5',
@@ -494,7 +494,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '5033000-7',
@@ -509,7 +509,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '64210000-1',
@@ -524,7 +524,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '64210000-1',
@@ -539,7 +539,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '64210000-1',
@@ -554,7 +554,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '64210000-1',
@@ -569,7 +569,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72220000-3',
@@ -584,7 +584,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48730000-4',
@@ -599,7 +599,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48730000-4',
@@ -614,7 +614,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48730000-4',
@@ -629,7 +629,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48620000-0',
@@ -644,7 +644,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72710000-0',
@@ -660,7 +660,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72720000-3',
@@ -675,7 +675,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '50340000-0',
@@ -690,7 +690,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72310000-1',
@@ -705,7 +705,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72720000-3',
@@ -721,7 +721,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '72260000-5',
@@ -736,7 +736,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '2240',
     '48730000-4',
@@ -751,7 +751,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '30210000-4',
@@ -766,7 +766,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '30210000-4',
@@ -781,7 +781,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '30210000-4',
@@ -796,7 +796,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '32420000-3',
@@ -811,7 +811,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '3242000-3',
@@ -826,7 +826,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '48823000-3',
@@ -841,7 +841,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '30210000-4',
@@ -856,7 +856,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '35120000-1',
@@ -871,7 +871,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '35120000-1',
@@ -886,7 +886,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '35120000-1',
@@ -901,7 +901,7 @@ INSERT INTO estimate (
 );
 
 INSERT INTO estimate (
-    kekv, dk_code, name_project, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
+    kekv, dk_code, project_name, unit_of_measure, quantity, price, total_price, special_fund, general_fund, justification
 ) VALUES (
     '3110',
     '30210000-4',
