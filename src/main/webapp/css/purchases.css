@@ -142,11 +142,12 @@
 /* Анімація "Затримка + Затухання" */
 @keyframes fadeBlueHold {
     0% {
-        background-color: #3164ff;
+        /*background-color: #3164ff;*/
+        background-color: #00264d;
         color: white;
     }
     80% {
-        background-color: #3164ff;
+        background-color: #00264d;
         color: white;
     }
     100% {

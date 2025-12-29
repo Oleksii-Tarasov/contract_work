@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.dao.PurchasesDAO;
 import ua.gov.court.supreme.contractwork.dao.UserDAO;
-import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequest;
 import ua.gov.court.supreme.contractwork.dto.ProjectsTotalAmounts;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Estimate;
@@ -88,6 +87,10 @@ public class WorkInspector {
 
     public Purchases getProjectFromPurchasesById(long id) {
         return purchasesDAO.getProjectById(id);
+    }
+
+    public void updateProjectToPurchases(Purchases updatedProject) {
+        purchasesDAO.updateProjectToPurchases(updatedProject);
     }
 
     public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchases> projectsFromPurchases) {

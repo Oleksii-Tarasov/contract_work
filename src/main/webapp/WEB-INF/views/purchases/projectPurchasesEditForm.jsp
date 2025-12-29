@@ -57,38 +57,86 @@
                             <option value="квартал" ${projectForUpdate.unitOfMeasure == 'квартал' ? 'selected' : ''}>квартал</option>
                         </select>
                     </div>
-                </div>
 
-                <!-- Правий стовпчик -->
-                <div class="col-md-6">
+                    <!-- Кількість -->
                     <div class="mb-3">
                         <label for="quantity" class="form-label fw-bold">Кількість:</label>
                         <input type="number" class="form-control" id="quantity" name="quantity"
                                min="0" value="${projectForUpdate.quantity}" required>
                     </div>
 
+                    <!-- Ціна за одиницю -->
                     <div class="mb-3">
                         <label for="price" class="form-label fw-bold">Ціна за одиницю, грн:</label>
                         <input type="number" class="form-control" id="price" name="price"
                                step="0.01" min="0" value="${projectForUpdate.price}" required>
                     </div>
 
+                </div>
+
+                <!-- Правий стовпчик -->
+                <div class="col-md-6">
+
+                    <!-- Загальна Сума -->
                     <div class="mb-3">
                         <label for="totalPrice" class="form-label fw-bold">Загальна Сума, грн:</label>
                         <input type="text" class="form-control" id="totalPrice" name="totalPrice"
                                readonly value="${projectForUpdate.totalPrice}">
                     </div>
 
+                    <!-- Спеціальний фонд -->
                     <div class="mb-3">
                         <label for="specialFund" class="form-label fw-bold">Спеціальний фонд:</label>
                         <input type="text" class="form-control" id="specialFund" name="specialFund"
                                readonly value="${projectForUpdate.specialFund}">
                     </div>
-
+                    <!-- Загальний фонд -->
                     <div class="mb-3">
                         <label for="generalFund" class="form-label fw-bold">Загальний фонд:</label>
                         <input type="number" class="form-control" id="generalFund" name="generalFund"
                                min="0" value="${projectForUpdate.generalFund}">
+                    </div>
+                    <!-- Статус закупівлі -->
+                    <div class="mb-3">
+                        <label for="projectStatus" class="form-label fw-bold">Статус закупівлі:</label>
+                        <select class="form-select" id="projectStatus" name="projectStatus">
+                            <c:forEach var="st" items="${projectStatuses}">
+                                <option value="${st.dbValue}"
+                                    ${projectForUpdate.projectStatus != null && projectForUpdate.projectStatus.dbValue == st.dbValue ? 'selected' : ''}>
+                                        ${fn:escapeXml(st.displayName)}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <!-- Відповідальний виконавець -->
+                    <div class="mb-3">
+                        <label for="executorId" class="form-label fw-bold">Відповідальний виконавець:</label>
+                        <select class="form-select" id="executorId" name="executorId">
+                            <option value="">-- не вибрано --</option>
+                            <c:forEach var="u" items="${users}">
+                                <option value="${u.id}"
+                                    ${projectForUpdate.responsibleExecutor != null && projectForUpdate.responsibleExecutor.id == u.id ? 'selected' : ''}>
+                                        ${fn:escapeXml(u.shortName)}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <!-- Сума Договору -->
+                    <div class="mb-3">
+                        <label for="contractPrice" class="form-label fw-bold">Сума Договору, грн:</label>
+                        <input type="number" class="form-control" id="contractPrice" name="contractPrice"
+                               step="0.01" min="0"
+                               value="${projectForUpdate.contractPrice}">
+                    </div>
+                    <!-- Оплата до -->
+                    <div class="mb-3">
+                        <label for="paymentTo" class="form-label fw-bold">Оплата до:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                            <%-- fn:substring обрізає час, залишаючи тільки дату YYYY-MM-DD для input type="date" --%>
+                            <input type="date" class="form-control" id="paymentTo" name="paymentTo"
+                                   value="${projectForUpdate.paymentTo != null ? fn:substring(projectForUpdate.paymentTo, 0, 10) : ''}">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -117,30 +165,16 @@
         const total = quantity * price;
         const generalFund = parseFloat(generalFundInput.value) || 0;
 
-        // Оновлюємо загальну суму
         totalPriceInput.value = total.toFixed(2);
 
-        // Перераховуємо спеціальний фонд
         const specialFund = total - generalFund;
 
-        // Перевіряємо, щоб сума спеціального фонду не була від'ємною
         if (specialFund < 0) {
             specialFundInput.value = (0).toFixed(2);
             generalFundInput.value = total.toFixed(2);
         } else {
             specialFundInput.value = specialFund.toFixed(2);
         }
-    }
-
-    // Функція для ініціалізації розподілу коштів
-    function initializeFunds() {
-        const specialFundInput = document.getElementById('specialFund');
-        const totalPriceInput = document.getElementById('totalPrice');
-
-        const total = parseFloat(totalPriceInput.value) || 0;
-
-        // Автоматично встановлюємо всю суму в спеціальний фонд
-        specialFundInput.value = total.toFixed(2);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -151,12 +185,9 @@
         if (quantityInput && priceInput) {
             quantityInput.addEventListener('input', calculateTotal);
             priceInput.addEventListener('input', calculateTotal);
-
-            // Викликаємо функцію розподілу при завантаженні сторінки
             calculateTotal();
         }
 
-        // Слухач для поля "Загальний фонд"
         if (generalFundInput) {
             generalFundInput.addEventListener('input', calculateTotal);
         }

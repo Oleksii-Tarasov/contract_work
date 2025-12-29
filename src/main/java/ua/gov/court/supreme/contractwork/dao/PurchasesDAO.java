@@ -54,14 +54,20 @@ public class PurchasesDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                User responsibleExecutor = new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("middle_name"),
-                        resultSet.getString("short_name"),
-                        resultSet.getString("position")
-                );
+                User responsibleExecutor = null;
+
+                long executorId = resultSet.getLong("responsible_executor_id");
+
+                if (executorId > 0) {
+                    responsibleExecutor = new User(
+                            executorId, // <-- ВИКОРИСТОВУЄМО ПРАВИЛЬНИЙ ID
+                            resultSet.getString("last_name"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("middle_name"),
+                            resultSet.getString("short_name"),
+                            resultSet.getString("position")
+                    );
+                }
 
                 java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
                 LocalDate paymentTo = (sqlDatePaymentTo != null) ? sqlDatePaymentTo.toLocalDate() : null;
@@ -107,14 +113,20 @@ public class PurchasesDAO {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    User responsibleExecutor = new User(
-                            resultSet.getLong("id"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("middle_name"),
-                            resultSet.getString("short_name"),
-                            resultSet.getString("position")
-                    );
+                    User responsibleExecutor = null;
+
+                    long executorId = resultSet.getLong("responsible_executor_id");
+
+                    if (executorId > 0) {
+                        responsibleExecutor = new User(
+                                executorId,
+                                resultSet.getString("last_name"),
+                                resultSet.getString("first_name"),
+                                resultSet.getString("middle_name"),
+                                resultSet.getString("short_name"),
+                                resultSet.getString("position")
+                        );
+                    }
 
                     java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
                     LocalDate paymentTo = (sqlDatePaymentTo != null) ? sqlDatePaymentTo.toLocalDate() : null;
@@ -289,6 +301,75 @@ public class PurchasesDAO {
         if (dto.getPaymentTo() != null || dto.getPaymentTo() == null) {
             // null теж свідоме оновлення
             updatePaymentDueDate(projectId, dto.getPaymentTo());
+        }
+    }
+
+
+    public void updateProjectToPurchases(Purchases updatedProject) {
+        String query = """
+                UPDATE purchases SET 
+                    kekv = ?, 
+                    dk_code = ?, 
+                    name_project = ?, 
+                    justification = ?, 
+                    unit_of_measure = ?, 
+                    quantity = ?, 
+                    price = ?, 
+                    total_price = ?, 
+                    special_fund = ?, 
+                    general_fund = ?, 
+                    status = ?, 
+                    responsible_executor_id = ?, 
+                    contract_price = ?, 
+                    payment_to = ?, 
+                    remaining_balance = ? 
+                WHERE id = ?
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, updatedProject.getKekv());
+            ps.setString(2, updatedProject.getDkCode());
+            ps.setString(3, updatedProject.getNameProject());
+            ps.setString(4, updatedProject.getJustification());
+            ps.setString(5, updatedProject.getUnitOfMeasure());
+            ps.setDouble(6, updatedProject.getQuantity());
+            ps.setDouble(7, updatedProject.getPrice());
+            ps.setDouble(8, updatedProject.getTotalPrice());
+            ps.setDouble(9, updatedProject.getSpecialFund());
+            ps.setDouble(10, updatedProject.getGeneralFund());
+
+            // Статус (int)
+            ps.setInt(11, updatedProject.getProjectStatus().getDbValue());
+
+            // Виконавець (Long або NULL)
+            if (updatedProject.getResponsibleExecutor() != null && updatedProject.getResponsibleExecutor().getId() > 0) {
+                ps.setLong(12, updatedProject.getResponsibleExecutor().getId());
+            } else {
+                ps.setNull(12, Types.BIGINT);
+            }
+
+            // Сума договору
+            ps.setDouble(13, updatedProject.getContractPrice());
+
+            // Дата оплати (Date або NULL)
+            if (updatedProject.getPaymentTo() != null) {
+                ps.setDate(14, Date.valueOf(updatedProject.getPaymentTo()));
+            } else {
+                ps.setNull(14, Types.DATE);
+            }
+
+            // Залишок (розраховується в сервлеті)
+            ps.setDouble(15, updatedProject.getRemainingBalance());
+
+            // ID для WHERE
+            ps.setLong(16, updatedProject.getId());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при оновленні проєкту: " + e.getMessage(), e);
         }
     }
 }
