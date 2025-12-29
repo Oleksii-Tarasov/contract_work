@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @WebServlet("/purchases/update-project-fields")
@@ -60,7 +61,7 @@ public class UpdatePurchasesFieldsServlet extends BaseWorkServlet {
         if (node.has("contractPrice")) {
             JsonNode p = node.get("contractPrice");
             if (!p.isNull()) {
-                double contractPrice = p.asDouble();
+                BigDecimal contractPrice = BigDecimal.valueOf(p.asDouble());
                 workInspector.updateContractPrice(
                         projectId,
                         contractPrice

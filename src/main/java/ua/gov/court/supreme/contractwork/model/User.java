@@ -1,5 +1,14 @@
 package ua.gov.court.supreme.contractwork.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     private long id;
     private String firstName;
@@ -10,17 +19,6 @@ public class User {
     private String login;
     private String password;
 
-    public User(long id, String lastName, String firstName,  String middleName, String shortName, String position, String login, String password) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.shortName = shortName;
-        this.position = position;
-        this.login = login;
-        this.password = password;
-    }
-
     public User(long id, String lastName, String firstName,  String middleName, String shortName, String position) {
         this.id = id;
         this.lastName = lastName;
@@ -28,37 +26,5 @@ public class User {
         this.middleName = middleName;
         this.shortName = shortName;
         this.position = position;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

@@ -2,28 +2,29 @@ package ua.gov.court.supreme.contractwork.service;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
-import ua.gov.court.supreme.contractwork.dao.PurchasesDAO;
+import ua.gov.court.supreme.contractwork.dao.PurchaseDAO;
 import ua.gov.court.supreme.contractwork.dao.UserDAO;
 import ua.gov.court.supreme.contractwork.dto.ProjectsTotalAmounts;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Estimate;
-import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.Purchase;
 import ua.gov.court.supreme.contractwork.model.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class WorkInspector {
     private final EstimateDAO estimateDAO;
-    private final PurchasesDAO purchasesDAO;
+    private final PurchaseDAO purchaseDAO;
     private final UserDAO userDAO;
     private final EstimateExcelConstructor estimateExcelConstructor;
 
     public WorkInspector() {
         this.estimateDAO = new EstimateDAO();
-        this.purchasesDAO = new PurchasesDAO();
+        this.purchaseDAO = new PurchaseDAO();
         this.userDAO = new UserDAO();
         this.estimateExcelConstructor = new EstimateExcelConstructor();
     }
@@ -40,13 +41,13 @@ public class WorkInspector {
 
     public ProjectsTotalAmounts getEstimateTotalAmounts(List<Estimate> projectsFromEstimate) {
         if (projectsFromEstimate == null) {
-            return new ProjectsTotalAmounts(0, 0, 0, 0);
+            return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
         double quantity = projectsFromEstimate.stream().mapToDouble(Estimate::getQuantity).sum();
-        double priceSum = projectsFromEstimate.stream().mapToDouble(Estimate::getTotalPrice).sum();
-        double generalFund = projectsFromEstimate.stream().mapToDouble(Estimate::getGeneralFund).sum();
-        double specialFund = projectsFromEstimate.stream().mapToDouble(Estimate::getSpecialFund).sum();
+        BigDecimal priceSum = projectsFromEstimate.stream().map(Estimate::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal generalFund = projectsFromEstimate.stream().map(Estimate::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal specialFund = projectsFromEstimate.stream().map(Estimate::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new ProjectsTotalAmounts(quantity, priceSum, generalFund, specialFund);
     }
@@ -78,31 +79,31 @@ public class WorkInspector {
     // PURCHASES
 
     public void createPurchasesFromEstimate() {
-        purchasesDAO.insertProjectsFromEstimate();
+        purchaseDAO.insertProjectsFromEstimate();
     }
 
-    public List<Purchases> getProjectsFromPurchasesByKekv(int kekv) {
-        return purchasesDAO.getProjectsByKekv(kekv);
+    public List<Purchase> getProjectsFromPurchasesByKekv(int kekv) {
+        return purchaseDAO.getProjectsByKekv(kekv);
     }
 
-    public Purchases getProjectFromPurchasesById(long id) {
-        return purchasesDAO.getProjectById(id);
+    public Purchase getProjectFromPurchasesById(long id) {
+        return purchaseDAO.getProjectById(id);
     }
 
-    public void updateProjectToPurchases(Purchases updatedProject) {
-        purchasesDAO.updateProjectToPurchases(updatedProject);
+    public void updateProjectToPurchases(Purchase updatedProject) {
+        purchaseDAO.updateProjectToPurchases(updatedProject);
     }
 
-    public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchases> projectsFromPurchases) {
+    public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchase> projectsFromPurchases) {
         if (projectsFromPurchases == null) {
-            return new ProjectsTotalAmounts(0, 0, 0, 0, 0);
+            return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
-        double quantity = projectsFromPurchases.stream().mapToDouble(Purchases::getQuantity).sum();
-        double priceSum = projectsFromPurchases.stream().mapToDouble(Purchases::getTotalPrice).sum();
-        double remainingBalance = projectsFromPurchases.stream().mapToDouble(Purchases::getRemainingBalance).sum();
-        double generalFund = projectsFromPurchases.stream().mapToDouble(Purchases::getGeneralFund).sum();
-        double specialFund = projectsFromPurchases.stream().mapToDouble(Purchases::getSpecialFund).sum();
+        double quantity = projectsFromPurchases.stream().mapToDouble(Purchase::getQuantity).sum();
+        BigDecimal priceSum = projectsFromPurchases.stream().map(Purchase::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal remainingBalance = projectsFromPurchases.stream().map(Purchase::getRemainingBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal generalFund = projectsFromPurchases.stream().map(Purchase::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal specialFund = projectsFromPurchases.stream().map(Purchase::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 
         return new ProjectsTotalAmounts(quantity, priceSum, remainingBalance, generalFund, specialFund);
@@ -113,22 +114,22 @@ public class WorkInspector {
     }
 
     public void updateProjectStatus(long projectId, ProjectStatus projectStatus) {
-        purchasesDAO.updateProjectStatus(projectId, projectStatus);
+        purchaseDAO.updateProjectStatus(projectId, projectStatus);
     }
 
     public void updateJustification(long projectId, String justification) {
-        purchasesDAO.updateJustification(projectId, justification);
+        purchaseDAO.updateJustification(projectId, justification);
     }
 
-    public void updateContractPrice(long projectId, double contractPrice) {
-        Purchases purchase = purchasesDAO.getProjectById(projectId);
-        double remainingBalance = purchase.getTotalPrice() - contractPrice;
+    public void updateContractPrice(long projectId, BigDecimal contractPrice) {
+        Purchase purchase = purchaseDAO.getProjectById(projectId);
+        BigDecimal remainingBalance = purchase.getTotalPrice().subtract(contractPrice);
 
-        purchasesDAO.updateContractPrice(projectId, contractPrice, remainingBalance);
+        purchaseDAO.updateContractPrice(projectId, contractPrice, remainingBalance);
     }
 
     public void updatePaymentDueDate(long projectId, LocalDate paymentDate) {
-        purchasesDAO.updatePaymentDueDate(projectId, paymentDate);
+        purchaseDAO.updatePaymentDueDate(projectId, paymentDate);
     }
 
     // Робота із користувачами
@@ -138,10 +139,10 @@ public class WorkInspector {
     }
 
     public long getExecutorIdFromProject(long projectId) {
-        return purchasesDAO.getExecutorIdFromProject(projectId);
+        return purchaseDAO.getExecutorIdFromProject(projectId);
     }
 
     public void updateProjectExecutor(long projectId, Long executorId) {
-        purchasesDAO.updateProjectExecutor(projectId, executorId);
+        purchaseDAO.updateProjectExecutor(projectId, executorId);
     }
 }

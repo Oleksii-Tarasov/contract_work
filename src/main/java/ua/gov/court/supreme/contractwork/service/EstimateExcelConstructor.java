@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class EstimateExcelConstructor {
@@ -193,29 +194,33 @@ public class EstimateExcelConstructor {
 
         // ===== ПІДСУМКИ =====
         double totalQty = 0;
-        double totalSum = 0;
-        double totalZF = 0;
-        double totalSF = 0;
+        BigDecimal totalSum = BigDecimal.ZERO;
+        BigDecimal totalZF = BigDecimal.ZERO;
+        BigDecimal totalSF = BigDecimal.ZERO;
 
         int index = 1;
         for (Estimate project : list) {
             Row row = sheet.createRow(rowIndex++);
 
-            double sum = project.getQuantity() * project.getPrice();
+            BigDecimal sum = project.getQuantity() == 0 ? BigDecimal.ZERO 
+                : project.getPrice().multiply(BigDecimal.valueOf(project.getQuantity()));
 
             totalQty += project.getQuantity();
-            totalSum += sum;
-            totalZF += project.getGeneralFund();
-            totalSF += project.getSpecialFund();
+            totalSum = totalSum.add(sum);
+            totalZF = totalZF.add(project.getGeneralFund());
+            totalSF = totalSF.add(project.getSpecialFund());
 
             row.createCell(0).setCellValue(index++);
             row.createCell(1).setCellValue(project.getDkCode() + " " + project.getProjectName());
             row.createCell(2).setCellValue(project.getUnitOfMeasure());
             row.createCell(3).setCellValue(project.getQuantity());
-            row.createCell(4).setCellValue(project.getPrice());
-            row.createCell(5).setCellValue(sum);
-            row.createCell(6).setCellValue(project.getGeneralFund());
-            row.createCell(7).setCellValue(project.getSpecialFund());
+            
+            // Set double values for POI from BigDecimal
+            row.createCell(4).setCellValue(project.getPrice().doubleValue());
+            row.createCell(5).setCellValue(sum.doubleValue());
+            row.createCell(6).setCellValue(project.getGeneralFund().doubleValue());
+            row.createCell(7).setCellValue(project.getSpecialFund().doubleValue());
+            
             row.createCell(8).setCellValue(project.getJustification());
 
             // центр
@@ -253,9 +258,9 @@ public class EstimateExcelConstructor {
         totalRow.getCell(1).setCellStyle(rightKekvStyle);
 
         totalRow.createCell(3).setCellValue(totalQty);
-        totalRow.createCell(5).setCellValue(totalSum);
-        totalRow.createCell(6).setCellValue(totalZF);
-        totalRow.createCell(7).setCellValue(totalSF);
+        totalRow.createCell(5).setCellValue(totalSum.doubleValue());
+        totalRow.createCell(6).setCellValue(totalZF.doubleValue());
+        totalRow.createCell(7).setCellValue(totalSF.doubleValue());
 
         totalRow.createCell(0).setCellStyle(sumCenter);
         totalRow.createCell(2).setCellStyle(sumCenter);

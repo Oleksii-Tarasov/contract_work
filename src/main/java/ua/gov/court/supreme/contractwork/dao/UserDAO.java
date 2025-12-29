@@ -26,14 +26,14 @@ public class UserDAO {
              ResultSet resultSet = preparedStatement.executeQuery()
         ) {
             while (resultSet.next()) {
-                users.add(new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("middle_name"),
-                        resultSet.getString("short_name"),
-                        resultSet.getString("position")
-                ));
+                users.add(User.builder()
+                        .id(resultSet.getLong("id"))
+                        .lastName(resultSet.getString("last_name"))
+                        .firstName(resultSet.getString("first_name"))
+                        .middleName(resultSet.getString("middle_name"))
+                        .shortName(resultSet.getString("short_name"))
+                        .position(resultSet.getString("position"))
+                        .build());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package ua.gov.court.supreme.contractwork.dao;
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,10 @@ public class EstimateDAO {
             preparedStatement.setString(3, newProject.getProjectName());
             preparedStatement.setString(4, newProject.getUnitOfMeasure());
             preparedStatement.setDouble(5, newProject.getQuantity());
-            preparedStatement.setDouble(6, newProject.getPrice());
-            preparedStatement.setDouble(7, newProject.getTotalPrice());
-            preparedStatement.setDouble(8, newProject.getSpecialFund());
-            preparedStatement.setDouble(9, newProject.getGeneralFund());
+            preparedStatement.setBigDecimal(6, newProject.getPrice());
+            preparedStatement.setBigDecimal(7, newProject.getTotalPrice());
+            preparedStatement.setBigDecimal(8, newProject.getSpecialFund());
+            preparedStatement.setBigDecimal(9, newProject.getGeneralFund());
             preparedStatement.setString(10, newProject.getJustification());
 
             preparedStatement.execute();
@@ -58,19 +59,20 @@ public class EstimateDAO {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    projectFromEstimate = new Estimate(
-                            resultSet.getLong("id"),
-                            resultSet.getString("kekv"),
-                            resultSet.getString("dk_code"),
-                            resultSet.getString("project_name"),
-                            resultSet.getString("unit_of_measure"),
-                            resultSet.getDouble("quantity"),
-                            resultSet.getDouble("price"),
-                            resultSet.getDouble("total_price"),
-                            resultSet.getDouble("special_fund"),
-                            resultSet.getDouble("general_fund"),
-                            resultSet.getString("justification")
-                    );
+                    projectFromEstimate = Estimate.builder()
+                            .id(resultSet.getLong("id"))
+                            .kekv(resultSet.getString("kekv"))
+                            .dkCode(resultSet.getString("dk_code"))
+                            .projectName(resultSet.getString("project_name"))
+                            .unitOfMeasure(resultSet.getString("unit_of_measure"))
+                            .quantity(resultSet.getDouble("quantity"))
+                            .price(resultSet.getBigDecimal("price"))
+                            .totalPrice(resultSet.getBigDecimal("total_price"))
+                            .specialFund(resultSet.getBigDecimal("special_fund"))
+                            .generalFund(resultSet.getBigDecimal("general_fund"))
+                            .justification(resultSet.getString("justification"))
+                            .informatization(resultSet.getBoolean("informatization"))
+                            .build();
                 }
             }
         } catch (SQLException e) {
@@ -95,20 +97,20 @@ public class EstimateDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                estimateProjectsByKekv.add(new Estimate(
-                        resultSet.getLong("id"),
-                        resultSet.getString("kekv"),
-                        resultSet.getString("dk_code"),
-                        resultSet.getString("project_name"),
-                        resultSet.getString("unit_of_measure"),
-                        resultSet.getDouble("quantity"),
-                        resultSet.getDouble("price"),
-                        resultSet.getDouble("total_price"),
-                        resultSet.getDouble("special_fund"),
-                        resultSet.getDouble("general_fund"),
-                        resultSet.getString("justification"),
-                        resultSet.getBoolean("informatization")
-                ));
+                estimateProjectsByKekv.add(Estimate.builder()
+                        .id(resultSet.getLong("id"))
+                        .kekv(resultSet.getString("kekv"))
+                        .dkCode(resultSet.getString("dk_code"))
+                        .projectName(resultSet.getString("project_name"))
+                        .unitOfMeasure(resultSet.getString("unit_of_measure"))
+                        .quantity(resultSet.getDouble("quantity"))
+                        .price(resultSet.getBigDecimal("price"))
+                        .totalPrice(resultSet.getBigDecimal("total_price"))
+                        .specialFund(resultSet.getBigDecimal("special_fund"))
+                        .generalFund(resultSet.getBigDecimal("general_fund"))
+                        .justification(resultSet.getString("justification"))
+                        .informatization(resultSet.getBoolean("informatization"))
+                        .build());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -131,10 +133,10 @@ public class EstimateDAO {
             preparedStatement.setString(3, updatedProject.getProjectName());
             preparedStatement.setString(4, updatedProject.getUnitOfMeasure());
             preparedStatement.setDouble(5, updatedProject.getQuantity());
-            preparedStatement.setDouble(6, updatedProject.getPrice());
-            preparedStatement.setDouble(7, updatedProject.getTotalPrice());
-            preparedStatement.setDouble(8, updatedProject.getSpecialFund());
-            preparedStatement.setDouble(9, updatedProject.getGeneralFund());
+            preparedStatement.setBigDecimal(6, updatedProject.getPrice());
+            preparedStatement.setBigDecimal(7, updatedProject.getTotalPrice());
+            preparedStatement.setBigDecimal(8, updatedProject.getSpecialFund());
+            preparedStatement.setBigDecimal(9, updatedProject.getGeneralFund());
             preparedStatement.setString(10, updatedProject.getJustification());
             preparedStatement.setLong(11, updatedProject.getId());
 

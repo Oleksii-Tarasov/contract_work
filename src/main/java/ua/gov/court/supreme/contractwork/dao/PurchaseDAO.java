@@ -3,18 +3,19 @@ package ua.gov.court.supreme.contractwork.dao;
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
 import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequest;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
-import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.Purchase;
 import ua.gov.court.supreme.contractwork.model.User;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PurchasesDAO {
+public class PurchaseDAO {
     private final PostgresConnector postgresConnector;
 
-    public PurchasesDAO() {
+    public PurchaseDAO() {
         this.postgresConnector = new PostgresConnector();
     }
 
@@ -36,8 +37,8 @@ public class PurchasesDAO {
         }
     }
 
-    public List<Purchases> getProjectsByKekv(int kekv) {
-        List<Purchases> purchasesProjectsByKekv = new ArrayList<>();
+    public List<Purchase> getProjectsByKekv(int kekv) {
+        List<Purchase> purchasesProjectsByKekv = new ArrayList<>();
 
         String query = switch (kekv) {
             case 2210 -> "SELECT p.*, u.* FROM purchases p " +
@@ -59,14 +60,14 @@ public class PurchasesDAO {
                 long executorId = resultSet.getLong("responsible_executor_id");
 
                 if (executorId > 0) {
-                    responsibleExecutor = new User(
-                            executorId, // <-- ВИКОРИСТОВУЄМО ПРАВИЛЬНИЙ ID
-                            resultSet.getString("last_name"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("middle_name"),
-                            resultSet.getString("short_name"),
-                            resultSet.getString("position")
-                    );
+                    responsibleExecutor = User.builder()
+                            .id(executorId)
+                            .lastName(resultSet.getString("last_name"))
+                            .firstName(resultSet.getString("first_name"))
+                            .middleName(resultSet.getString("middle_name"))
+                            .shortName(resultSet.getString("short_name"))
+                            .position(resultSet.getString("position"))
+                            .build();
                 }
 
                 java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
@@ -75,25 +76,25 @@ public class PurchasesDAO {
                 int statusInt = resultSet.getInt("status");
                 ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
 
-                purchasesProjectsByKekv.add(new Purchases(
-                        resultSet.getLong("id"),
-                        resultSet.getString("kekv"),
-                        resultSet.getString("dk_code"),
-                        resultSet.getString("project_name"),
-                        resultSet.getString("unit_of_measure"),
-                        resultSet.getDouble("quantity"),
-                        resultSet.getDouble("price"),
-                        resultSet.getDouble("total_price"),
-                        resultSet.getDouble("contract_price"),
-                        resultSet.getDouble("remaining_balance"),
-                        paymentTo,
-                        resultSet.getDouble("special_fund"),
-                        resultSet.getDouble("general_fund"),
-                        resultSet.getString("justification"),
-                        resultSet.getBoolean("informatization"),
-                        responsibleExecutor,
-                        projectStatus
-                ));
+                purchasesProjectsByKekv.add(Purchase.builder()
+                        .id(resultSet.getLong("id"))
+                        .kekv(resultSet.getString("kekv"))
+                        .dkCode(resultSet.getString("dk_code"))
+                        .projectName(resultSet.getString("project_name"))
+                        .unitOfMeasure(resultSet.getString("unit_of_measure"))
+                        .quantity(resultSet.getDouble("quantity"))
+                        .price(resultSet.getBigDecimal("price"))
+                        .totalPrice(resultSet.getBigDecimal("total_price"))
+                        .contractPrice(resultSet.getBigDecimal("contract_price"))
+                        .remainingBalance(resultSet.getBigDecimal("remaining_balance"))
+                        .paymentTo(paymentTo)
+                        .specialFund(resultSet.getBigDecimal("special_fund"))
+                        .generalFund(resultSet.getBigDecimal("general_fund"))
+                        .justification(resultSet.getString("justification"))
+                        .informatization(resultSet.getBoolean("informatization"))
+                        .responsibleExecutor(responsibleExecutor)
+                        .projectStatus(projectStatus)
+                        .build());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -102,8 +103,8 @@ public class PurchasesDAO {
         return purchasesProjectsByKekv;
     }
 
-    public Purchases getProjectById(long id) {
-        Purchases purchase = null;
+    public Purchase getProjectById(long id) {
+        Purchase purchase = null;
         String query = "SELECT p.*, u.* FROM purchases p " +
                 "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.id = ?";
 
@@ -118,14 +119,14 @@ public class PurchasesDAO {
                     long executorId = resultSet.getLong("responsible_executor_id");
 
                     if (executorId > 0) {
-                        responsibleExecutor = new User(
-                                executorId,
-                                resultSet.getString("last_name"),
-                                resultSet.getString("first_name"),
-                                resultSet.getString("middle_name"),
-                                resultSet.getString("short_name"),
-                                resultSet.getString("position")
-                        );
+                       responsibleExecutor = User.builder()
+                                .id(executorId)
+                                .lastName(resultSet.getString("last_name"))
+                                .firstName(resultSet.getString("first_name"))
+                                .middleName(resultSet.getString("middle_name"))
+                                .shortName(resultSet.getString("short_name"))
+                                .position(resultSet.getString("position"))
+                                .build();
                     }
 
                     java.sql.Date sqlDatePaymentTo = resultSet.getDate("payment_to");
@@ -134,25 +135,25 @@ public class PurchasesDAO {
                     int statusInt = resultSet.getInt("status");
                     ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
 
-                    purchase = new Purchases(
-                            resultSet.getLong("id"),
-                            resultSet.getString("kekv"),
-                            resultSet.getString("dk_code"),
-                            resultSet.getString("project_name"),
-                            resultSet.getString("unit_of_measure"),
-                            resultSet.getDouble("quantity"),
-                            resultSet.getDouble("price"),
-                            resultSet.getDouble("total_price"),
-                            resultSet.getDouble("contract_price"),
-                            resultSet.getDouble("remaining_balance"),
-                            paymentTo,
-                            resultSet.getDouble("special_fund"),
-                            resultSet.getDouble("general_fund"),
-                            resultSet.getString("justification"),
-                            resultSet.getBoolean("informatization"),
-                            responsibleExecutor,
-                            projectStatus
-                    );
+                    purchase = Purchase.builder()
+                            .id(resultSet.getLong("id"))
+                            .kekv(resultSet.getString("kekv"))
+                            .dkCode(resultSet.getString("dk_code"))
+                            .projectName(resultSet.getString("project_name"))
+                            .unitOfMeasure(resultSet.getString("unit_of_measure"))
+                            .quantity(resultSet.getDouble("quantity"))
+                            .price(resultSet.getBigDecimal("price"))
+                            .totalPrice(resultSet.getBigDecimal("total_price"))
+                            .contractPrice(resultSet.getBigDecimal("contract_price"))
+                            .remainingBalance(resultSet.getBigDecimal("remaining_balance"))
+                            .paymentTo(paymentTo)
+                            .specialFund(resultSet.getBigDecimal("special_fund"))
+                            .generalFund(resultSet.getBigDecimal("general_fund"))
+                            .justification(resultSet.getString("justification"))
+                            .informatization(resultSet.getBoolean("informatization"))
+                            .responsibleExecutor(responsibleExecutor)
+                            .projectStatus(projectStatus)
+                            .build();
                 }
             }
 
@@ -237,13 +238,13 @@ public class PurchasesDAO {
         }
     }
 
-    public void updateContractPrice(long projectId, double contractPrice, double remainingBalance) {
+    public void updateContractPrice(long projectId, BigDecimal contractPrice, BigDecimal remainingBalance) {
         String query = "UPDATE purchases SET contract_price = ?, remaining_balance = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setDouble(1, contractPrice);
-            preparedStatement.setDouble(2, remainingBalance);
+            preparedStatement.setBigDecimal(1, contractPrice);
+            preparedStatement.setBigDecimal(2, remainingBalance);
             preparedStatement.setLong(3, projectId);
 
             preparedStatement.executeUpdate();
@@ -292,9 +293,10 @@ public class PurchasesDAO {
 
         // 4. Сума договору + залишок
         if (dto.getContractPrice() != null) {
-            Purchases purchase = getProjectById(projectId);
-            double remainingBalance = purchase.getTotalPrice() - dto.getContractPrice();
-            updateContractPrice(projectId, dto.getContractPrice(), remainingBalance);
+            Purchase purchase = getProjectById(projectId);
+            BigDecimal contractPrice = dto.getContractPrice();
+            BigDecimal remainingBalance = purchase.getTotalPrice().subtract(contractPrice);
+            updateContractPrice(projectId, contractPrice, remainingBalance);
         }
 
         // 5. Оплата до
@@ -305,7 +307,7 @@ public class PurchasesDAO {
     }
 
 
-    public void updateProjectToPurchases(Purchases updatedProject) {
+    public void updateProjectToPurchases(Purchase updatedProject) {
         String query = """
                 UPDATE purchases SET 
                     kekv = ?, 
@@ -335,10 +337,10 @@ public class PurchasesDAO {
             ps.setString(4, updatedProject.getJustification());
             ps.setString(5, updatedProject.getUnitOfMeasure());
             ps.setDouble(6, updatedProject.getQuantity());
-            ps.setDouble(7, updatedProject.getPrice());
-            ps.setDouble(8, updatedProject.getTotalPrice());
-            ps.setDouble(9, updatedProject.getSpecialFund());
-            ps.setDouble(10, updatedProject.getGeneralFund());
+            ps.setBigDecimal(7, updatedProject.getPrice());
+            ps.setBigDecimal(8, updatedProject.getTotalPrice());
+            ps.setBigDecimal(9, updatedProject.getSpecialFund());
+            ps.setBigDecimal(10, updatedProject.getGeneralFund());
 
             // Статус (int)
             ps.setInt(11, updatedProject.getProjectStatus().getDbValue());
@@ -351,7 +353,7 @@ public class PurchasesDAO {
             }
 
             // Сума договору
-            ps.setDouble(13, updatedProject.getContractPrice());
+            ps.setBigDecimal(13, updatedProject.getContractPrice());
 
             // Дата оплати (Date або NULL)
             if (updatedProject.getPaymentTo() != null) {
@@ -361,7 +363,7 @@ public class PurchasesDAO {
             }
 
             // Залишок (розраховується в сервлеті)
-            ps.setDouble(15, updatedProject.getRemainingBalance());
+            ps.setBigDecimal(15, updatedProject.getRemainingBalance());
 
             // ID для WHERE
             ps.setLong(16, updatedProject.getId());

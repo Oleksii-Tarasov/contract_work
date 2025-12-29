@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet("/estimate/update-project")
 public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
@@ -24,24 +25,38 @@ public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
-        long id = Long.parseLong(req.getParameter("id"));
-        String kekv = req.getParameter("kekv");
-        String dkCode = req.getParameter("dkCode");
-        String projectName = req.getParameter("projectName");
-        String unitOfMeasure = req.getParameter("unitOfMeasure");
-        double quantity = Double.parseDouble(req.getParameter("quantity"));
-        double price = Double.parseDouble(req.getParameter("price"));
-        double totalPrice = Double.parseDouble(req.getParameter("totalPrice"));
-        double specialFund = Double.parseDouble(req.getParameter("specialFund"));
-        double generalFund = Double.parseDouble(req.getParameter("generalFund"));
-        String justification = req.getParameter("justification");
+        try {
+            long id = Long.parseLong(req.getParameter("id"));
+            String kekv = req.getParameter("kekv");
+            String dkCode = req.getParameter("dkCode");
+            String projectName = req.getParameter("projectName");
+            String unitOfMeasure = req.getParameter("unitOfMeasure");
+            double quantity = Double.parseDouble(req.getParameter("quantity"));
+            BigDecimal price = new BigDecimal(req.getParameter("price"));
+            BigDecimal totalPrice = new BigDecimal(req.getParameter("totalPrice"));
+            BigDecimal specialFund = new BigDecimal(req.getParameter("specialFund"));
+            BigDecimal generalFund = new BigDecimal(req.getParameter("generalFund"));
+            String justification = req.getParameter("justification");
 
-        Estimate updatedProject = new Estimate(id, kekv, dkCode, projectName, unitOfMeasure,
-                quantity, price, totalPrice, specialFund, generalFund, justification);
+            Estimate updatedProject = Estimate.builder()
+                    .id(id)
+                    .kekv(kekv)
+                    .dkCode(dkCode)
+                    .projectName(projectName)
+                    .unitOfMeasure(unitOfMeasure)
+                    .quantity(quantity)
+                    .price(price)
+                    .totalPrice(totalPrice)
+                    .specialFund(specialFund)
+                    .generalFund(generalFund)
+                    .justification(justification)
+                    .build();
 
+            workInspector.updateProjectToEstimate(updatedProject);
 
-        workInspector.updateProjectToEstimate(updatedProject);
-
-        resp.sendRedirect(req.getContextPath() + "/estimate#project-" + id);
+            resp.sendRedirect(req.getContextPath() + "/estimate#project-" + id);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid number format: " + e.getMessage());
+        }
     }
 }

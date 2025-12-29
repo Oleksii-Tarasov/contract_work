@@ -1,6 +1,6 @@
 package ua.gov.court.supreme.contractwork.servlet.purchases;
 
-import ua.gov.court.supreme.contractwork.model.Purchases;
+import ua.gov.court.supreme.contractwork.model.Purchase;
 import ua.gov.court.supreme.contractwork.model.User;
 import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -38,11 +40,12 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
             String justification = req.getParameter("justification");
             String unitOfMeasure = req.getParameter("unitOfMeasure");
             double quantity = Double.parseDouble(req.getParameter("quantity"));
-            double price = Double.parseDouble(req.getParameter("price"));
-            double totalPrice = quantity * price;
-            double generalFund = parseDoubleSafe(req.getParameter("generalFund"));
-            double specialFund = totalPrice - generalFund;
-            if (specialFund < 0) specialFund = 0;
+            BigDecimal price = parseBigDecimalSafe(req.getParameter("price"));
+            BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(quantity));
+            BigDecimal generalFund = parseBigDecimalSafe(req.getParameter("generalFund"));
+            BigDecimal specialFund = totalPrice.subtract(generalFund);
+            if (specialFund.compareTo(BigDecimal.ZERO) < 0) specialFund = BigDecimal.ZERO;
+            
             // Статус
             int statusInt = Integer.parseInt(req.getParameter("projectStatus"));
             ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
@@ -51,10 +54,10 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
             User responsibleExecutor = null;
             if (executorIdStr != null && !executorIdStr.isEmpty()) {
                 long userId = Long.parseLong(executorIdStr);
-                responsibleExecutor = new User(userId, null, null, null, null, null);
+                responsibleExecutor = User.builder().id(userId).build();
             }
             // Сума договору
-            double contractPrice = parseDoubleSafe(req.getParameter("contractPrice"));
+            BigDecimal contractPrice = parseBigDecimalSafe(req.getParameter("contractPrice"));
             // Дата оплати
             String paymentToStr = req.getParameter("paymentTo");
             LocalDate paymentTo = null;
@@ -62,28 +65,28 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
                 paymentTo = LocalDate.parse(paymentToStr);
             }
             // Розрахунок залишку
-            double remainingBalance = totalPrice - contractPrice;
+            BigDecimal remainingBalance = totalPrice.subtract(contractPrice);
 
             // 4. Створення об'єкта
-            Purchases projectToUpdate = new Purchases(
-                    id,
-                    kekv,
-                    dkCode,
-                    projectName,
-                    unitOfMeasure,
-                    quantity,
-                    price,
-                    totalPrice,
-                    contractPrice,
-                    remainingBalance,
-                    paymentTo,
-                    specialFund,
-                    generalFund,
-                    justification,
-                    false,
-                    responsibleExecutor,
-                    projectStatus
-            );
+            Purchase projectToUpdate = Purchase.builder()
+                    .id(id)
+                    .kekv(kekv)
+                    .dkCode(dkCode)
+                    .projectName(projectName)
+                    .unitOfMeasure(unitOfMeasure)
+                    .quantity(quantity)
+                    .price(price)
+                    .totalPrice(totalPrice)
+                    .contractPrice(contractPrice)
+                    .remainingBalance(remainingBalance)
+                    .paymentTo(paymentTo)
+                    .specialFund(specialFund)
+                    .generalFund(generalFund)
+                    .justification(justification)
+                    .informatization(false)
+                    .responsibleExecutor(responsibleExecutor)
+                    .projectStatus(projectStatus)
+                    .build();
 
             workInspector.updateProjectToPurchases(projectToUpdate);
 
@@ -95,10 +98,10 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
         }
     }
 
-    private double parseDoubleSafe(String value) {
+    private BigDecimal parseBigDecimalSafe(String value) {
         if (value == null || value.trim().isEmpty()) {
-            return 0.0;
+            return BigDecimal.ZERO;
         }
-        return Double.parseDouble(value.replace(",", "."));
+        return new BigDecimal(value.replace(",", "."));
     }
 }
