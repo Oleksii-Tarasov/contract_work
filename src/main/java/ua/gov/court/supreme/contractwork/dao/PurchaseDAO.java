@@ -1,7 +1,7 @@
 package ua.gov.court.supreme.contractwork.dao;
 
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
-import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequest;
+import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequestDTO;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Purchase;
 import ua.gov.court.supreme.contractwork.model.User;
@@ -271,7 +271,7 @@ public class PurchaseDAO {
         }
     }
 
-    public void updatePurchasesFields(ProjectUpdateRequest dto) {
+    public void updatePurchasesFields(ProjectUpdateRequestDTO dto) {
 
         long projectId = dto.getId();
 

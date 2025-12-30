@@ -11,12 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 @WebServlet("/purchases/update-project")
-public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
+public class UpdatePurchaseProjectServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id =  Long.parseLong(req.getParameter("id"));
@@ -25,7 +24,7 @@ public class UpdateProjectFromPurchasesServlet extends BaseWorkServlet {
         req.setAttribute("projectStatuses", ProjectStatus.values());
         req.setAttribute("users", workInspector.getAllUsers());
 
-        req.getRequestDispatcher("/WEB-INF/views/purchases/projectPurchasesEditForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/purchases/project-purchases-edit-form.jsp").forward(req, resp);
     }
 
     @Override

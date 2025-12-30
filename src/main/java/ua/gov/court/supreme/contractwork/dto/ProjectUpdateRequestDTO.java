@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class ProjectUpdateRequest {
+public class ProjectUpdateRequestDTO {
     private long id;
     private String justification;
     private BigDecimal contractPrice;

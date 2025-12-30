@@ -16,10 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @WebServlet("/purchases/update-project-fields")
-public class UpdatePurchasesFieldsServlet extends BaseWorkServlet {
+public class UpdatePurchaseFieldsServlet extends BaseWorkServlet {
     private final ObjectMapper mapper;
 
-    public UpdatePurchasesFieldsServlet() {
+    public UpdatePurchaseFieldsServlet() {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);

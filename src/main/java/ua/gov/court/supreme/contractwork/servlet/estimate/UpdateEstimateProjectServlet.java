@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @WebServlet("/estimate/update-project")
-public class UpdateProjectFromEstimateServlet extends BaseWorkServlet {
+public class UpdateEstimateProjectServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id = Long.parseLong(req.getParameter("id"));
 
         req.setAttribute("projectForUpdate", workInspector.getProjectFromEstimateById(id));
 
-        req.getRequestDispatcher("/WEB-INF/views/estimate/projectEstimateEditForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/estimate/project-estimate-edit-form.jsp").forward(req, resp);
     }
 
     @Override

@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @WebServlet("/estimate/new-project")
-public class NewProjectToEstimateServlet extends BaseWorkServlet {
+public class CreateEstimateProjectServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/WEB-INF/views/estimate/projectEstimateForm.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/estimate/project-estimate-form.jsp").forward(req, resp);
     }
 
     @Override

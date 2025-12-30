@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import ua.gov.court.supreme.contractwork.dao.EstimateDAO;
 import ua.gov.court.supreme.contractwork.dao.PurchaseDAO;
 import ua.gov.court.supreme.contractwork.dao.UserDAO;
-import ua.gov.court.supreme.contractwork.dto.ProjectsTotalAmounts;
+import ua.gov.court.supreme.contractwork.dto.ProjectsTotalsDTO;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 import ua.gov.court.supreme.contractwork.model.Purchase;
@@ -39,9 +39,9 @@ public class WorkInspector {
         return estimateDAO.getProjectsByKekv(kekv);
     }
 
-    public ProjectsTotalAmounts getEstimateTotalAmounts(List<Estimate> projectsFromEstimate) {
+    public ProjectsTotalsDTO getEstimateTotalAmounts(List<Estimate> projectsFromEstimate) {
         if (projectsFromEstimate == null) {
-            return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+            return new ProjectsTotalsDTO(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
         int quantity = projectsFromEstimate.stream().mapToInt(Estimate::getQuantity).sum();
@@ -49,7 +49,7 @@ public class WorkInspector {
         BigDecimal generalFund = projectsFromEstimate.stream().map(Estimate::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal specialFund = projectsFromEstimate.stream().map(Estimate::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new ProjectsTotalAmounts(quantity, priceSum, generalFund, specialFund);
+        return new ProjectsTotalsDTO(quantity, priceSum, generalFund, specialFund);
     }
 
     public void deleteProjectFromEstimate(long projectId) {
@@ -96,9 +96,9 @@ public class WorkInspector {
         purchaseDAO.updateProjectToPurchases(updatedProject);
     }
 
-    public ProjectsTotalAmounts getPurchasesTotalAmounts(List<Purchase> projectsFromPurchases) {
+    public ProjectsTotalsDTO getPurchasesTotalAmounts(List<Purchase> projectsFromPurchases) {
         if (projectsFromPurchases == null) {
-            return new ProjectsTotalAmounts(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+            return new ProjectsTotalsDTO(0, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
         int quantity = projectsFromPurchases.stream().mapToInt(Purchase::getQuantity).sum();
@@ -108,7 +108,7 @@ public class WorkInspector {
         BigDecimal specialFund = projectsFromPurchases.stream().map(Purchase::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 
-        return new ProjectsTotalAmounts(quantity, priceSum, remainingBalance, generalFund, specialFund);
+        return new ProjectsTotalsDTO(quantity, priceSum, remainingBalance, generalFund, specialFund);
     }
 
     public ProjectStatus[] getProjectStatuses() {

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/estimate/delete-project")
-public class DeleteProjectFromEstimateServlet extends BaseWorkServlet {
+public class DeleteEstimateProjectServlet extends BaseWorkServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=UTF-8");
