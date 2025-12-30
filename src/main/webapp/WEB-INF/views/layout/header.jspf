@@ -84,10 +84,10 @@
                         проєкт інформатизації
                     </li>
                     <%--                    <li class="mb-3 p-2" style="background-color: #FFB6C1">--%>
-                    <%--                        участь організації в СЕВ ОВВ на даний момент припинена--%>
+                    <%--                        participation of the organization in SEV OVV is currently suspended--%>
                     <%--                    </li>--%>
                     <%--                    <li class="mb-3 p-2" style="background-color: #FFFF00">--%>
-                    <%--                        збіги пошукових запитів із записами в таблиці--%>
+                    <%--                        search matches with table records--%>
                     <%--                    </li>--%>
                 </ul>
             </div>

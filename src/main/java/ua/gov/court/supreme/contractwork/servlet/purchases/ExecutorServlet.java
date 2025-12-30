@@ -12,29 +12,37 @@ import java.io.IOException;
 public class ExecutorServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        long projectId = Long.parseLong(req.getParameter("projectId"));
-        long executorId = workInspector.getExecutorIdFromProject(projectId);
+        resp.setContentType("application/json;charset=UTF-8");
 
-        resp.setContentType("application/json");
-        resp.getWriter().write("{\"executorId\":" + executorId + "}");
+        try {
+            long projectId = Long.parseLong(req.getParameter("projectId"));
+            Long executorId = contractWorkService.findExecutorIdByProjectId(projectId);
+
+            resp.getWriter().write("{\"executorId\": " + (executorId == null ? "null" : executorId) + "}");
+        } catch (NumberFormatException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"Invalid project ID\"}");
+        } catch (Exception e) {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\": \"Server error\"}");
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String projectIdStr = req.getParameter("projectId");
-        String userIdStr = req.getParameter("userId");
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/plain; charset=UTF-8");
 
-        try {
-            long projectId = Long.parseLong(projectIdStr);
-            Long userId = null;
+        String projectIdParam = req.getParameter("projectId");
+        String executorIdParam = req.getParameter("executorId");
 
-            if (userIdStr != null && !userIdStr.isEmpty()) {
-                userId = Long.parseLong(userIdStr);
+        try {
+            long projectId = Long.parseLong(projectIdParam);
+            Long executorId = null;
+            if (executorIdParam != null && !executorIdParam.isEmpty()) {
+                executorId = Long.parseLong(executorIdParam);
             }
 
-            workInspector.updateProjectExecutor(projectId, userId);
+            contractWorkService.updateProjectExecutor(projectId, executorId);
             resp.getWriter().write("OK");
         } catch (Exception e) {
             resp.setStatus(400);

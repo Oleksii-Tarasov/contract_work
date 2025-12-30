@@ -16,7 +16,7 @@ public class UpdateEstimateProjectServlet extends BaseWorkServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id = Long.parseLong(req.getParameter("id"));
 
-        req.setAttribute("projectForUpdate", workInspector.getProjectFromEstimateById(id));
+        req.setAttribute("projectForUpdate", contractWorkService.getEstimateProjectById(id));
 
         req.getRequestDispatcher("/WEB-INF/views/estimate/project-estimate-edit-form.jsp").forward(req, resp);
     }
@@ -38,7 +38,7 @@ public class UpdateEstimateProjectServlet extends BaseWorkServlet {
             BigDecimal generalFund = new BigDecimal(req.getParameter("generalFund"));
             String justification = req.getParameter("justification");
 
-            Estimate updatedProject = Estimate.builder()
+            Estimate projectToUpdate = Estimate.builder()
                     .id(id)
                     .kekv(kekv)
                     .dkCode(dkCode)
@@ -52,7 +52,7 @@ public class UpdateEstimateProjectServlet extends BaseWorkServlet {
                     .justification(justification)
                     .build();
 
-            workInspector.updateProjectToEstimate(updatedProject);
+            contractWorkService.updateEstimateProject(projectToUpdate);
 
             resp.sendRedirect(req.getContextPath() + "/estimate#project-" + id);
         } catch (NumberFormatException e) {

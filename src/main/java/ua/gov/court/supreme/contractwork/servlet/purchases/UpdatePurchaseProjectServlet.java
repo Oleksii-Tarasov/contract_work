@@ -20,15 +20,15 @@ public class UpdatePurchaseProjectServlet extends BaseWorkServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id =  Long.parseLong(req.getParameter("id"));
 
-        req.setAttribute("projectForUpdate", workInspector.getProjectFromPurchasesById(id));
+        req.setAttribute("projectForUpdate", contractWorkService.getPurchaseProjectById(id));
         req.setAttribute("projectStatuses", ProjectStatus.values());
-        req.setAttribute("users", workInspector.getAllUsers());
+        req.setAttribute("users", contractWorkService.getAllUsers());
 
         req.getRequestDispatcher("/WEB-INF/views/purchases/project-purchases-edit-form.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
         try {
@@ -44,29 +44,26 @@ public class UpdatePurchaseProjectServlet extends BaseWorkServlet {
             BigDecimal generalFund = parseBigDecimalSafe(req.getParameter("generalFund"));
             BigDecimal specialFund = totalPrice.subtract(generalFund);
             if (specialFund.compareTo(BigDecimal.ZERO) < 0) specialFund = BigDecimal.ZERO;
-            
-            // Статус
+
+            // Status
             int statusInt = Integer.parseInt(req.getParameter("projectStatus"));
             ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
-            // Виконавець
-            String executorIdStr = req.getParameter("executorId");
+            // Executor
+            String executorIdParam = req.getParameter("executorId");
             User responsibleExecutor = null;
-            if (executorIdStr != null && !executorIdStr.isEmpty()) {
-                long userId = Long.parseLong(executorIdStr);
+            if (executorIdParam != null && !executorIdParam.isEmpty()) {
+                long userId = Long.parseLong(executorIdParam);
                 responsibleExecutor = User.builder().id(userId).build();
             }
-            // Сума договору
             BigDecimal contractPrice = parseBigDecimalSafe(req.getParameter("contractPrice"));
-            // Дата оплати
-            String paymentToStr = req.getParameter("paymentTo");
+            String paymentToParam = req.getParameter("paymentTo");
             LocalDate paymentTo = null;
-            if (paymentToStr != null && !paymentToStr.isEmpty()) {
-                paymentTo = LocalDate.parse(paymentToStr);
+            if (paymentToParam != null && !paymentToParam.isEmpty()) {
+                paymentTo = LocalDate.parse(paymentToParam);
             }
-            // Розрахунок залишку
+            // Calculate Remaining Balance
             BigDecimal remainingBalance = totalPrice.subtract(contractPrice);
 
-            // 4. Створення об'єкта
             Purchase projectToUpdate = Purchase.builder()
                     .id(id)
                     .kekv(kekv)
@@ -87,13 +84,13 @@ public class UpdatePurchaseProjectServlet extends BaseWorkServlet {
                     .projectStatus(projectStatus)
                     .build();
 
-            workInspector.updateProjectToPurchases(projectToUpdate);
+            contractWorkService.updatePurchaseProject(projectToUpdate);
 
             resp.sendRedirect(req.getContextPath() + "/purchases?updatedId=" + id + "#project-" + id);
 
         } catch (NumberFormatException | DateTimeParseException e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Помилка у вхідних даних: " + e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input data: " + e.getMessage());
         }
     }
 

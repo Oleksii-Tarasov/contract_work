@@ -11,20 +11,20 @@ import java.io.IOException;
 @WebServlet("/estimate/delete-project")
 public class DeleteEstimateProjectServlet extends BaseWorkServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json;charset=UTF-8");
 
-        String idParam = req.getParameter("id");
+        String id = req.getParameter("id");
 
-        if (idParam == null || idParam.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"success\": false, \"message\": \"Missing project ID.\"}");
             return;
         }
 
         try {
-            long projectId = Long.parseLong(idParam);
-            workInspector.deleteProjectFromEstimate(projectId);
+            long projectId = Long.parseLong(id);
+            contractWorkService.deleteEstimateProject(projectId);
 
             resp.getWriter().write("{\"success\": true, \"deletedId\": " + projectId + "}");
         } catch (NumberFormatException e) {

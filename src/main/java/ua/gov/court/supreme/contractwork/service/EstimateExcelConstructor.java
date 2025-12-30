@@ -15,7 +15,7 @@ public class EstimateExcelConstructor {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Кошторис");
 
-        // ====== БАЗОВИЙ СТИЛЬ ШРИФТУ ======
+        // ====== BASE FONT STYLE ======
         Font baseFont = workbook.createFont();
         baseFont.setFontName("Roboto Condensed Light");
         baseFont.setFontHeightInPoints((short) 12);
@@ -25,24 +25,24 @@ public class EstimateExcelConstructor {
 
         int rowIndex = 0;
 
-        // ТІЛЬКИ ОДИН ЗАГОЛОВОК ДЛЯ ВСЬОГО ДОКУМЕНТА
+        // SINGLE HEADER FOR THE ENTIRE DOCUMENT
         rowIndex = writeHeader(workbook, sheet, rowIndex, baseStyle);
 
-        // 2210 з заголовком таблиці
+        // 2210 with table header
         rowIndex = writeKekvBlock(workbook, sheet,
                 "2210", "Предмети, матеріали, обладнання та інвентар, у т. ч. м'який інвентар та обмундирування",
-                estimateDAO.getProjectsByKekv(2210), rowIndex, baseStyle, true);
+                estimateDAO.findAllByKekv(2210), rowIndex, baseStyle, true);
 
-        // 2240 та 3110 без заголовків таблиці
+        // 2240 and 3110 without table headers
         rowIndex = writeKekvBlock(workbook, sheet,
                 "2240", "Оплата послуг (крім комунальних)",
-                estimateDAO.getProjectsByKekv(2240), rowIndex, baseStyle, false);
+                estimateDAO.findAllByKekv(2240), rowIndex, baseStyle, false);
 
         rowIndex = writeKekvBlock(workbook, sheet,
                 "3110", "Придбання обладнання і предметів довгострокового користування",
-                estimateDAO.getProjectsByKekv(3110), rowIndex, baseStyle, false);
+                estimateDAO.findAllByKekv(3110), rowIndex, baseStyle, false);
 
-        // ШИРИНА СТОВПЦІВ (Кількість робимо трішки ширше)
+        // COLUMN WIDTHS (Quantity column slightly wider)
         sheet.setColumnWidth(0, 6 * 256);
         sheet.setColumnWidth(1, 50 * 256);
         sheet.setColumnWidth(2, 10 * 256);
@@ -72,7 +72,7 @@ public class EstimateExcelConstructor {
         headerFont.setBold(true);
         headerStyle.setFont(headerFont);
 
-        // === Один рядок із трьома фрагментами тексту ===
+        // === One row with three text fragments ===
         Row headerRow = sheet.createRow(rowIndex++);
         Cell headerCell = headerRow.createCell(8);
         headerCell.setCellValue("""
@@ -84,7 +84,7 @@ public class EstimateExcelConstructor {
         ______________ Віктор КАПУСТИНСЬКИЙ
         """);
         headerCell.setCellStyle(headerStyle);
-        headerCell.getCellStyle().setWrapText(true); // дозволяє перенесення рядків у межах однієї клітинки
+        headerCell.getCellStyle().setWrapText(true); // Allow text wrapping within a cell
 
         rowIndex += 2;
 
@@ -116,7 +116,7 @@ public class EstimateExcelConstructor {
     private int writeKekvBlock(Workbook workbook, Sheet sheet, String kekvCode, String kekvTitle,
                                List<Estimate> list, int rowIndex, CellStyle baseStyle, boolean writeHeader) {
 
-        // ===== СТИЛЬ ЗАГОЛОВКА ТАБЛИЦІ =====
+        // ===== TABLE HEADER STYLE =====
         CellStyle headerTableStyle = workbook.createCellStyle();
         headerTableStyle.cloneStyleFrom(baseStyle);
 
@@ -156,7 +156,7 @@ public class EstimateExcelConstructor {
             }
         }
 
-        // ==== РЯДОК КЕКВ ====
+        // ==== KEKV ROW ====
         Row kekvRow = sheet.createRow(rowIndex++);
         Cell kekvCell = kekvRow.createCell(0);
         kekvCell.setCellValue(kekvCode + " " + kekvTitle);
@@ -170,7 +170,7 @@ public class EstimateExcelConstructor {
         kekvStyle.setFont(kekvFont);
         kekvCell.setCellStyle(kekvStyle);
 
-        // ====== СТИЛІ ЯЧЕЙОК ======
+        // ====== CELL STYLES ======
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.cloneStyleFrom(baseStyle);
         cellStyle.setBorderTop(BorderStyle.THIN);
@@ -184,15 +184,15 @@ public class EstimateExcelConstructor {
         centerStyle.cloneStyleFrom(cellStyle);
         centerStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        // СТИЛЬ: ГРОШОВИЙ ФОРМАТ
+        // STYLE: CURRENCY FORMAT
         CellStyle currencyStyle = workbook.createCellStyle();
-        currencyStyle.cloneStyleFrom(cellStyle); // Копіюємо всі базові налаштування (рамки, вирівнювання тощо)
+        currencyStyle.cloneStyleFrom(cellStyle); // Copy all base settings (borders, alignment, etc.)
         DataFormat format = workbook.createDataFormat();
-        // Встановлюємо формат: #,##0.00 означає роздільник тисяч, 2 знаки після коми
+        // Set format: #,##0.00 means thousands separator, 2 decimal places
         currencyStyle.setDataFormat(format.getFormat("#,##0.00"));
         currencyStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        // ===== ПІДСУМКИ =====
+        // ===== TOTALS =====
         double totalQty = 0;
         BigDecimal totalSum = BigDecimal.ZERO;
         BigDecimal totalZF = BigDecimal.ZERO;
@@ -223,7 +223,7 @@ public class EstimateExcelConstructor {
             
             row.createCell(8).setCellValue(project.getJustification());
 
-            // центр
+            // center
             row.getCell(0).setCellStyle(centerStyle);
             row.getCell(2).setCellStyle(centerStyle);
             row.getCell(3).setCellStyle(centerStyle);
@@ -232,12 +232,12 @@ public class EstimateExcelConstructor {
             row.getCell(6).setCellStyle(currencyStyle);
             row.getCell(7).setCellStyle(currencyStyle);
 
-            // текст
+            // text
             row.getCell(1).setCellStyle(cellStyle);
             row.getCell(8).setCellStyle(cellStyle);
         }
 
-        // ======= РЯДОК ПІДСУМКІВ =======
+        // ======= TOTALS ROW =======
         Row totalRow = sheet.createRow(rowIndex++);
 
         CellStyle rightKekvStyle = workbook.createCellStyle();

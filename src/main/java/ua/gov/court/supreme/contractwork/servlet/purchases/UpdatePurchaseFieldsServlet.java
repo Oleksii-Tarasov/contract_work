@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.servlet.BaseWorkServlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,58 +25,58 @@ public class UpdatePurchaseFieldsServlet extends BaseWorkServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         JsonNode node = mapper.readTree(req.getInputStream());
 
         long projectId = node.get("id").asLong();
 
-        // 1. Обґрунтування
+        // 1. Justification
         if (node.has("justification")) {
             JsonNode j = node.get("justification");
-            workInspector.updateJustification(
+            contractWorkService.updateJustification(
                     projectId,
                     j.isNull() ? null : j.asText()
             );
         }
 
-        // 2. Статус закупівлі
+        // 2. Project Status
         if (node.has("projectStatus")) {
             JsonNode s = node.get("projectStatus");
             if (!s.isNull()) {
-                workInspector.updateProjectStatus(projectId, ProjectStatus.fromInt(s.asInt()));
+                contractWorkService.updateProjectStatus(projectId, ProjectStatus.fromInt(s.asInt()));
             }
         }
 
-        // 3. Відповідальний виконавець
+        // 3. Executor
         if (node.has("executorId")) {
             JsonNode e = node.get("executorId");
-            workInspector.updateProjectExecutor(
+            contractWorkService.updateProjectExecutor(
                     projectId,
                     e.isNull() ? null : e.asLong()
             );
         }
 
-        // 4. Сума договору
+        // 4. Contract Price
         if (node.has("contractPrice")) {
             JsonNode p = node.get("contractPrice");
             if (!p.isNull()) {
                 BigDecimal contractPrice = BigDecimal.valueOf(p.asDouble());
-                workInspector.updateContractPrice(
+                contractWorkService.updateContractPrice(
                         projectId,
                         contractPrice
                 );
             }
         }
 
-        // 5. Оплата до
+        // 5. Payment Due Date
         if (node.has("paymentTo")) {
             JsonNode d = node.get("paymentTo");
 
             if (d.isNull()) {
-                workInspector.updatePaymentDueDate(projectId, null);
+                contractWorkService.updatePaymentDueDate(projectId, null);
             } else {
                 LocalDate date = LocalDate.parse(d.asText());
-                workInspector.updatePaymentDueDate(projectId, date);
+                contractWorkService.updatePaymentDueDate(projectId, date);
             }
         }
 

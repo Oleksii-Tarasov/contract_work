@@ -3,7 +3,6 @@ package ua.gov.court.supreme.contractwork.dao;
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
 import ua.gov.court.supreme.contractwork.model.Estimate;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,36 +14,34 @@ public class EstimateDAO {
         this.postgresConnector = new PostgresConnector();
     }
 
-    public int insertProject(Estimate projectForEstimate) {
+    public int save(Estimate project) {
         int generatedId = -1;
         String query = """
                 INSERT INTO estimate (kekv, dk_code, project_name, unit_of_measure,
                  quantity, price, total_price, special_fund, general_fund, justification)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                 """;
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setString(1, projectForEstimate.getKekv());
-            preparedStatement.setString(2, projectForEstimate.getDkCode());
-            preparedStatement.setString(3, projectForEstimate.getProjectName());
-            preparedStatement.setString(4, projectForEstimate.getUnitOfMeasure());
-            preparedStatement.setInt(5, projectForEstimate.getQuantity());
-            preparedStatement.setBigDecimal(6, projectForEstimate.getPrice());
-            preparedStatement.setBigDecimal(7, projectForEstimate.getTotalPrice());
-            preparedStatement.setBigDecimal(8, projectForEstimate.getSpecialFund());
-            preparedStatement.setBigDecimal(9, projectForEstimate.getGeneralFund());
-            preparedStatement.setString(10, projectForEstimate.getJustification());
+            preparedStatement.setString(1, project.getKekv());
+            preparedStatement.setString(2, project.getDkCode());
+            preparedStatement.setString(3, project.getProjectName());
+            preparedStatement.setString(4, project.getUnitOfMeasure());
+            preparedStatement.setInt(5, project.getQuantity());
+            preparedStatement.setBigDecimal(6, project.getPrice());
+            preparedStatement.setBigDecimal(7, project.getTotalPrice());
+            preparedStatement.setBigDecimal(8, project.getSpecialFund());
+            preparedStatement.setBigDecimal(9, project.getGeneralFund());
+            preparedStatement.setString(10, project.getJustification());
 
             preparedStatement.executeUpdate();
 
-            // Отримання згенерованого ID
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next()) {
-                generatedId = rs.getInt(1);
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                generatedId = resultSet.getInt(1);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +49,7 @@ public class EstimateDAO {
         return generatedId;
     }
 
-    public List<Estimate> getProjectsByKekv(int kekv) {
+    public List<Estimate> findAllByKekv(int kekv) {
         List<Estimate> estimateProjectsByKekv = new ArrayList<>();
 
         String query = "";
@@ -85,7 +82,6 @@ public class EstimateDAO {
                             .justification(resultSet.getString("justification"))
                             .build());
                 }
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -94,7 +90,7 @@ public class EstimateDAO {
         return estimateProjectsByKekv;
     }
 
-    public Estimate getProjectById(long id) {
+    public Estimate findById(long id) {
         Estimate project = null;
         String query = "SELECT * FROM estimate WHERE id = ?";
 
@@ -119,7 +115,6 @@ public class EstimateDAO {
                             .build();
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +122,7 @@ public class EstimateDAO {
         return project;
     }
 
-    public void updateProjectToEstimate(Estimate updatedProject) {
+    public void update(Estimate project) {
         String query = """
                 UPDATE estimate SET 
                     kekv = ?, 
@@ -146,31 +141,30 @@ public class EstimateDAO {
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setString(1, updatedProject.getKekv());
-            preparedStatement.setString(2, updatedProject.getDkCode());
-            preparedStatement.setString(3, updatedProject.getProjectName());
-            preparedStatement.setString(4, updatedProject.getUnitOfMeasure());
-            preparedStatement.setInt(5, updatedProject.getQuantity());
-            preparedStatement.setBigDecimal(6, updatedProject.getPrice());
-            preparedStatement.setBigDecimal(7, updatedProject.getTotalPrice());
-            preparedStatement.setBigDecimal(8, updatedProject.getSpecialFund());
-            preparedStatement.setBigDecimal(9, updatedProject.getGeneralFund());
-            preparedStatement.setString(10, updatedProject.getJustification());
-            preparedStatement.setLong(11, updatedProject.getId());
+            preparedStatement.setString(1, project.getKekv());
+            preparedStatement.setString(2, project.getDkCode());
+            preparedStatement.setString(3, project.getProjectName());
+            preparedStatement.setString(4, project.getUnitOfMeasure());
+            preparedStatement.setInt(5, project.getQuantity());
+            preparedStatement.setBigDecimal(6, project.getPrice());
+            preparedStatement.setBigDecimal(7, project.getTotalPrice());
+            preparedStatement.setBigDecimal(8, project.getSpecialFund());
+            preparedStatement.setBigDecimal(9, project.getGeneralFund());
+            preparedStatement.setString(10, project.getJustification());
+            preparedStatement.setLong(11, project.getId());
 
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteProjectFromEstimateById(long projectId) {
+    public void delete(long id) {
         String query = "DELETE FROM estimate WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, projectId);
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

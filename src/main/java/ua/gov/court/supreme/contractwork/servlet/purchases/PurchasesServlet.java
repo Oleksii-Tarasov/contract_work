@@ -14,27 +14,32 @@ import java.util.List;
 public class PurchasesServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Purchase> projectsForPurchases2210 = workInspector.getProjectsFromPurchasesByKekv(2210);
-        req.setAttribute("projectsForPurchases2210", projectsForPurchases2210);
-        req.setAttribute("totalQuantity2210", workInspector.getPurchasesTotalAmounts(projectsForPurchases2210).getTotalQuantity());
-        req.setAttribute("totalPriceSum2210", workInspector.getPurchasesTotalAmounts(projectsForPurchases2210).getTotalPriceSum());
-        req.setAttribute("totalRemainingBalance2210", workInspector.getPurchasesTotalAmounts(projectsForPurchases2210).getTotalRemainingBalance());
+        List<Purchase> purchases2210 = contractWorkService.getPurchaseProjectsByKekv(2210);
+        req.setAttribute("purchases2210", purchases2210);
+        req.setAttribute("totalQuantity2210", contractWorkService.calculatePurchaseTotals(purchases2210).getTotalQuantity());
+        req.setAttribute("totalPriceSum2210", contractWorkService.calculatePurchaseTotals(purchases2210).getTotalPriceSum());
+        req.setAttribute("totalRemainingBalance2210", contractWorkService.calculatePurchaseTotals(purchases2210).getTotalRemainingBalance());
+        req.setAttribute("totalGeneralFund2210", contractWorkService.calculatePurchaseTotals(purchases2210).getTotalGeneralFund());
+        req.setAttribute("totalSpecialFund2210", contractWorkService.calculatePurchaseTotals(purchases2210).getTotalSpecialFund());
 
-        List<Purchase> projectsForPurchases2240 = workInspector.getProjectsFromPurchasesByKekv(2240);
-        req.setAttribute("projectsForPurchases2240", projectsForPurchases2240);
-        req.setAttribute("totalQuantity2240", workInspector.getPurchasesTotalAmounts(projectsForPurchases2240).getTotalQuantity());
-        req.setAttribute("totalPriceSum2240", workInspector.getPurchasesTotalAmounts(projectsForPurchases2240).getTotalPriceSum());
-        req.setAttribute("totalRemainingBalance2240", workInspector.getPurchasesTotalAmounts(projectsForPurchases2240).getTotalRemainingBalance());
+        List<Purchase> purchases2240 = contractWorkService.getPurchaseProjectsByKekv(2240);
+        req.setAttribute("purchases2240", purchases2240);
+        req.setAttribute("totalQuantity2240", contractWorkService.calculatePurchaseTotals(purchases2240).getTotalQuantity());
+        req.setAttribute("totalPriceSum2240", contractWorkService.calculatePurchaseTotals(purchases2240).getTotalPriceSum());
+        req.setAttribute("totalRemainingBalance2240", contractWorkService.calculatePurchaseTotals(purchases2240).getTotalRemainingBalance());
+        req.setAttribute("totalGeneralFund2240", contractWorkService.calculatePurchaseTotals(purchases2240).getTotalGeneralFund());
+        req.setAttribute("totalSpecialFund2240", contractWorkService.calculatePurchaseTotals(purchases2240).getTotalSpecialFund());
 
-        List<Purchase> projectsForPurchases3110 = workInspector.getProjectsFromPurchasesByKekv(3110);
-        req.setAttribute("projectsForPurchases3110", projectsForPurchases3110);
-        req.setAttribute("totalQuantity3110", workInspector.getPurchasesTotalAmounts(projectsForPurchases3110).getTotalQuantity());
-        req.setAttribute("totalPriceSum3110", workInspector.getPurchasesTotalAmounts(projectsForPurchases3110).getTotalPriceSum());
-        req.setAttribute("totalRemainingBalance3110", workInspector.getPurchasesTotalAmounts(projectsForPurchases3110).getTotalRemainingBalance());
+        List<Purchase> purchases3110 = contractWorkService.getPurchaseProjectsByKekv(3110);
+        req.setAttribute("purchases3110", purchases3110);
+        req.setAttribute("totalQuantity3110", contractWorkService.calculatePurchaseTotals(purchases3110).getTotalQuantity());
+        req.setAttribute("totalPriceSum3110", contractWorkService.calculatePurchaseTotals(purchases3110).getTotalPriceSum());
+        req.setAttribute("totalRemainingBalance3110", contractWorkService.calculatePurchaseTotals(purchases3110).getTotalRemainingBalance());
+        req.setAttribute("totalGeneralFund3110", contractWorkService.calculatePurchaseTotals(purchases3110).getTotalGeneralFund());
+        req.setAttribute("totalSpecialFund3110", contractWorkService.calculatePurchaseTotals(purchases3110).getTotalSpecialFund());
 
-        req.setAttribute("users", workInspector.getAllUsers());
-
-        req.setAttribute("projectStatuses", workInspector.getProjectStatuses());
+        req.setAttribute("projectStatuses", contractWorkService.getProjectStatuses());
+        req.setAttribute("users", contractWorkService.getAllUsers());
 
         getServletContext().getRequestDispatcher("/WEB-INF/views/purchases/purchases.jsp").forward(req, resp);
     }

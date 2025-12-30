@@ -11,7 +11,7 @@ import java.io.IOException;
 public class GenerateEstimateExcelServlet extends BaseWorkServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        byte[] excelData = workInspector.createEstimateExcelFile();
+        byte[] excelData = contractWorkService.createEstimateExcelFile();
 
         resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         resp.setHeader("Content-Disposition", "attachment; filename=\"koshtorys_2025.xlsx\"");

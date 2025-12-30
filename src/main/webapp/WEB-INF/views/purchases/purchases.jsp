@@ -29,7 +29,7 @@
                                 інвентар та обмундирування
                             </th>
                         </tr>
-                        <c:forEach var="project2210" items="${projectsForPurchases2210}" varStatus="projectStatus">
+                        <c:forEach var="project2210" items="${purchases2210}" varStatus="projectStatus">
                             <tr id="project-${project2210.id}">
                                 <td>
                                     <c:out value="${projectStatus.count}" />
@@ -97,7 +97,7 @@
                             <th colspan="9" style="text-align: left">Оплата послуг (крім комунальних)
                             </th>
                         </tr>
-                        <c:forEach var="project2240" items="${projectsForPurchases2240}" varStatus="projectStatus">
+                        <c:forEach var="project2240" items="${purchases2240}" varStatus="projectStatus">
                             <tr id="project-${project2240.id}">
                                 <td>
                                     <c:out value="${projectStatus.count}" />
@@ -166,7 +166,7 @@
                                 користування
                             </th>
                         </tr>
-                        <c:forEach var="project3110" items="${projectsForPurchases3110}" varStatus="projectStatus">
+                        <c:forEach var="project3110" items="${purchases3110}" varStatus="projectStatus">
                             <tr id="project-${project3110.id}">
                                 <td>
                                     <c:out value="${projectStatus.count}" />
@@ -313,7 +313,7 @@
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
 
-                        // --- 1. СКРОЛ/ПІДСВІЧУВАННЯ ---
+                        // --- 1. SCROLL/HIGHLIGHTING ---
                         const updatedProjectId = localStorage.getItem("updatedProjectId");
                         if (updatedProjectId) {
                             const row = document.getElementById("project-" + updatedProjectId);
@@ -327,7 +327,7 @@
                             localStorage.removeItem("updatedProjectId");
                         }
 
-                        // --- 2. ЕЛЕМЕНТИ ТА ЗМІННІ ---
+                        // --- 2. ELEMENTS AND VARIABLES ---
                         const actionModalEl = document.getElementById('actionModal');
                         const actionModal = new bootstrap.Modal(actionModalEl);
                         const modalTitle = document.getElementById("actionModalLabel");
@@ -349,7 +349,7 @@
                         let originalPaymentDueDate = "";
                         let paymentDueDateWasChanged = false;
 
-                        // --- 3. ФУНКЦІЇ КЕРУВАННЯ КНОПКОЮ ТА ЗБЕРЕЖЕННЯМ ---
+                        // --- 3. BUTTON CONTROL AND SAVE FUNCTIONS ---
                         function transformCloseToSave() {
                             if (modalCloseBtn.classList.contains('btn-save-check')) return;
                             modalCloseBtn.classList.remove('btn-close');
@@ -377,7 +377,7 @@
                             if (executorWasChanged) payload.executorId = executorSelectModal.value || null;
                             if (projectStatusChanged) payload.projectStatus = Number(projectStatusSelect.value);
 
-                            // Якщо реально нічого не змінили, просто закриваємо
+                            // If nothing really changed, just close
                             if (Object.keys(payload).length === 1) {
                                 actionModal.hide();
                                 return;
@@ -399,8 +399,8 @@
                                 });
                         }
 
-                        // --- 4. СЛУХАЧІ ПОДІЙ ---
-                        // Обробка кліку по кнопці (хрестик або галочка)
+                        // --- 4. EVENT LISTENERS ---
+                        // Handle button click (check or cross)
                         modalCloseBtn.addEventListener('click', function (e) {
                             if (this.classList.contains('btn-save-check')) {
                                 saveProjectChanges();
@@ -418,7 +418,7 @@
                             resetModalCloseButton();
                         });
 
-                        // --- 5. ВІДКРИТТЯ МОДАЛКИ (БЕЗ ЗМІН) ---
+                        // --- 5. OPEN MODAL (NO CHANGES) ---
                         window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus, paymentDueDate) {
                             resetModalCloseButton();
 
@@ -438,7 +438,7 @@
                             justificationField.value = justification || "";
                             originalJustification = justification || "";
 
-                            // Статус закупівлі
+                            // Purchase Status
                             const statusSelect = document.getElementById("projectStatusSelect");
                             statusSelect.innerHTML = "";
                             <c:forEach var="st" items="${projectStatuses}">
@@ -451,7 +451,7 @@
                             </c:forEach>
                             statusSelect.value = projectStatus !== "null" ? projectStatus : "";
 
-                            // Відповідальний виконавець
+                            // Responsible Executor
                             const select = document.getElementById("executorSelectModal");
                             select.innerHTML = '<option value="">-- не вибрано --</option>';
                             <c:forEach var="u" items="${users}">
@@ -471,7 +471,7 @@
                                     if (select.value !== serverId) select.value = "";
                                 });
 
-                            // Ціна та Дата
+                            // Price and Date
                             const priceInput = document.getElementById("contractPriceInput");
                             const formattedPrice = formatPriceForInput(contractPrice);
                             priceInput.value = formattedPrice;
@@ -485,7 +485,7 @@
                             actionModal.show();
                         };
 
-                        // --- 6. ВІДСТЕЖЕННЯ ЗМІН ---
+                        // --- 6. CHANGE TRACKING ---
                         executorSelectModal.addEventListener("change", () => { executorWasChanged = true; transformCloseToSave(); });
                         projectStatusSelect.addEventListener("change", () => { projectStatusChanged = true; transformCloseToSave(); });
 

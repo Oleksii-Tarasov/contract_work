@@ -28,15 +28,12 @@ public class CreateEstimateProjectServlet extends BaseWorkServlet {
             String unitOfMeasure = req.getParameter("unitOfMeasure");
             int quantity = Integer.parseInt(req.getParameter("quantity"));
             BigDecimal price = new BigDecimal(req.getParameter("price"));
-            BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(quantity));
-            // Trust calculated total or user input? Let's use user input for consistency but parsed as BigDecimal.
             BigDecimal totalPriceInput = new BigDecimal(req.getParameter("totalPrice"));
-
             BigDecimal specialFund = new BigDecimal(req.getParameter("specialFund"));
             BigDecimal generalFund = new BigDecimal(req.getParameter("generalFund"));
             String justification = req.getParameter("justification");
 
-            Estimate newProjectForEstimate = Estimate.builder()
+            Estimate newEstimateProject = Estimate.builder()
                     .kekv(kekv)
                     .dkCode(dkCode)
                     .projectName(projectName)
@@ -49,7 +46,7 @@ public class CreateEstimateProjectServlet extends BaseWorkServlet {
                     .justification(justification)
                     .build();
 
-            int projectId = workInspector.insertProjectToEstimate(newProjectForEstimate);
+            int projectId = contractWorkService.createEstimateProject(newEstimateProject);
             resp.sendRedirect(req.getContextPath() + "/estimate#project-" + projectId);
         } catch (Exception e) {
             e.printStackTrace();

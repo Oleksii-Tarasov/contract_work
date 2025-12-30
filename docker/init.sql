@@ -3,36 +3,36 @@ DROP TABLE IF EXISTS purchases;
 DROP TABLE IF EXISTS dk_code_inf;
 DROP TABLE IF EXISTS users;
 
--- Таблиця Користувачів
+-- Users Table
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,
                        last_name VARCHAR(255) NOT NULL,
                        first_name VARCHAR(255) NOT NULL,
                        middle_name VARCHAR(255) NOT NULL,
-                       short_name VARCHAR(100),            -- Прізвище та ініціали
-                       position VARCHAR(150),              -- Посада
+                       short_name VARCHAR(100),            -- Surname and initials
+                       position VARCHAR(150),              -- Position
                        login VARCHAR(100) UNIQUE NOT NULL,
                        password_hash VARCHAR(255) NOT NULL
 );
 
--- Таблиця Кошторису
+-- Estimate Table
 CREATE TABLE estimate
 (
-    id              SERIAL PRIMARY KEY,      -- Унікальний ідентифікатор запису
-    kekv            VARCHAR(10)    NOT NULL, -- Код КЕКВ
-    dk_code         VARCHAR(10)    NOT NULL, -- Код ДК
-    project_name    TEXT           NOT NULL, -- Назва предмета закупівлі
-    unit_of_measure VARCHAR(20)    NOT NULL, -- Одиниця виміру
-    quantity        NUMERIC(10, 2) NOT NULL, -- Кількість
-    price           NUMERIC(12, 2) NOT NULL, -- Ціна за одиницю
-    total_price     NUMERIC(12, 2) NOT NULL, -- Загальна сума
-    special_fund    NUMERIC(12, 2) NOT NULL, -- Кошти зі спеціального фонду
-    general_fund    NUMERIC(12, 2) NOT NULL, -- Кошти із загального фонду
-    justification   TEXT           NOT NULL, -- Обґрунтування закупівлі
-    informatization BOOLEAN DEFAULT FALSE    -- Належність проєкту до інформатизації
+    id              SERIAL PRIMARY KEY,      -- Unique record identifier
+    kekv            VARCHAR(10)    NOT NULL, -- KEKV Code
+    dk_code         VARCHAR(10)    NOT NULL, -- DK Code
+    project_name    TEXT           NOT NULL, -- Item name
+    unit_of_measure VARCHAR(20)    NOT NULL, -- Unit of measure
+    quantity        NUMERIC(10, 2) NOT NULL, -- Quantity
+    price           NUMERIC(12, 2) NOT NULL, -- Unit price
+    total_price     NUMERIC(12, 2) NOT NULL, -- Total amount
+    special_fund    NUMERIC(12, 2) NOT NULL, -- Special fund funds
+    general_fund    NUMERIC(12, 2) NOT NULL, -- General fund funds
+    justification   TEXT           NOT NULL, -- Purchase justification
+    informatization BOOLEAN DEFAULT FALSE    -- Is informatization project
 );
 
--- Таблиця Закупівель
+-- Purchases Table
 CREATE TABLE purchases
 (
     id                SERIAL PRIMARY KEY,
@@ -43,18 +43,18 @@ CREATE TABLE purchases
     quantity          NUMERIC(10, 2) NOT NULL,
     price             NUMERIC(12, 2) NOT NULL,
     total_price       NUMERIC(12, 2) NOT NULL,
-    contract_price    NUMERIC(12, 2) DEFAULT 0,         -- Сума Договору
-    remaining_balance NUMERIC(12, 2) NOT NULL,          -- Залишок коштів
-    payment_to        DATE,                             -- Гранична дата оплати по Договору
+    contract_price    NUMERIC(12, 2) DEFAULT 0,         -- Contract Amount
+    remaining_balance NUMERIC(12, 2) NOT NULL,          -- Remaining Balance
+    payment_to        DATE,                             -- Payment deadline per Contract
     special_fund      NUMERIC(12, 2) NOT NULL,
     general_fund      NUMERIC(12, 2) NOT NULL,
     justification     TEXT           NOT NULL,
     informatization   BOOLEAN DEFAULT FALSE,
     responsible_executor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-    status            SMALLINT DEFAULT 0                -- Статус закупівлі
+    status            SMALLINT DEFAULT 0                -- Purchase status
 );
 
--- Таблиця Кодів ДК інформатизації
+-- Informatization DK Codes Table
 CREATE TABLE dk_code_inf
 (
     id           SERIAL PRIMARY KEY,
@@ -70,32 +70,32 @@ DECLARE
     regex_pattern TEXT;
     prefix_part   TEXT;
 BEGIN
-    -- Проходимо по всіх еталонних кодах довідника (без суфікса)
+    -- Loop through all reference codes from the directory (without suffix)
     FOR ref_code IN SELECT SUBSTRING(dk_code FROM '^[0-9]+') FROM dk_code_inf
         LOOP
-        -- ref_code тепер містить тільки префікс, наприклад, '30200000' або '71200000'
+        -- ref_code now contains only the prefix, e.g., '30200000' or '71200000'
 
-        -- Перетворюємо еталонний код на шаблон регулярного виразу
+        -- Convert reference code to a regex pattern
         -- '30200000' -> '^302\d{5}'
 
-        -- Замінюємо 0 на \d (будь-яка цифра)
-        -- '30200000' стає '302\d\d\d\d\d'
+        -- Replace 0 with \d (any digit)
+        -- '30200000' becomes '302\d\d\d\d\d'
             prefix_part := REPLACE(ref_code, '0', '\d');
 
-            -- Формуємо повний регулярний вираз:
-            -- Початок (^) + наш шаблон префікса + дефіс (-) + будь-яка цифра (\d) + кінець ($)
+            -- Form the full regular expression:
+            -- Start (^) + our prefix pattern + hyphen (-) + any digit (\d) + end ($)
             regex_pattern := '^' || prefix_part || '-\d$';
 
-            -- Перевіряємо, чи вхідний код відповідає цьому регулярному виразу,
-            -- Наприклад, '302256000-9' ~ '^302\d{5}-\d$'
+            -- Check if the input code matches this regex pattern,
+            -- For example, '302256000-9' ~ '^302\d{5}-\d$'
             IF NEW.dk_code ~ regex_pattern THEN
                 code_exists := TRUE;
-                EXIT; -- Знайшли збіг, виходимо з циклу
+                EXIT; -- Match found, exit loop
             END IF;
 
         END LOOP;
 
-    -- Встановлюємо фінальне значення
+    -- Set final value
     IF code_exists THEN
         NEW.informatization = TRUE;
     ELSE
@@ -107,7 +107,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Створення тригерів
+-- Create triggers
 DROP TRIGGER IF EXISTS trigger_set_informatization_estimate ON estimate;
 DROP TRIGGER IF EXISTS trigger_set_informatization_purchases ON purchases;
 

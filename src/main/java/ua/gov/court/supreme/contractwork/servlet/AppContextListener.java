@@ -1,6 +1,6 @@
 package ua.gov.court.supreme.contractwork.servlet;
 
-import ua.gov.court.supreme.contractwork.service.WorkInspector;
+import ua.gov.court.supreme.contractwork.service.ContractWorkService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -13,7 +13,7 @@ public class AppContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Server started – initializing...");
         ServletContext servletContext = sce.getServletContext();
-        WorkInspector workInspector = new WorkInspector();
-        servletContext.setAttribute("workInspector", workInspector);
+        ContractWorkService contractWorkService = new ContractWorkService();
+        sce.getServletContext().setAttribute("contractWorkService", contractWorkService);
     }
 }

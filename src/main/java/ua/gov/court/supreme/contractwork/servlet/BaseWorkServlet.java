@@ -1,21 +1,21 @@
 package ua.gov.court.supreme.contractwork.servlet;
 
-import ua.gov.court.supreme.contractwork.service.WorkInspector;
+import ua.gov.court.supreme.contractwork.service.ContractWorkService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 public abstract class BaseWorkServlet extends HttpServlet {
-    protected WorkInspector workInspector;
+    protected ContractWorkService contractWorkService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        workInspector = (WorkInspector) config.getServletContext().getAttribute("workInspector");
+        contractWorkService = (ContractWorkService) config.getServletContext().getAttribute("contractWorkService");
 
-        if (workInspector == null) {
-            throw new ServletException("WorkInspector is not initialized");
+        if (contractWorkService == null) {
+            throw new ServletException("ContractWorkService is not initialized");
         }
     }
 }

@@ -1,7 +1,6 @@
 package ua.gov.court.supreme.contractwork.dao;
 
 import ua.gov.court.supreme.contractwork.db.PostgresConnector;
-import ua.gov.court.supreme.contractwork.dto.ProjectUpdateRequestDTO;
 import ua.gov.court.supreme.contractwork.enums.ProjectStatus;
 import ua.gov.court.supreme.contractwork.model.Purchase;
 import ua.gov.court.supreme.contractwork.model.User;
@@ -19,7 +18,7 @@ public class PurchaseDAO {
         this.postgresConnector = new PostgresConnector();
     }
 
-    public void insertProjectsFromEstimate() {
+    public void importFromEstimates() {
         String query = """
                 TRUNCATE TABLE purchases RESTART IDENTITY;
                 INSERT INTO purchases (kekv, dk_code, project_name, unit_of_measure,
@@ -37,7 +36,7 @@ public class PurchaseDAO {
         }
     }
 
-    public List<Purchase> getProjectsByKekv(int kekv) {
+    public List<Purchase> findAllByKekv(int kekv) {
         List<Purchase> purchasesProjectsByKekv = new ArrayList<>();
 
         String query = switch (kekv) {
@@ -103,8 +102,8 @@ public class PurchaseDAO {
         return purchasesProjectsByKekv;
     }
 
-    public Purchase getProjectById(long id) {
-        Purchase purchase = null;
+    public Purchase findById(long id) {
+        Purchase project = null;
         String query = "SELECT p.*, u.* FROM purchases p " +
                 "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.id = ?";
 
@@ -119,7 +118,7 @@ public class PurchaseDAO {
                     long executorId = resultSet.getLong("responsible_executor_id");
 
                     if (executorId > 0) {
-                       responsibleExecutor = User.builder()
+                        responsibleExecutor = User.builder()
                                 .id(executorId)
                                 .lastName(resultSet.getString("last_name"))
                                 .firstName(resultSet.getString("first_name"))
@@ -135,7 +134,7 @@ public class PurchaseDAO {
                     int statusInt = resultSet.getInt("status");
                     ProjectStatus projectStatus = ProjectStatus.fromInt(statusInt);
 
-                    purchase = Purchase.builder()
+                    project = Purchase.builder()
                             .id(resultSet.getLong("id"))
                             .kekv(resultSet.getString("kekv"))
                             .dkCode(resultSet.getString("dk_code"))
@@ -156,15 +155,14 @@ public class PurchaseDAO {
                             .build();
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return purchase;
+        return project;
     }
 
-    public Long getExecutorIdFromProject(long projectId) {
+    public Long findExecutorIdByProjectId(long projectId) {
         String query = "SELECT responsible_executor_id FROM purchases WHERE id = ?";
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -173,17 +171,16 @@ public class PurchaseDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                long id = resultSet.getLong(1);
-                return resultSet.wasNull() ? null : id;
+                long executorId = resultSet.getLong(1);
+                return resultSet.wasNull() ? null : executorId;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void updateProjectExecutor(long projectId, Long executorId) {
+    public void updateExecutor(long projectId, Long executorId) {
         String query = "UPDATE purchases SET responsible_executor_id = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
@@ -213,13 +210,14 @@ public class PurchaseDAO {
                 preparedStatement.setString(1, justification.trim());
             }
             preparedStatement.setLong(2, projectId);
+
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void updateProjectStatus(long projectId, ProjectStatus status) {
+    public void updateStatus(long projectId, ProjectStatus status) {
         String query = "UPDATE purchases SET status = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
@@ -229,8 +227,8 @@ public class PurchaseDAO {
             } else {
                 preparedStatement.setInt(1, status.getDbValue());
             }
-
             preparedStatement.setLong(2, projectId);
+
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -256,13 +254,12 @@ public class PurchaseDAO {
         String query = "UPDATE purchases SET payment_to = ? WHERE id = ?";
 
         try (Connection connection = postgresConnector.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (paymentDate != null) {
                 preparedStatement.setDate(1, Date.valueOf(paymentDate));
             } else {
                 preparedStatement.setNull(1, Types.DATE);
             }
-
             preparedStatement.setLong(2, projectId);
 
             preparedStatement.executeUpdate();
@@ -271,42 +268,7 @@ public class PurchaseDAO {
         }
     }
 
-    public void updatePurchasesFields(ProjectUpdateRequestDTO dto) {
-
-        long projectId = dto.getId();
-
-        // 1. Обґрунтування
-        if (dto.getJustification() != null) {
-            updateJustification(projectId, dto.getJustification());
-        }
-
-        // 2. Статус
-        if (dto.getProjectStatus() != null) {
-            updateProjectStatus(projectId, dto.getProjectStatus());
-        }
-
-        // 3. Виконавець
-        if (dto.getExecutorId() != null) {
-            updateProjectExecutor(projectId, dto.getExecutorId());
-        }
-
-        // 4. Сума договору + залишок
-        if (dto.getContractPrice() != null) {
-            Purchase purchase = getProjectById(projectId);
-            BigDecimal contractPrice = dto.getContractPrice();
-            BigDecimal remainingBalance = purchase.getTotalPrice().subtract(contractPrice);
-            updateContractPrice(projectId, contractPrice, remainingBalance);
-        }
-
-        // 5. Оплата до
-        if (dto.getPaymentTo() != null || dto.getPaymentTo() == null) {
-            // null теж свідоме оновлення
-            updatePaymentDueDate(projectId, dto.getPaymentTo());
-        }
-    }
-
-
-    public void updateProjectToPurchases(Purchase updatedProject) {
+    public void update(Purchase project) {
         String query = """
                 UPDATE purchases SET 
                     kekv = ?, 
@@ -328,49 +290,38 @@ public class PurchaseDAO {
                 """;
 
         try (Connection connection = postgresConnector.getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            ps.setString(1, updatedProject.getKekv());
-            ps.setString(2, updatedProject.getDkCode());
-            ps.setString(3, updatedProject.getProjectName());
-            ps.setString(4, updatedProject.getJustification());
-            ps.setString(5, updatedProject.getUnitOfMeasure());
-            ps.setDouble(6, updatedProject.getQuantity());
-            ps.setBigDecimal(7, updatedProject.getPrice());
-            ps.setBigDecimal(8, updatedProject.getTotalPrice());
-            ps.setBigDecimal(9, updatedProject.getSpecialFund());
-            ps.setBigDecimal(10, updatedProject.getGeneralFund());
-
-            // Статус (int)
-            ps.setInt(11, updatedProject.getProjectStatus().getDbValue());
-
-            // Виконавець (Long або NULL)
-            if (updatedProject.getResponsibleExecutor() != null && updatedProject.getResponsibleExecutor().getId() > 0) {
-                ps.setLong(12, updatedProject.getResponsibleExecutor().getId());
+            preparedStatement.setString(1, project.getKekv());
+            preparedStatement.setString(2, project.getDkCode());
+            preparedStatement.setString(3, project.getProjectName());
+            preparedStatement.setString(4, project.getJustification());
+            preparedStatement.setString(5, project.getUnitOfMeasure());
+            preparedStatement.setDouble(6, project.getQuantity());
+            preparedStatement.setBigDecimal(7, project.getPrice());
+            preparedStatement.setBigDecimal(8, project.getTotalPrice());
+            preparedStatement.setBigDecimal(9, project.getSpecialFund());
+            preparedStatement.setBigDecimal(10, project.getGeneralFund());
+            // Status (int)
+            preparedStatement.setInt(11, project.getProjectStatus().getDbValue());
+            // Executor (Long or NULL)
+            if (project.getResponsibleExecutor() != null && project.getResponsibleExecutor().getId() > 0) {
+                preparedStatement.setLong(12, project.getResponsibleExecutor().getId());
             } else {
-                ps.setNull(12, Types.BIGINT);
+                preparedStatement.setNull(12, Types.BIGINT);
             }
-
-            // Сума договору
-            ps.setBigDecimal(13, updatedProject.getContractPrice());
-
-            // Дата оплати (Date або NULL)
-            if (updatedProject.getPaymentTo() != null) {
-                ps.setDate(14, Date.valueOf(updatedProject.getPaymentTo()));
+            preparedStatement.setBigDecimal(13, project.getContractPrice());
+            if (project.getPaymentTo() != null) {
+                preparedStatement.setDate(14, Date.valueOf(project.getPaymentTo()));
             } else {
-                ps.setNull(14, Types.DATE);
+                preparedStatement.setNull(14, Types.DATE);
             }
+            preparedStatement.setBigDecimal(15, project.getRemainingBalance());
+            preparedStatement.setLong(16, project.getId());
 
-            // Залишок (розраховується в сервлеті)
-            ps.setBigDecimal(15, updatedProject.getRemainingBalance());
-
-            // ID для WHERE
-            ps.setLong(16, updatedProject.getId());
-
-            ps.executeUpdate();
-
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Помилка при оновленні проєкту: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating project: " + e.getMessage(), e);
         }
     }
 }

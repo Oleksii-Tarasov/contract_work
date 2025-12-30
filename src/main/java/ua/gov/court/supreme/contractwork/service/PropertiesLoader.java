@@ -29,7 +29,7 @@ public class PropertiesLoader {
         return properties.getProperty(key);
     }
 
-    //    Postgres DB
+    // Postgres DB
     public String getPostgresUrl() {
         return getProperty("postgres.db.url");
     }

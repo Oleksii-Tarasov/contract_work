@@ -18,13 +18,4 @@ public class User {
     private String position;
     private String login;
     private String password;
-
-    public User(long id, String lastName, String firstName,  String middleName, String shortName, String position) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.shortName = shortName;
-        this.position = position;
-    }
 }

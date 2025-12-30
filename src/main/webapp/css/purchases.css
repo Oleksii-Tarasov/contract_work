@@ -5,7 +5,8 @@
 /*Table*/
 .table {
     font-family: 'Roboto Condensed', sans-serif;
-    font-weight: 300; /* light */
+    font-weight: 300;
+    /* light */
     font-size: 16px;
 }
 
@@ -14,16 +15,19 @@
     border-bottom: 2px solid black !important;
 }
 
-/* колір для рядків де проєкт стосується інформатизації */
+/* color for rows related to informatization */
 .informatization-row {
-    background-color: #ddebf7 !important; /* ніжний блакитний */
+    background-color: #ddebf7 !important;
+    /* light blue */
 }
 
 .project-row {
-    scroll-margin-top: 200px; /* під header */
+    scroll-margin-top: 200px;
+    /* under header */
 }
 
-.table td, .table th {
+.table td,
+.table th {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -34,86 +38,107 @@
     vertical-align: middle;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
 }
 
 .table th:nth-child(1),
-.table td:nth-child(1) {  /* № з/п */
+.table td:nth-child(1) {
+    /* № */
     min-width: 5px;
     width: 6%;
     text-align: center;
 }
+
 .table th:nth-child(2),
-.table td:nth-child(2) {  /* Найменування */
+.table td:nth-child(2) {
+    /* Назва предмета закупівлі */
     min-width: 150px;
     width: 35%;
 }
+
 .table tr td:nth-child(2) {
     cursor: pointer;
 }
+
 .table th:nth-child(3),
-.table td:nth-child(3) {  /* Одиниця виміру */
+.table td:nth-child(3) {
+    /* Одиниця виміру */
     min-width: 50px;
     width: 5%;
     text-align: center;
 }
+
 .table th:nth-child(4),
-.table td:nth-child(4) {  /* Кількість */
+.table td:nth-child(4) {
+    /* Кількість */
     min-width: 50px;
     width: 5%;
     text-align: center;
 }
+
 .table th:nth-child(5),
-.table td:nth-child(5) {  /* Ціна, грн */
+.table td:nth-child(5) {
+    /* Ціна за одиницю, грн. */
     min-width: 90px;
     width: 5%;
     text-align: center;
 }
+
 .table th:nth-child(6),
-.table td:nth-child(6) {  /* Сума по кошторису, грн */
-    min-width: 100px;
-    width: 5%;
-    text-align: center;
-}
-.table th:nth-child(7),
-.table td:nth-child(7) {  /* Сума по договору, грн */
-    min-width: 100px;
-    width: 5%;
-    text-align: center;
-}
-.table th:nth-child(8),
-.table td:nth-child(8) {  /* Залишок */
-    min-width: 100px;
-    width: 5%;
-    text-align: center;
-}
-.table th:nth-child(9),
-.table td:nth-child(9) {  /* Оплата до */
+.table td:nth-child(6) {
+    /* Сума по кошторису, грн. */
     min-width: 100px;
     width: 5%;
     text-align: center;
 }
 
-/* Статус закупівлі */
+.table th:nth-child(7),
+.table td:nth-child(7) {
+    /* Сума Договору, грн. */
+    min-width: 100px;
+    width: 5%;
+    text-align: center;
+}
+
+.table th:nth-child(8),
+.table td:nth-child(8) {
+    /* Залишок */
+    min-width: 100px;
+    width: 5%;
+    text-align: center;
+}
+
+.table th:nth-child(9),
+.table td:nth-child(9) {
+    /* Оплата до */
+    min-width: 100px;
+    width: 5%;
+    text-align: center;
+}
+
+/* Purchase Status */
 .status-new {
     background-color: transparent;
 }
 
 .status-in-progress {
-    background-color: #fff2cc !important;  /* жовтий */
+    background-color: #fff2cc !important;
+    /* yellow */
 }
 
 .status-completed {
-    background-color: #e2efda !important;  /* зелений */
+    background-color: #e2efda !important;
+    /* green */
 }
 
 .status-cancelled {
-    background-color: #fce4d6 !important;  /* червоний */
+    background-color: #fce4d6 !important;
+    /* red */
 }
 
-/* селектор */
+/* selector */
 .executor-select-clean {
     border: none !important;
     background-color: transparent !important;
@@ -132,34 +157,37 @@
     cursor: pointer;
 }
 
-/* При фокусі не малювати рамок */
+/* Remove outline on focus */
 .executor-select-clean:focus {
     outline: none !important;
     box-shadow: none !important;
 }
 
-/* Підсвічування першої комірки (№) */
-/* Анімація "Затримка + Затухання" */
+/* Highlighting the first cell (No.) */
+/* Animation "Delay + Fade" */
 @keyframes fadeBlueHold {
     0% {
         /*background-color: #3164ff;*/
         background-color: #00264d;
         color: white;
     }
+
     80% {
         background-color: #00264d;
         color: white;
     }
+
     100% {
         background-color: transparent;
         color: inherit;
     }
 }
+
 .highlight-cell {
     animation: fadeBlueHold 3s ease-in-out forwards;
 }
 
-/* Стиль для кнопки-галочки */
+/* Checkmark button style */
 .btn-save-check {
     background: none !important;
     border: none !important;
@@ -171,7 +199,7 @@
     padding: 0;
     cursor: pointer;
 
-    /* Розташування */
+    /* Position */
     display: flex;
     align-items: center;
     justify-content: center;
