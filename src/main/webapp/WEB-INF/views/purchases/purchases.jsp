@@ -315,23 +315,38 @@
 
                         // --- 1. SCROLL/HIGHLIGHTING ---
                         // --- 1. SCROLL/HIGHLIGHTING ---
+                        // Restore scroll position
+                        const savedScroll = localStorage.getItem("scrollPositionPurchases");
+                        if (savedScroll !== null) {
+                            window.scrollTo({
+                                top: parseInt(savedScroll),
+                                behavior: "instant"
+                            });
+                            localStorage.removeItem("scrollPositionPurchases");
+                        }
+
+                        // Determine target project
                         let updatedProjectId = localStorage.getItem("updatedProjectId");
                         if (!updatedProjectId) {
                             const urlParams = new URLSearchParams(window.location.search);
                             updatedProjectId = urlParams.get("updatedId");
                         }
+                        // Fallback to hash if needed (handling both #project-ID and direct ID)
+                        if (!updatedProjectId && window.location.hash && window.location.hash.startsWith("#project-")) {
+                            updatedProjectId = window.location.hash.replace("#project-", "");
+                        }
 
                         if (updatedProjectId) {
                             const row = document.getElementById("project-" + updatedProjectId);
                             if (row) {
-                                // Add highlight class to the first cell (or the whole row if preferred, sticking to user request 'first column')
                                 const firstCell = row.querySelector("td:first-child");
                                 if (firstCell) {
-                                    // Make sure this class exists in CSS, or use inline style
-                                    // Checking CSS, if .highlight-cell is missing, we might need to add it or use .table-warning
                                     firstCell.classList.add("highlight-cell");
                                 }
-                                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                // Slight delay to ensure scroll restore is finished and layout is stable
+                                setTimeout(() => {
+                                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, 100);
                             }
                             localStorage.removeItem("updatedProjectId");
                         }
@@ -520,4 +535,8 @@
                         if (isNaN(num)) return "";
                         return num.toLocaleString("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     }
+
+                    window.addEventListener("beforeunload", function () {
+                        localStorage.setItem("scrollPositionPurchases", window.scrollY);
+                    });
                 </script>
