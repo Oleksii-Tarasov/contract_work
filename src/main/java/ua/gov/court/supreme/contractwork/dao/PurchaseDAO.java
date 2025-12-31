@@ -104,8 +104,10 @@ public class PurchaseDAO {
 
     public Purchase findById(long id) {
         Purchase project = null;
-        String query = "SELECT p.*, u.* FROM purchases p " +
-                "LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.id = ?";
+        String query = """
+                SELECT p.*, u.* FROM purchases p 
+                LEFT JOIN users u ON p.responsible_executor_id = u.id WHERE p.id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -163,7 +165,9 @@ public class PurchaseDAO {
     }
 
     public Long findExecutorIdByProjectId(long projectId) {
-        String query = "SELECT responsible_executor_id FROM purchases WHERE id = ?";
+        String query = """
+                SELECT responsible_executor_id FROM purchases WHERE id = ?
+                """;
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -181,7 +185,9 @@ public class PurchaseDAO {
     }
 
     public void updateExecutor(long projectId, Long executorId) {
-        String query = "UPDATE purchases SET responsible_executor_id = ? WHERE id = ?";
+        String query = """
+                UPDATE purchases SET responsible_executor_id = ? WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -200,7 +206,9 @@ public class PurchaseDAO {
     }
 
     public void updateJustification(long projectId, String justification) {
-        String query = "UPDATE purchases SET justification = ? WHERE id = ?";
+        String query = """
+                UPDATE purchases SET justification = ? WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -218,7 +226,9 @@ public class PurchaseDAO {
     }
 
     public void updateStatus(long projectId, ProjectStatus status) {
-        String query = "UPDATE purchases SET status = ? WHERE id = ?";
+        String query = """
+                UPDATE purchases SET status = ? WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -236,7 +246,9 @@ public class PurchaseDAO {
     }
 
     public void updateContractPrice(long projectId, BigDecimal contractPrice, BigDecimal remainingBalance) {
-        String query = "UPDATE purchases SET contract_price = ?, remaining_balance = ? WHERE id = ?";
+        String query = """
+                UPDATE purchases SET contract_price = ?, remaining_balance = ? WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -251,7 +263,9 @@ public class PurchaseDAO {
     }
 
     public void updatePaymentDueDate(long projectId, LocalDate paymentDate) {
-        String query = "UPDATE purchases SET payment_to = ? WHERE id = ?";
+        String query = """
+                UPDATE purchases SET payment_to = ? WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

@@ -15,11 +15,7 @@
     border-bottom: 2px solid black !important;
 }
 
-/* color for rows related to informatization */
-.informatization-row {
-    background-color: #ddebf7 !important;
-    /* light blue */
-}
+
 
 tr {
     scroll-margin-top: 200px;

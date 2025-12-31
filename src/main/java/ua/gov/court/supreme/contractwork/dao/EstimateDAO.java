@@ -52,15 +52,12 @@ public class EstimateDAO {
     public List<Estimate> findAllByKekv(int kekv) {
         List<Estimate> estimateProjectsByKekv = new ArrayList<>();
 
-        String query = "";
-
-        if (kekv == 2210) {
-            query = "SELECT * FROM estimate WHERE kekv = '2210' ORDER BY id ASC";
-        } else if (kekv == 2240) {
-            query = "SELECT * FROM estimate WHERE kekv = '2240' ORDER BY id ASC";
-        } else if (kekv == 3110) {
-            query = "SELECT * FROM estimate WHERE kekv = '3110' ORDER BY id ASC";
-        }
+        String query = switch (kekv) {
+            case 2210 -> "SELECT * FROM estimate WHERE kekv = '2210' ORDER BY id ASC";
+            case 2240 -> "SELECT * FROM estimate WHERE kekv = '2240' ORDER BY id ASC";
+            case 3110 -> "SELECT * FROM estimate WHERE kekv = '3110' ORDER BY id ASC";
+            default -> "";
+        };
 
         if (!query.isEmpty()) {
             try (Connection connection = postgresConnector.getConnection();
@@ -92,7 +89,9 @@ public class EstimateDAO {
 
     public Estimate findById(long id) {
         Estimate project = null;
-        String query = "SELECT * FROM estimate WHERE id = ?";
+        String query = """
+                SELECT * FROM estimate WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -160,7 +159,9 @@ public class EstimateDAO {
     }
 
     public void delete(long id) {
-        String query = "DELETE FROM estimate WHERE id = ?";
+        String query = """
+                DELETE FROM estimate WHERE id = ?
+                """;
 
         try (Connection connection = postgresConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

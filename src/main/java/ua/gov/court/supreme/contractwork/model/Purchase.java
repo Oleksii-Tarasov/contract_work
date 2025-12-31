@@ -21,4 +21,11 @@ public class Purchase extends Estimate {
     private LocalDate paymentTo;
     private User responsibleExecutor;
     private ProjectStatus projectStatus;
+
+    public String getFormattedPaymentTo() {
+        if (paymentTo == null) {
+            return "";
+        }
+        return paymentTo.format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
 }

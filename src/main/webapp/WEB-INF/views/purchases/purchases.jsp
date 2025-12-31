@@ -64,7 +64,7 @@
                                     <fmt:formatNumber value="${project2210.remainingBalance}" pattern="#,##0.00" />
                                 </td>
                                 <td>
-                                    <c:out value="${project2210.paymentTo}" />
+                                    <c:out value="${project2210.formattedPaymentTo}" />
                                 </td>
                                 <td class="${project2210.projectStatus.cssClass}">
                                     <c:out
@@ -132,7 +132,7 @@
                                     <fmt:formatNumber value="${project2240.remainingBalance}" pattern="#,##0.00" />
                                 </td>
                                 <td>
-                                    <c:out value="${project2240.paymentTo}" />
+                                    <c:out value="${project2240.formattedPaymentTo}" />
                                 </td>
                                 <td class="${project2240.projectStatus.cssClass}">
                                     <c:out
@@ -201,7 +201,7 @@
                                     <fmt:formatNumber value="${project3110.remainingBalance}" pattern="#,##0.00" />
                                 </td>
                                 <td>
-                                    <c:out value="${project3110.paymentTo}" />
+                                    <c:out value="${project3110.formattedPaymentTo}" />
                                 </td>
                                 <td class="${project3110.projectStatus.cssClass}">
                                     <c:out
@@ -314,12 +314,21 @@
                     document.addEventListener("DOMContentLoaded", function () {
 
                         // --- 1. SCROLL/HIGHLIGHTING ---
-                        const updatedProjectId = localStorage.getItem("updatedProjectId");
+                        // --- 1. SCROLL/HIGHLIGHTING ---
+                        let updatedProjectId = localStorage.getItem("updatedProjectId");
+                        if (!updatedProjectId) {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            updatedProjectId = urlParams.get("updatedId");
+                        }
+
                         if (updatedProjectId) {
                             const row = document.getElementById("project-" + updatedProjectId);
                             if (row) {
+                                // Add highlight class to the first cell (or the whole row if preferred, sticking to user request 'first column')
                                 const firstCell = row.querySelector("td:first-child");
                                 if (firstCell) {
+                                    // Make sure this class exists in CSS, or use inline style
+                                    // Checking CSS, if .highlight-cell is missing, we might need to add it or use .table-warning
                                     firstCell.classList.add("highlight-cell");
                                 }
                                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
