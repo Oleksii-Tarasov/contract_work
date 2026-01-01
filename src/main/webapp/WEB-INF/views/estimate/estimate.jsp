@@ -22,8 +22,7 @@
             <tr class="black-borders">
                 <th>2210</th>
                 <th colspan="8" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т. ч.
-                    м'який
-                    інвентар та обмундирування
+                    м'який інвентар та обмундирування
                 </th>
             </tr>
             <c:forEach var="project2210" items="${projectsForEstimate2210}" varStatus="projectStatus">
@@ -228,9 +227,7 @@
             <div class="modal-body d-none" id="confirmDeleteBody">
                 <p>Ви впевнені, що хочете видалити проєкт <strong id="projectNameConfirmPlaceholder"></strong>?
                 </p>
-                <!-- Button triggering deletion servlet -->
                 <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
-                <!-- Cancel button returning to first body -->
                 <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати</button>
             </div>
         </div>
@@ -244,15 +241,9 @@
 <script>
     var actionModalEl = document.getElementById('actionModal');
     var actionModal = new bootstrap.Modal(actionModalEl);
-
-    // Modal title element
     var modalTitle = document.getElementById("actionModalLabel");
-
-    // Body 1 elements
     var actionBody = document.getElementById("actionBody");
     var editButton = document.getElementById("editButton");
-
-    // Body 2 elements (confirmation)
     var confirmDeleteBody = document.getElementById("confirmDeleteBody");
     var projectNameConfirmPlaceholder = document.getElementById("projectNameConfirmPlaceholder");
     var confirmDeleteButton = document.getElementById("confirmDeleteButton");
@@ -264,15 +255,12 @@
         currentProjectId = projectId;
         currentProjectName = projectName;
 
-        // Ensure we always show action selection body first
         actionBody.classList.remove('d-none');
         confirmDeleteBody.classList.add('d-none');
 
-        // SET TITLE HERE:
         modalTitle.textContent = projectName;
 
         editButton.href = "${pageContext.request.contextPath}/estimate/update-project?id=" + projectId;
-        // editButton.href = contextPath +"/update-project?id=" + projectId;
 
         actionModal.show();
     }
@@ -292,7 +280,6 @@
             if (!currentProjectId) return;
 
             fetch("${pageContext.request.contextPath}/estimate/delete-project", {
-                // fetch(contextPath + "/delete-project", {
                 method: "POST",
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: "id=" + encodeURIComponent(currentProjectId)
@@ -306,10 +293,12 @@
                             row.style.transition = "background-color 0.5s ease, opacity 0.5s ease";
                             row.style.backgroundColor = "#f8d7da";
                             row.style.opacity = "0";
-                            setTimeout(() => row.remove(), 500);
+                            setTimeout(() => {
+                                row.remove();
+                                recalculateNumbering();
+                            }, 500);
                         }
 
-                        // Close modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
                         modal.hide();
                     } else {
@@ -321,6 +310,21 @@
                     alert("Виникла помилка при видаленні проєкту.");
                 });
         };
+    }
+
+    function recalculateNumbering() {
+        const rows = document.querySelectorAll(".table tr");
+        let counter = 1;
+        rows.forEach(row => {
+            if (row.classList.contains("black-borders")) {
+                counter = 1;
+            } else if (row.id && row.id.startsWith("project-")) {
+                const firstCell = row.querySelector("td:first-child");
+                if (firstCell) {
+                    firstCell.textContent = counter++;
+                }
+            }
+        });
     }
 
     // Function to cancel deletion (return to first body)
@@ -335,9 +339,6 @@
 
     // Reset modal state when closed by any means (x-button, click outside)
     actionModalEl.addEventListener('hidden.bs.modal', function (event) {
-        // We don't call cancelDelete() here directly to avoid
-        // possible Bootstrap modal lifecycle conflicts.
-        // openActionModal() resetting state on next open is sufficient.
         currentProjectId = null;
         currentProjectName = '';
     });

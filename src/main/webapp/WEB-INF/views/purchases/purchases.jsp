@@ -25,8 +25,7 @@
             <tr class="black-borders">
                 <th>2210</th>
                 <th colspan="9" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т.
-                    ч. м'який
-                    інвентар та обмундирування
+                    ч. м'який інвентар та обмундирування
                 </th>
             </tr>
             <c:forEach var="project2210" items="${purchases2210}" varStatus="projectStatus">
@@ -204,7 +203,8 @@
                         <c:out value="${project3110.formattedPaymentTo}"/>
                     </td>
                     <td class="${project3110.projectStatus.cssClass}">
-                        <c:out value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}"/>
+                        <c:out
+                                value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}"/>
                     </td>
                 </tr>
             </c:forEach>
@@ -230,6 +230,7 @@
         </table>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel"
      aria-hidden="true">
@@ -252,6 +253,7 @@
                             <select id="executorSelectModal" class="executor-select-clean"></select>
                         </p>
                     </div>
+
                     <div class="col-6">
                         <strong>Статус закупівлі:</strong>
                         <select id="projectStatusSelect" class="executor-select-clean"></select>
@@ -286,8 +288,7 @@
 
                     <p class="mt-3">
                         <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
-                        <button type="button" class="btn btn-danger"
-                                onclick="confirmDelete()">Видалити
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Видалити
                         </button>
                     </p>
                 </div>
@@ -295,6 +296,7 @@
         </div>
     </div>
 </div>
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
      aria-hidden="true">
@@ -310,8 +312,7 @@
                         id="projectNameConfirmPlaceholder"></strong>?</p>
                 <div class="d-flex justify-content-end">
                     <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
-                    <button type="button" class="btn btn-secondary"
-                            onclick="cancelDelete()">Скасувати
+                    <button type="button" class="btn btn-secondary" onclick="cancelDelete()">Скасувати
                     </button>
                 </div>
             </div>
@@ -581,7 +582,21 @@
                     })
                     .then(data => {
                         if (data.success) {
-                            location.reload();
+                            // Hide the modal first
+                            deleteModal.hide();
+
+                            const row = document.getElementById("project-" + currentProjectId);
+                            if (row) {
+                                row.style.transition = "background-color 0.5s ease, opacity 0.5s ease";
+                                row.style.backgroundColor = "#f8d7da";
+                                row.style.opacity = "0";
+                                setTimeout(() => {
+                                    row.remove();
+                                    recalculateNumbering();
+                                }, 500);
+                            }
+
+                            currentProjectId = null;
                         } else {
                             alert("Помилка при видаленні: " + (data.message || "Невідома помилка"));
                         }
@@ -623,6 +638,21 @@
         const num = Number(value);
         if (isNaN(num)) return "";
         return num.toLocaleString("uk-UA", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    function recalculateNumbering() {
+        const rows = document.querySelectorAll(".table tr");
+        let counter = 1;
+        rows.forEach(row => {
+            if (row.classList.contains("black-borders")) {
+                counter = 1;
+            } else if (row.id && row.id.startsWith("project-")) {
+                const firstCell = row.querySelector("td:first-child");
+                if (firstCell) {
+                    firstCell.textContent = counter++;
+                }
+            }
+        });
     }
 
     window.addEventListener("beforeunload", function () {
