@@ -93,6 +93,10 @@ public class ContractWorkService {
     public void updatePurchaseProject(Purchase projectToUpdate) {
         purchaseDAO.update(projectToUpdate);
     }
+    
+    public void deletePurchaseProject(long id) {
+        purchaseDAO.delete(id);
+    }
 
     public ProjectsTotalsDTO calculatePurchaseTotals(List<Purchase> purchaseProjects) {
         if (purchaseProjects == null) {
@@ -104,7 +108,6 @@ public class ContractWorkService {
         BigDecimal remainingBalance = purchaseProjects.stream().map(Purchase::getRemainingBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal generalFund = purchaseProjects.stream().map(Purchase::getGeneralFund).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal specialFund = purchaseProjects.stream().map(Purchase::getSpecialFund).reduce(BigDecimal.ZERO, BigDecimal::add);
-
 
         return new ProjectsTotalsDTO(quantity, priceSum, remainingBalance, generalFund, specialFund);
     }

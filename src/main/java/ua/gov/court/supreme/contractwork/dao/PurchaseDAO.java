@@ -338,4 +338,18 @@ public class PurchaseDAO {
             throw new RuntimeException("Error updating project: " + e.getMessage(), e);
         }
     }
+    public void delete(long id) {
+        String query = """
+                DELETE FROM purchases WHERE id = ?
+                """;
+
+        try (Connection connection = postgresConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

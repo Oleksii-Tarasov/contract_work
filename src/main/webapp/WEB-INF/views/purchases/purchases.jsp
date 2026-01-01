@@ -1,40 +1,40 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-        <%@include file="/WEB-INF/views/layout/header.jspf" %>
-            <style>
-                <%@include file="/css/purchases.css" %>
-            </style>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@include file="/WEB-INF/views/layout/header.jspf" %>
+<style>
+    <%@include file="/css/purchases.css" %>
+</style>
 
-            <div class="container-sm mt-4">
-                <div class="bg-white p-4 rounded shadow">
-                    <table class="table table-striped-columns">
-                        <tr>
-                            <th>№</th>
-                            <th>Назва предмета закупівлі</th>
-                            <th>Одиниця виміру</th>
-                            <th>Кількість</th>
-                            <th>Ціна за одиницю</th>
-                            <th>Сума по кошторису</th>
-                            <th>Сума Договору</th>
+<div class="container-sm mt-4">
+    <div class="bg-white p-4 rounded shadow">
+        <table class="table table-striped-columns">
+            <tr>
+                <th>№</th>
+                <th>Назва предмета закупівлі</th>
+                <th>Одиниця виміру</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Сума по кошторису</th>
+                <th>Сума Договору</th>
 
-                            <th data-sortable="true">Залишок</th>
-                            <th>Оплата до</th>
-                            <th data-sortable="true">Відповідальний виконавець</th>
-                        </tr>
+                <th data-sortable="true">Залишок</th>
+                <th>Оплата до</th>
+                <th data-sortable="true">Відповідальний виконавець</th>
+            </tr>
 
-                        <tr class="black-borders">
-                            <th>2210</th>
-                            <th colspan="9" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т.
-                                ч. м'який
-                                інвентар та обмундирування
-                            </th>
-                        </tr>
-                        <c:forEach var="project2210" items="${purchases2210}" varStatus="projectStatus">
-                            <tr id="project-${project2210.id}">
-                                <td>
-                                    <c:out value="${projectStatus.count}" />
-                                </td>
-                                <td class="${project2210.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
+            <tr class="black-borders">
+                <th>2210</th>
+                <th colspan="9" style="text-align: left">Предмети, матеріали, обладнання та інвентар, у т.
+                    ч. м'який
+                    інвентар та обмундирування
+                </th>
+            </tr>
+            <c:forEach var="project2210" items="${purchases2210}" varStatus="projectStatus">
+                <tr id="project-${project2210.id}">
+                    <td>
+                        <c:out value="${projectStatus.count}"/>
+                    </td>
+                    <td class="${project2210.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
                         ${project2210.id},
                             '${fn:escapeXml(project2210.projectName)}',
                             '${fn:escapeXml(project2210.justification)}',
@@ -42,67 +42,67 @@
                         ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'},
                             '${project2210.paymentTo != null ? fn:substring(project2210.paymentTo, 0, 10) : ''}'
                             )">
-                                    <c:out value="${project2210.dkCode}" /> -
-                                    <c:out value="${project2210.projectName}" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <c:out value="${project2210.unitOfMeasure}" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2210.quantity}" pattern="#,##0" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2210.price}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2210.totalPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2210.contractPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <fmt:formatNumber value="${project2210.remainingBalance}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <c:out value="${project2210.formattedPaymentTo}" />
-                                </td>
-                                <td class="${project2210.projectStatus.cssClass}">
-                                    <c:out
-                                        value="${project2210.responsibleExecutor != null ? project2210.responsibleExecutor.shortName : ''}" />
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:out value="${project2210.dkCode}"/> -
+                        <c:out value="${project2210.projectName}"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <c:out value="${project2210.unitOfMeasure}"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2210.quantity}" pattern="#,##0"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2210.price}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2210.totalPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2210.contractPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber value="${project2210.remainingBalance}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <c:out value="${project2210.formattedPaymentTo}"/>
+                    </td>
+                    <td class="${project2210.projectStatus.cssClass}">
+                        <c:out
+                                value="${project2210.responsibleExecutor != null ? project2210.responsibleExecutor.shortName : ''}"/>
+                    </td>
+                </tr>
+            </c:forEach>
 
-                        <tr>
-                            <th></th>
-                            <th style="text-align: right">ВСЬОГО ЗА 2210</th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalQuantity2210}" pattern="#,##0" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalPriceSum2210}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalRemainingBalance2210}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+            <tr>
+                <th></th>
+                <th style="text-align: right">ВСЬОГО ЗА 2210</th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalQuantity2210}" pattern="#,##0"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalPriceSum2210}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalRemainingBalance2210}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
 
-                        <tr class="black-borders">
-                            <th>2240</th>
-                            <th colspan="9" style="text-align: left">Оплата послуг (крім комунальних)
-                            </th>
-                        </tr>
-                        <c:forEach var="project2240" items="${purchases2240}" varStatus="projectStatus">
-                            <tr id="project-${project2240.id}">
-                                <td>
-                                    <c:out value="${projectStatus.count}" />
-                                </td>
-                                <td class="${project2240.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
+            <tr class="black-borders">
+                <th>2240</th>
+                <th colspan="9" style="text-align: left">Оплата послуг (крім комунальних)
+                </th>
+            </tr>
+            <c:forEach var="project2240" items="${purchases2240}" varStatus="projectStatus">
+                <tr id="project-${project2240.id}">
+                    <td>
+                        <c:out value="${projectStatus.count}"/>
+                    </td>
+                    <td class="${project2240.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
                         ${project2240.id},
                             '${fn:escapeXml(project2240.projectName)}',
                             '${fn:escapeXml(project2240.justification)}',
@@ -110,68 +110,68 @@
                         ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'},
                             '${project2240.paymentTo != null ? fn:substring(project2240.paymentTo, 0, 10) : ''}'
                             )">
-                                    <c:out value="${project2240.dkCode}" /> -
-                                    <c:out value="${project2240.projectName}" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <c:out value="${project2240.unitOfMeasure}" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2240.quantity}" pattern="#,##0" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2240.price}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2240.totalPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project2240.contractPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <fmt:formatNumber value="${project2240.remainingBalance}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <c:out value="${project2240.formattedPaymentTo}" />
-                                </td>
-                                <td class="${project2240.projectStatus.cssClass}">
-                                    <c:out
-                                        value="${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.shortName : ''}" />
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:out value="${project2240.dkCode}"/> -
+                        <c:out value="${project2240.projectName}"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <c:out value="${project2240.unitOfMeasure}"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2240.quantity}" pattern="#,##0"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2240.price}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2240.totalPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project2240.contractPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber value="${project2240.remainingBalance}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <c:out value="${project2240.formattedPaymentTo}"/>
+                    </td>
+                    <td class="${project2240.projectStatus.cssClass}">
+                        <c:out
+                                value="${project2240.responsibleExecutor != null ? project2240.responsibleExecutor.shortName : ''}"/>
+                    </td>
+                </tr>
+            </c:forEach>
 
-                        <tr>
-                            <th></th>
-                            <th style="text-align: right">ВСЬОГО ЗА 2240</th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalQuantity2240}" pattern="#,##0" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalPriceSum2240}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalRemainingBalance2240}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+            <tr>
+                <th></th>
+                <th style="text-align: right">ВСЬОГО ЗА 2240</th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalQuantity2240}" pattern="#,##0"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalPriceSum2240}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalRemainingBalance2240}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
 
-                        <tr class="black-borders">
-                            <th>3110</th>
-                            <th colspan="9" style="text-align: left">Придбання обладнання і предметів довгострокового
-                                користування
-                            </th>
-                        </tr>
-                        <c:forEach var="project3110" items="${purchases3110}" varStatus="projectStatus">
-                            <tr id="project-${project3110.id}">
-                                <td>
-                                    <c:out value="${projectStatus.count}" />
-                                </td>
-                                <td class="${project3110.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
+            <tr class="black-borders">
+                <th>3110</th>
+                <th colspan="9" style="text-align: left">Придбання обладнання і предметів довгострокового
+                    користування
+                </th>
+            </tr>
+            <c:forEach var="project3110" items="${purchases3110}" varStatus="projectStatus">
+                <tr id="project-${project3110.id}">
+                    <td>
+                        <c:out value="${projectStatus.count}"/>
+                    </td>
+                    <td class="${project3110.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
                         ${project3110.id},
                             '${fn:escapeXml(project3110.projectName)}',
                             '${fn:escapeXml(project3110.justification)}',
@@ -179,357 +179,453 @@
                         ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'},
                             '${project3110.paymentTo != null ? fn:substring(project3110.paymentTo, 0, 10) : ''}'
                             )">
-                                    <c:out value="${project3110.dkCode}" /> -
-                                    <c:out value="${project3110.projectName}" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <c:out value="${project3110.unitOfMeasure}" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project3110.quantity}" pattern="#,##0" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project3110.price}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project3110.totalPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <fmt:formatNumber value="${project3110.contractPrice}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <fmt:formatNumber value="${project3110.remainingBalance}" pattern="#,##0.00" />
-                                </td>
-                                <td>
-                                    <c:out value="${project3110.formattedPaymentTo}" />
-                                </td>
-                                <td class="${project3110.projectStatus.cssClass}">
-                                    <c:out
-                                        value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}" />
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:out value="${project3110.dkCode}"/> -
+                        <c:out value="${project3110.projectName}"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <c:out value="${project3110.unitOfMeasure}"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project3110.quantity}" pattern="#,##0"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project3110.price}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project3110.totalPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <fmt:formatNumber value="${project3110.contractPrice}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber value="${project3110.remainingBalance}" pattern="#,##0.00"/>
+                    </td>
+                    <td>
+                        <c:out value="${project3110.formattedPaymentTo}"/>
+                    </td>
+                    <td class="${project3110.projectStatus.cssClass}">
+                        <c:out value="${project3110.responsibleExecutor != null ? project3110.responsibleExecutor.shortName : ''}"/>
+                    </td>
+                </tr>
+            </c:forEach>
 
-                        <tr>
-                            <th></th>
-                            <th style="text-align: right">ВСЬОГО ЗА 3110</th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalQuantity3110}" pattern="#,##0" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalPriceSum3110}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th>
-                                <fmt:formatNumber value="${totalRemainingBalance3110}" pattern="#,##0.00" />
-                            </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </table>
-                </div>
+            <tr>
+                <th></th>
+                <th style="text-align: right">ВСЬОГО ЗА 3110</th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalQuantity3110}" pattern="#,##0"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalPriceSum3110}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th>
+                    <fmt:formatNumber value="${totalRemainingBalance3110}" pattern="#,##0.00"/>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionModalLabel"></h5>
+                <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="actionModalLabel"></h5>
-                            <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body" id="actionBody">
-                            <div class="row">
-                                <div class="col-6 border-end">
-                                    <strong>Обґрунтування/Примітки:</strong>
-                                    <textarea id="justificationText" class="form-control mb-3" rows="5">
+            <div class="modal-body" id="actionBody">
+                <div class="row">
+                    <div class="col-6 border-end">
+                        <strong>Обґрунтування/Примітки:</strong>
+                        <textarea id="justificationText" class="form-control mb-3" rows="5">
                         </textarea>
 
-                                    <p><strong>Відповідальний виконавець:</strong>
-                                        <select id="executorSelectModal" class="executor-select-clean"></select>
-                                    </p>
+                        <p><strong>Відповідальний виконавець:</strong>
+                            <select id="executorSelectModal" class="executor-select-clean"></select>
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <strong>Статус закупівлі:</strong>
+                        <select id="projectStatusSelect" class="executor-select-clean"></select>
+
+                        <div class="row g-3" style="max-width: 420px">
+                            <div class="row g-3" style="max-width: 420px">
+                                <!-- Заголовки -->
+                                <div class="col-6 mb-1">
+                                    <strong>Сума Договору:</strong>
                                 </div>
-                                <div class="col-6">
-                                    <strong>Статус закупівлі:</strong>
-                                    <select id="projectStatusSelect" class="executor-select-clean"></select>
-
-                                    <div class="row g-3" style="max-width: 420px">
-
-                                        <div class="row g-3" style="max-width: 420px">
-
-                                            <!-- Заголовки -->
-                                            <div class="col-6 mb-1">
-                                                <strong>Сума Договору:</strong>
-                                            </div>
-                                            <div class="col-6 mb-1">
-                                                <strong>Оплата до:</strong>
-                                            </div>
-
-                                            <!-- Поля -->
-                                            <div class="col-6 mt-0">
-                                                <input id="contractPriceInput" type="text" class="form-control"
-                                                    style="max-width: 180px" />
-                                            </div>
-                                            <div class="col-6 mt-0">
-                                                <div class="input-group" style="max-width: 180px">
+                                <div class="col-6 mb-1">
+                                    <strong>Оплата до:</strong>
+                                </div>
+                                <!-- Поля -->
+                                <div class="col-6 mt-0">
+                                    <input id="contractPriceInput" type="text" class="form-control"
+                                           style="max-width: 180px"/>
+                                </div>
+                                <div class="col-6 mt-0">
+                                    <div class="input-group" style="max-width: 180px">
                                                     <span class="input-group-text">
                                                         <i class="fa-solid fa-calendar-days"></i>
                                                     </span>
-                                                    <input type="date" id="paymentDueDateInput" class="form-control" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <p><strong>Документи:</strong></p>
+                                        <input type="date" id="paymentDueDateInput" class="form-control"/>
                                     </div>
                                 </div>
-
-                                <p class="mt-3">
-                                    <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
-                                    <button type="button" class="btn btn-danger"
-                                        onclick="confirmDelete()">Видалити</button>
-                                </p>
                             </div>
 
-                            <div class="modal-body d-none" id="confirmDeleteBody">
-                                <p>Ви впевнені, що хочете видалити проєкт <strong
-                                        id="projectNameConfirmPlaceholder"></strong>?</p>
-                                <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
-                                <button type="button" class="btn btn-secondary"
-                                    onclick="cancelDelete()">Скасувати</button>
-                            </div>
+                            <p><strong>Документи:</strong></p>
                         </div>
                     </div>
+
+                    <p class="mt-3">
+                        <a id="editButton" href="#" class="btn btn-primary me-2">Редагувати</a>
+                        <button type="button" class="btn btn-danger"
+                                onclick="confirmDelete()">Видалити
+                        </button>
+                    </p>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Підтвердження видалення</h5>
+                <button type="button" class="btn-close" aria-label="Close"
+                        onclick="cancelDelete()"></button>
+            </div>
+            <div class="modal-body">
+                <p>Ви впевнені, що хочете видалити проєкт <strong
+                        id="projectNameConfirmPlaceholder"></strong>?</p>
+                <div class="d-flex justify-content-end">
+                    <a id="confirmDeleteButton" href="#" class="btn btn-danger me-2">Так, видалити</a>
+                    <button type="button" class="btn btn-secondary"
+                            onclick="cancelDelete()">Скасувати
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <%@include file="/WEB-INF/views/layout/footer.jspf" %>
+<%@include file="/WEB-INF/views/layout/footer.jspf" %>
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- 1. SCROLL/HIGHLIGHTING ---
+        const savedScroll = localStorage.getItem("scrollPositionPurchases");
+        if (savedScroll !== null) {
+            window.scrollTo({
+                top: parseInt(savedScroll),
+                behavior: "instant"
+            });
+            localStorage.removeItem("scrollPositionPurchases");
+        }
 
-                        // --- 1. SCROLL/HIGHLIGHTING ---
-                        const savedScroll = localStorage.getItem("scrollPositionPurchases");
-                        if (savedScroll !== null) {
-                            window.scrollTo({
-                                top: parseInt(savedScroll),
-                                behavior: "instant"
-                            });
-                            localStorage.removeItem("scrollPositionPurchases");
-                        }
+        let updatedProjectId = localStorage.getItem("updatedProjectId");
+        if (!updatedProjectId) {
+            const urlParams = new URLSearchParams(window.location.search);
+            updatedProjectId = urlParams.get("updatedId");
+        }
+        if (!updatedProjectId && window.location.hash && window.location.hash.startsWith("#project-")) {
+            updatedProjectId = window.location.hash.replace("#project-", "");
+        }
+        if (updatedProjectId) {
+            const row = document.getElementById("project-" + updatedProjectId);
+            if (row) {
+                const firstCell = row.querySelector("td:first-child");
+                if (firstCell) {
+                    firstCell.classList.add("highlight-cell");
+                }
+            }
+            localStorage.removeItem("updatedProjectId");
+        }
 
-                        let updatedProjectId = localStorage.getItem("updatedProjectId");
-                        if (!updatedProjectId) {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            updatedProjectId = urlParams.get("updatedId");
-                        }
-                        if (!updatedProjectId && window.location.hash && window.location.hash.startsWith("#project-")) {
-                            updatedProjectId = window.location.hash.replace("#project-", "");
-                        }
-                        if (updatedProjectId) {
-                            const row = document.getElementById("project-" + updatedProjectId);
-                            if (row) {
-                                const firstCell = row.querySelector("td:first-child");
-                                if (firstCell) {
-                                    firstCell.classList.add("highlight-cell");
-                                }
-                                // NOTE: User requested NO auto-scrolling to the row.
-                                // We remain exactly where we restored to.
-                            }
-                            localStorage.removeItem("updatedProjectId");
-                        }
+        // --- 2. ELEMENTS AND VARIABLES ---
+        const actionModalEl = document.getElementById('actionModal');
+        const actionModal = new bootstrap.Modal(actionModalEl);
 
-                        // --- 2. ELEMENTS AND VARIABLES ---
-                        const actionModalEl = document.getElementById('actionModal');
-                        const actionModal = new bootstrap.Modal(actionModalEl);
-                        const modalTitle = document.getElementById("actionModalLabel");
-                        const actionBody = document.getElementById("actionBody");
-                        const confirmDeleteBody = document.getElementById("confirmDeleteBody");
-                        const editButton = document.getElementById("editButton");
-                        const executorSelectModal = document.getElementById("executorSelectModal");
-                        const projectStatusSelect = document.getElementById("projectStatusSelect");
-                        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const deleteModalEl = document.getElementById('deleteModal');
+        const deleteModal = new bootstrap.Modal(deleteModalEl);
 
-                        let currentProjectId = null;
-                        let currentProjectName = '';
-                        let executorWasChanged = false;
-                        let projectStatusChanged = false;
-                        let originalJustification = "";
-                        let justificationWasChanged = false;
-                        let originalContractPrice = "";
-                        let contractPriceWasChanged = false;
-                        let originalPaymentDueDate = "";
-                        let paymentDueDateWasChanged = false;
+        const modalTitle = document.getElementById("actionModalLabel");
+        const actionBody = document.getElementById("actionBody");
+        const editButton = document.getElementById("editButton");
+        const executorSelectModal = document.getElementById("executorSelectModal");
+        const projectStatusSelect = document.getElementById("projectStatusSelect");
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-                        // --- 3. BUTTON CONTROL AND SAVE FUNCTIONS ---
-                        function transformCloseToSave() {
-                            if (modalCloseBtn.classList.contains('btn-save-check')) return;
-                            modalCloseBtn.classList.remove('btn-close');
-                            modalCloseBtn.classList.add('btn-save-check');
-                            modalCloseBtn.innerHTML = '&#10004;&#xFE0E;';
-                            modalCloseBtn.setAttribute('title', 'Зберегти зміни');
-                        }
+        // Delete Modal Elements
+        const projectNameConfirmPlaceholder = document.getElementById("projectNameConfirmPlaceholder");
 
-                        function resetModalCloseButton() {
-                            modalCloseBtn.classList.add('btn-close');
-                            modalCloseBtn.classList.remove('btn-save-check');
-                            modalCloseBtn.innerHTML = '';
-                            modalCloseBtn.removeAttribute('title');
-                        }
+        let currentProjectId = null;
+        let currentProjectName = '';
+        let executorWasChanged = false;
+        let projectStatusChanged = false;
+        let originalJustification = "";
+        let justificationWasChanged = false;
+        let originalContractPrice = "";
+        let contractPriceWasChanged = false;
+        let originalPaymentDueDate = "";
+        let paymentDueDateWasChanged = false;
+        let isSwitchingModals = false;
 
-                        function saveProjectChanges() {
-                            if (!currentProjectId) return;
+        // --- 3. BUTTON CONTROL AND SAVE FUNCTIONS ---
+        function transformCloseToSave() {
+            if (modalCloseBtn.classList.contains('btn-save-check')) return;
+            modalCloseBtn.classList.remove('btn-close');
+            modalCloseBtn.classList.add('btn-save-check');
+            modalCloseBtn.innerHTML = '&#10004;&#xFE0E;';
+            modalCloseBtn.setAttribute('title', 'Зберегти зміни');
+        }
 
-                            const payload = { id: currentProjectId };
-                            if (justificationWasChanged) payload.justification = document.getElementById("justificationText").value;
-                            if (contractPriceWasChanged) {
-                                payload.contractPrice = Number(document.getElementById("contractPriceInput").value.replace(/\s/g, '').replace(',', '.'));
-                            }
-                            if (paymentDueDateWasChanged) payload.paymentTo = document.getElementById("paymentDueDateInput").value || null;
-                            if (executorWasChanged) payload.executorId = executorSelectModal.value || null;
-                            if (projectStatusChanged) payload.projectStatus = Number(projectStatusSelect.value);
+        function resetModalCloseButton() {
+            modalCloseBtn.classList.add('btn-close');
+            modalCloseBtn.classList.remove('btn-save-check');
+            modalCloseBtn.innerHTML = '';
+            modalCloseBtn.removeAttribute('title');
+        }
 
-                            // If nothing changed, just close
-                            if (Object.keys(payload).length === 1) {
-                                actionModal.hide();
-                                return;
-                            }
+        function saveProjectChanges() {
+            if (!currentProjectId) return;
 
-                            localStorage.setItem("updatedProjectId", currentProjectId);
+            const payload = {id: currentProjectId};
+            if (justificationWasChanged) payload.justification = document.getElementById("justificationText").value;
+            if (contractPriceWasChanged) {
+                payload.contractPrice = Number(document.getElementById("contractPriceInput").value.replace(/\s/g, '').replace(',', '.'));
+            }
+            if (paymentDueDateWasChanged) payload.paymentTo = document.getElementById("paymentDueDateInput").value || null;
+            if (executorWasChanged) payload.executorId = executorSelectModal.value || null;
+            if (projectStatusChanged) payload.projectStatus = Number(projectStatusSelect.value);
 
-                            fetch("/contractwork/purchases/update-project-fields", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(payload)
-                            })
-                                .then(() => {
-                                    location.reload();
-                                })
-                                .catch(err => {
-                                    console.error("Update failed", err);
-                                    localStorage.removeItem("updatedProjectId");
-                                });
-                        }
+            // If nothing changed, just close
+            if (Object.keys(payload).length === 1) {
+                actionModal.hide();
+                return;
+            }
 
-                        // --- 4. EVENT LISTENERS ---
-                        // Handle button click (check or cross)
-                        modalCloseBtn.addEventListener('click', function (e) {
-                            if (this.classList.contains('btn-save-check')) {
-                                saveProjectChanges();
-                            }
-                        });
+            localStorage.setItem("updatedProjectId", currentProjectId);
 
-                        actionModalEl.addEventListener('hidden.bs.modal', () => {
-                            currentProjectId = null;
-                            currentProjectName = '';
-                            executorWasChanged = false;
-                            projectStatusChanged = false;
-                            justificationWasChanged = false;
-                            contractPriceWasChanged = false;
-                            paymentDueDateWasChanged = false;
-                            resetModalCloseButton();
-                        });
+            fetch("/contractwork/purchases/update-project-fields", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            })
+                .then(() => {
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("Update failed", err);
+                    localStorage.removeItem("updatedProjectId");
+                });
+        }
 
-                        // --- 5. OPEN MODAL (NO CHANGES) ---
-                        window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus, paymentDueDate) {
-                            resetModalCloseButton();
+        // --- 4. EVENT LISTENERS ---
+        // Handle button click (check or cross)
+        modalCloseBtn.addEventListener('click', function (e) {
+            if (this.classList.contains('btn-save-check')) {
+                saveProjectChanges();
+            }
+        });
 
-                            executorWasChanged = false;
-                            projectStatusChanged = false;
-                            justificationWasChanged = false;
-                            contractPriceWasChanged = false;
-                            paymentDueDateWasChanged = false;
+        actionModalEl.addEventListener('hidden.bs.modal', () => {
+            // CRITICAL: specific check to maintain state if we are just switching to delete modal
+            if (isSwitchingModals) {
+                isSwitchingModals = false;
+                return;
+            }
 
-                            currentProjectId = projectId;
-                            currentProjectName = projectName;
-                            actionBody.classList.remove('d-none');
-                            document.getElementById("confirmDeleteBody").classList.add('d-none');
-                            modalTitle.textContent = projectName;
+            // Highlight the row we just acted on (even if no changes made)
+            if (currentProjectId) {
+                document.querySelectorAll(".highlight-cell").forEach(el => el.classList.remove("highlight-cell"));
+                const row = document.getElementById("project-" + currentProjectId);
+                if (row) {
+                    const firstCell = row.querySelector("td:first-child");
+                    if (firstCell) firstCell.classList.add("highlight-cell");
+                }
+            }
 
-                            const justificationField = document.getElementById('justificationText');
-                            justificationField.value = justification || "";
-                            originalJustification = justification || "";
+            currentProjectId = null;
+            currentProjectName = '';
+            executorWasChanged = false;
+            projectStatusChanged = false;
+            justificationWasChanged = false;
+            contractPriceWasChanged = false;
+            paymentDueDateWasChanged = false;
+            resetModalCloseButton();
+        });
 
-                            // Purchase Status
-                            const statusSelect = document.getElementById("projectStatusSelect");
-                            statusSelect.innerHTML = "";
-                            <c:forEach var="st" items="${projectStatuses}">
-                                (function () {
+        // Fix for nested modals or focus issues if any
+        deleteModalEl.addEventListener('hidden.bs.modal', () => {
+            if (isSwitchingModals) {
+                // Creating specific flow: if hiding delete modal to go back to action, do nothing special here
+                // The 'show' of action modal will handle focus.
+                isSwitchingModals = false;
+            }
+        });
+
+        // --- 5. OPEN MODAL ---
+        window.openActionModal = function (projectId, projectName, justification, contractPrice, projectStatus, paymentDueDate) {
+            resetModalCloseButton();
+
+            executorWasChanged = false;
+            projectStatusChanged = false;
+            justificationWasChanged = false;
+            contractPriceWasChanged = false;
+            paymentDueDateWasChanged = false;
+
+            currentProjectId = projectId;
+            currentProjectName = projectName;
+
+            // Ensure action body is visible (legacy cleanup)
+            actionBody.classList.remove('d-none');
+
+            modalTitle.textContent = projectName;
+
+            const justificationField = document.getElementById('justificationText');
+            justificationField.value = justification || "";
+            originalJustification = justification || "";
+
+            // Purchase Status
+            const statusSelect = document.getElementById("projectStatusSelect");
+            statusSelect.innerHTML = "";
+            <c:forEach var="st" items="${projectStatuses}">
+            (function () {
                 const opt = document.createElement("option");
-                                opt.value = "${st.dbValue}";
-                                opt.textContent = "${fn:escapeXml(st.displayName)}";
-                                statusSelect.appendChild(opt);
+                opt.value = "${st.dbValue}";
+                opt.textContent = "${fn:escapeXml(st.displayName)}";
+                statusSelect.appendChild(opt);
             })();
-                            </c:forEach>
-                            statusSelect.value = projectStatus !== "null" ? projectStatus : "";
+            </c:forEach>
+            statusSelect.value = projectStatus !== "null" ? projectStatus : "";
 
-                            // Responsible Executor
-                            const select = document.getElementById("executorSelectModal");
-                            select.innerHTML = '<option value="">-- не вибрано --</option>';
-                            <c:forEach var="u" items="${users}">
-                                (function () {
+            // Responsible Executor
+            const select = document.getElementById("executorSelectModal");
+            select.innerHTML = '<option value="">-- не вибрано --</option>';
+            <c:forEach var="u" items="${users}">
+            (function () {
                 const opt = document.createElement("option");
-                                opt.value = "${u.id}";
-                                opt.textContent = "${fn:escapeXml(u.shortName)}";
-                                select.appendChild(opt);
+                opt.value = "${u.id}";
+                opt.textContent = "${fn:escapeXml(u.shortName)}";
+                select.appendChild(opt);
             })();
-                            </c:forEach>
+            </c:forEach>
 
-                            fetch("/contractwork/executor?projectId=" + projectId)
-                                .then(r => r.json())
-                                .then(data => {
-                                    const serverId = data && data.executorId != null ? String(data.executorId) : "";
-                                    select.value = serverId;
-                                    if (select.value !== serverId) select.value = "";
-                                });
+            fetch("/contractwork/executor?projectId=" + projectId)
+                .then(r => r.json())
+                .then(data => {
+                    const serverId = data && data.executorId != null ? String(data.executorId) : "";
+                    select.value = serverId;
+                    if (select.value !== serverId) select.value = "";
+                });
 
-                            // Price and Date
-                            const priceInput = document.getElementById("contractPriceInput");
-                            const formattedPrice = formatPriceForInput(contractPrice);
-                            priceInput.value = formattedPrice;
-                            originalContractPrice = formattedPrice;
+            // Price and Date
+            const priceInput = document.getElementById("contractPriceInput");
+            const formattedPrice = formatPriceForInput(contractPrice);
+            priceInput.value = formattedPrice;
+            originalContractPrice = formattedPrice;
 
-                            const paymentInput = document.getElementById("paymentDueDateInput");
-                            paymentInput.value = paymentDueDate || "";
-                            originalPaymentDueDate = paymentInput.value;
+            const paymentInput = document.getElementById("paymentDueDateInput");
+            paymentInput.value = paymentDueDate || "";
+            originalPaymentDueDate = paymentInput.value;
 
-                            editButton.href = "${pageContext.request.contextPath}/purchases/update-project?id=" + projectId;
-                            actionModal.show();
-                        };
+            editButton.href = "${pageContext.request.contextPath}/purchases/update-project?id=" + projectId;
+            actionModal.show();
+        };
 
-                        // --- 6. CHANGE TRACKING ---
-                        executorSelectModal.addEventListener("change", () => { executorWasChanged = true; transformCloseToSave(); });
-                        projectStatusSelect.addEventListener("change", () => { projectStatusChanged = true; transformCloseToSave(); });
+        // --- 6. DELETE MODAL LOGIC ---
+        window.confirmDelete = function () {
+            if (!currentProjectId) return;
+            isSwitchingModals = true;
+            actionModal.hide();
 
-                        document.getElementById("justificationText").addEventListener("input", function () {
-                            justificationWasChanged = (this.value.trim() !== originalJustification.trim());
-                            transformCloseToSave();
-                        });
+            projectNameConfirmPlaceholder.textContent = currentProjectName;
+            deleteModal.show();
+        };
 
-                        document.getElementById("contractPriceInput").addEventListener("input", function () {
-                            contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
-                            transformCloseToSave();
-                        });
+        window.cancelDelete = function () {
+            isSwitchingModals = true;
+            deleteModal.hide();
+            actionModal.show();
+        };
 
-                        document.getElementById("paymentDueDateInput").addEventListener("input", function () {
-                            paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
-                            transformCloseToSave();
-                        });
+        const confirmDeleteBtn = document.getElementById("confirmDeleteButton");
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                if (!currentProjectId) return;
+
+                fetch("${pageContext.request.contextPath}/purchases/delete-project", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "id=" + encodeURIComponent(currentProjectId)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("HTTP Status: " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert("Помилка при видаленні: " + (data.message || "Невідома помилка"));
+                        }
+                    })
+                    .catch(err => {
+                        alert("Помилка з'єднання при видаленні");
                     });
+            });
+        }
 
-                    function formatPriceForInput(value) {
-                        if (value === null || value === undefined || value === "" || value === "null") return "";
-                        const num = Number(value);
-                        if (isNaN(num)) return "";
-                        return num.toLocaleString("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    }
+        // --- 7. CHANGE TRACKING ---
+        executorSelectModal.addEventListener("change", () => {
+            executorWasChanged = true;
+            transformCloseToSave();
+        });
+        projectStatusSelect.addEventListener("change", () => {
+            projectStatusChanged = true;
+            transformCloseToSave();
+        });
 
-                    window.addEventListener("beforeunload", function () {
-                        localStorage.setItem("scrollPositionPurchases", window.scrollY);
-                    });
-                </script>
+        document.getElementById("justificationText").addEventListener("input", function () {
+            justificationWasChanged = (this.value.trim() !== originalJustification.trim());
+            transformCloseToSave();
+        });
+
+        document.getElementById("contractPriceInput").addEventListener("input", function () {
+            contractPriceWasChanged = (this.value.trim() !== originalContractPrice.trim());
+            transformCloseToSave();
+        });
+
+        document.getElementById("paymentDueDateInput").addEventListener("input", function () {
+            paymentDueDateWasChanged = (this.value !== originalPaymentDueDate);
+            transformCloseToSave();
+        });
+    });
+
+    function formatPriceForInput(value) {
+        if (value === null || value === undefined || value === "" || value === "null") return "";
+        const num = Number(value);
+        if (isNaN(num)) return "";
+        return num.toLocaleString("uk-UA", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    window.addEventListener("beforeunload", function () {
+        localStorage.setItem("scrollPositionPurchases", window.scrollY);
+    });
+</script>

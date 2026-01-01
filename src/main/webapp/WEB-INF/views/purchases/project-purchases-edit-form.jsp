@@ -152,7 +152,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-warning">Зберегти</button>
-                    <a href="${pageContext.request.contextPath}/purchases#project-${projectForUpdate.id}"
+                    <a href="${pageContext.request.contextPath}/purchases?updatedId=${projectForUpdate.id}"
                         class="btn btn-secondary">
                         Скасувати
                     </a>
