@@ -35,13 +35,13 @@
                                     <c:out value="${projectStatus.count}" />
                                 </td>
                                 <td class="${project2210.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
-                            ${project2210.id},
-                                '${fn:escapeXml(project2210.projectName)}',
-                                '${fn:escapeXml(project2210.justification)}',
-                                '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
-                            ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'},
-                                '${project2210.paymentTo != null ? fn:substring(project2210.paymentTo, 0, 10) : ''}'
-                                )">
+                        ${project2210.id},
+                            '${fn:escapeXml(project2210.projectName)}',
+                            '${fn:escapeXml(project2210.justification)}',
+                            '${project2210.contractPrice != null ? project2210.contractPrice : 'null'}',
+                        ${project2210.projectStatus != null ? project2210.projectStatus.dbValue : 'null'},
+                            '${project2210.paymentTo != null ? fn:substring(project2210.paymentTo, 0, 10) : ''}'
+                            )">
                                     <c:out value="${project2210.dkCode}" /> -
                                     <c:out value="${project2210.projectName}" />
                                 </td>
@@ -103,13 +103,13 @@
                                     <c:out value="${projectStatus.count}" />
                                 </td>
                                 <td class="${project2240.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
-                            ${project2240.id},
-                                '${fn:escapeXml(project2240.projectName)}',
-                                '${fn:escapeXml(project2240.justification)}',
-                                '${project2240.contractPrice != null ? project2240.contractPrice : 'null'}',
-                            ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'},
-                                '${project2240.paymentTo != null ? fn:substring(project2240.paymentTo, 0, 10) : ''}'
-                                )">
+                        ${project2240.id},
+                            '${fn:escapeXml(project2240.projectName)}',
+                            '${fn:escapeXml(project2240.justification)}',
+                            '${project2240.contractPrice != null ? project2240.contractPrice : 'null'}',
+                        ${project2240.projectStatus != null ? project2240.projectStatus.dbValue : 'null'},
+                            '${project2240.paymentTo != null ? fn:substring(project2240.paymentTo, 0, 10) : ''}'
+                            )">
                                     <c:out value="${project2240.dkCode}" /> -
                                     <c:out value="${project2240.projectName}" />
                                 </td>
@@ -172,13 +172,13 @@
                                     <c:out value="${projectStatus.count}" />
                                 </td>
                                 <td class="${project3110.informatization ? 'informatization-row' : ''}" onclick="openActionModal(
-                            ${project3110.id},
-                                '${fn:escapeXml(project3110.projectName)}',
-                                '${fn:escapeXml(project3110.justification)}',
-                                '${project3110.contractPrice != null ? project3110.contractPrice : 'null'}',
-                            ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'},
-                                '${project3110.paymentTo != null ? fn:substring(project3110.paymentTo, 0, 10) : ''}'
-                                )">
+                        ${project3110.id},
+                            '${fn:escapeXml(project3110.projectName)}',
+                            '${fn:escapeXml(project3110.justification)}',
+                            '${project3110.contractPrice != null ? project3110.contractPrice : 'null'}',
+                        ${project3110.projectStatus != null ? project3110.projectStatus.dbValue : 'null'},
+                            '${project3110.paymentTo != null ? fn:substring(project3110.paymentTo, 0, 10) : ''}'
+                            )">
                                     <c:out value="${project3110.dkCode}" /> -
                                     <c:out value="${project3110.projectName}" />
                                 </td>
@@ -314,8 +314,6 @@
                     document.addEventListener("DOMContentLoaded", function () {
 
                         // --- 1. SCROLL/HIGHLIGHTING ---
-                        // --- 1. SCROLL/HIGHLIGHTING ---
-                        // Restore scroll position
                         const savedScroll = localStorage.getItem("scrollPositionPurchases");
                         if (savedScroll !== null) {
                             window.scrollTo({
@@ -325,17 +323,14 @@
                             localStorage.removeItem("scrollPositionPurchases");
                         }
 
-                        // Determine target project
                         let updatedProjectId = localStorage.getItem("updatedProjectId");
                         if (!updatedProjectId) {
                             const urlParams = new URLSearchParams(window.location.search);
                             updatedProjectId = urlParams.get("updatedId");
                         }
-                        // Fallback to hash if needed (handling both #project-ID and direct ID)
                         if (!updatedProjectId && window.location.hash && window.location.hash.startsWith("#project-")) {
                             updatedProjectId = window.location.hash.replace("#project-", "");
                         }
-
                         if (updatedProjectId) {
                             const row = document.getElementById("project-" + updatedProjectId);
                             if (row) {
@@ -343,10 +338,8 @@
                                 if (firstCell) {
                                     firstCell.classList.add("highlight-cell");
                                 }
-                                // Slight delay to ensure scroll restore is finished and layout is stable
-                                setTimeout(() => {
-                                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }, 100);
+                                // NOTE: User requested NO auto-scrolling to the row.
+                                // We remain exactly where we restored to.
                             }
                             localStorage.removeItem("updatedProjectId");
                         }
@@ -401,7 +394,7 @@
                             if (executorWasChanged) payload.executorId = executorSelectModal.value || null;
                             if (projectStatusChanged) payload.projectStatus = Number(projectStatusSelect.value);
 
-                            // If nothing really changed, just close
+                            // If nothing changed, just close
                             if (Object.keys(payload).length === 1) {
                                 actionModal.hide();
                                 return;

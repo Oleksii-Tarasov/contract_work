@@ -86,7 +86,7 @@ public class UpdatePurchaseProjectServlet extends BaseWorkServlet {
 
             contractWorkService.updatePurchaseProject(projectToUpdate);
 
-            resp.sendRedirect(req.getContextPath() + "/purchases?updatedId=" + id + "#project-" + id);
+            resp.sendRedirect(req.getContextPath() + "/purchases?updatedId=" + id);
 
         } catch (NumberFormatException | DateTimeParseException e) {
             e.printStackTrace();
